@@ -11,8 +11,6 @@ var G = {};
 var DEBUG = false;
 G.ui = {}
 G.ui.fps = 30 //50;
-G.speedStart=1.2;
-G.spacing=50;//Ticks between cactus
 G.ui.width = 150;
 G.ui.height = 150;
 G.ui.scaleX = (window.innerWidth/G.ui.width);
@@ -241,9 +239,11 @@ G.clickEnd = function(e) {
 G.restart = function() {
 	G.ticks = 0;
 	G.state = 1;
-	G.speed = G.speedStart;
+	G.speed = 1.2;
+	G.spacing=50;//Ticks between cactus
 	G.music.tempo=100;
 	G.lastCactus = 0;
+	G.level = 0;
 	G.ui.palette = G.ui.palette0;
 	G.ent=[];
 	G.player = G.entity.add({
@@ -303,17 +303,18 @@ G.update = function() {
 		if (prob(75) && G.entity.count('stone6')<6) G.entity.add({tag:'stone3',x:G.ui.camera.x+G.ui.width,y:rnd(0, G.ui.horizon-3),pts:G.ui.sprites.stone3})
 	}
 
-	if (G.ticks%100==0) {G.speed+=0.05;G.spacing-=1;    }
-
+	if (G.ticks%10==0) {G.speed+=0.005;G.spacing-=.1;}
+	
+	// Generate cactii 3 times a second according to spacing
 	if (G.ticks%(G.ui.fps/3)==0) {
 		var nextCactus = (Math.random()*G.spacing)+40;
 		//dp(G.ticks, G.ticks-G.lastCactus, nextCactus,G.ticks-G.lastCactus>nextCactus)
 		if (G.ticks-G.lastCactus>nextCactus) {
-			//console.log('last:', G.ticks-G.lastCactus,'next:',nextCactus, G.ticks-G.lastCactus>nextCactus)
+			console.log('spacing:',G.spacing,'last:', G.ticks-G.lastCactus,'next:',nextCactus, G.ticks-G.lastCactus>nextCactus)
 			var p=Math.random();
 			G.addCactus(0,Math.round(Math.random()))
-			if(p>0.75) G.addCactus(10,Math.round(Math.random()))
-			if(p>0.95) G.addCactus(20,Math.round(Math.random()))
+			if(G.level>1 && p>0.75) G.addCactus(10,Math.round(Math.random()))
+			if(G.level>3 && p>0.95) G.addCactus(20,Math.round(Math.random()))
 			G.lastCactus = G.ticks;
 		}
 	}
@@ -363,7 +364,8 @@ G.update = function() {
 	}
 	
 	G.player.score = Math.round(G.ticks/10);
-	G.player.score = G.player.jumps
+	G.level = Math.floor(G.player.score/100)
+	//G.player.score = G.player.jumps
 	G.ui.showScore(G.player.score)
 	if(G.ticks%1000==0) G.ui.palette = G.ui.palette==G.ui.palette0?G.ui.palette1:G.ui.palette0;
 }

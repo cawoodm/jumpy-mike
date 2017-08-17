@@ -1,9 +1,11 @@
 G.restart = function() {
 	G.ticks = 0;
 	G.state = 1;
-	G.speed = G.speedStart;
+	G.speed = 1.2;
+	G.spacing=50;//Ticks between cactus
 	G.music.tempo=100;
 	G.lastCactus = 0;
+	G.level = 0;
 	G.ui.palette = G.ui.palette0;
 	G.ent=[];
 	G.player = G.entity.add({
