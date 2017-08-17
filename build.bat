@@ -1,4 +1,4 @@
-@ECHO OFF
+::@ECHO OFF
 
 DEL app.js
 
@@ -28,3 +28,5 @@ CD ..\..\JavaScript\games\trex
 git add .
 git commit -m "Release"
 git push origin master
+
+CD %dp0
