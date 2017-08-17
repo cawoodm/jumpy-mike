@@ -1,0 +1,10 @@
+<script>
+function prob(p){return Math.random()*100<=p}
+var i=0, tot=0;
+for (i=0; i<100; i++) {
+	var res = prob(75);
+	console.log(res)
+	if (res) tot++;
+}
+console.log(tot)
+</script>
