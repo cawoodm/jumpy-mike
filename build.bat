@@ -22,3 +22,9 @@ ECHO //FILE: game.js >> app.js
 TYPE game.js >> app.js
 
 COPY /Y app.js release\
+
+COPY /Y .\release\*.* "C:\Users\marc\Google Drive\Work\cawoodm.github.io\jumpy-mike"
+CD ..\..\JavaScript\games\trex
+git add .
+git commit -m "Release"
+git push origin master
