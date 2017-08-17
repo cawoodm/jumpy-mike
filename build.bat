@@ -24,9 +24,10 @@ TYPE game.js >> app.js
 COPY /Y app.js release\
 
 COPY /Y .\release\*.* "C:\Users\marc\Google Drive\Work\cawoodm.github.io\jumpy-mike"
-CD ..\..\JavaScript\games\trex
+CD ..\..\cawoodm.github.io\jumpy-mike
 git add .
 git commit -m "Release"
 git push origin master
 
+::CD ..\..\JavaScript\games\trex
 CD %dp0
