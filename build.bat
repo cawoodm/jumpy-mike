@@ -21,7 +21,7 @@ TYPE game.js >> app.js
 :: Prepare release
 TYPE app.appcache > release\app.appcache
 COPY /Y app.js release\
-DEL /Y /Q app.js
+DEL /Q app.js
 COPY /Y sprites.png release\
 ECHO "Ready to test in release\ folder"
 PAUSE
