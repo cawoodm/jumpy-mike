@@ -8,7 +8,7 @@ function $(i) {return document.getElementById(i)}
 var G = {};
 var DEBUG = false;
 G.ui = {}
-G.ui.fps = 30 //50;
+G.ui.fps = 20 //50;
 G.ui.width = 150;
 G.ui.height = 150;
 G.ui.scaleX = Math.floor(window.innerWidth/G.ui.width)||1;
@@ -26,7 +26,7 @@ G.ui.palette1 = {light:'#333', dark:'#EEE', mid:'#CCC'}
 G.ui.palette = G.ui.palette0 
 G.ui.camera = {}
 
-function init() {
+G.init = function() {
 	document.body.style.padding=document.body.style.margin='0px';
 	document.body.style.backgroundColor='#000';//G.ui.palette.dark;
 	G.ui.area = $('c');
@@ -40,7 +40,9 @@ function init() {
 	G.ui.area.height=Math.floor(G.ui.height*G.ui.scaleY);
 	//G.ui.area.style.backgroundColor='#DDD';
 	G.ui.pts = {}
-	G.restart();
+	G.music.init();
+	//G.restart();G.pause();
+	G.menu.intro0();
 }
 //FILE: sprites.js
 function makeSprite(X,H,a) {
@@ -75,9 +77,9 @@ G.ui.sprites = {
 	trex: makeSprite(0,20,[[0,11,18],[1,10,19],[2,10,11],[2,12,12,1],[2,13,19],[3,10,19],[4,10,19],[5,10,14],[6,10,17],[7,0,0],[7,9,13],[8,0,0],[8,8,13],[9,0,1],[9,6,15],[10,0,2],[10,5,13],[11,0,13],[12,0,0,1],[12,1,12],[12,13,13,1],[13,1,12],[14,2,12],[15,3,11],[16,4,10],[17,5,7],[17,9,10],[18,5,6],[18,10,10],[19,5,5],[19,10,10],[20,5,6],[20,10,11]])
 	,cloud: makeSprite(0,7,[[0,6,10],[1,2,6],[1,11,11],[2,1,1],[2,5,5],[2,12,12],[3,0,1],[3,4,4],[3,13,13],[4,0,0],[4,13,13],[5,0,0],[5,13,13],[6,1,1],[6,13,13],[7,2,12]])
 	,smallCloud: makeSprite(0,4,[[0,4,6],[1,1,3],[1,7,7],[2,0,0],[2,2,2],[2,8,8],[3,0,0],[3,8,8],[4,1,7]])
-  ,stone: [{x:0,y:0}]
-  ,stone2: [{x:0,y:0},{x:1,y:0}]
-  ,stone3: spriteQuad(0,0,3,1,1)
+  ,stone0: [{x:0,y:0}]
+  ,stone1: [{x:0,y:0},{x:1,y:0}]
+  ,stone2: spriteQuad(0,0,3,1,1)
   ,cactus0:  spriteCombine([spriteQuad(0,2,2,4,10),spriteQuad(6,3,2,3,10),spriteQuad(0,6,8,2,10),spriteQuad(3,0,2,10,10)])
   ,cactus1:  spriteCombine([spriteQuad(3,3,3,17,20),spriteQuad(6,7,3,2,20),spriteQuad(7,5,2,4,20),spriteQuad(0,9,3,2,20),spriteQuad(0,7 ,2,4,20)])
   ,horizon: spriteQuad(0,0,G.ui.width,1,1)
@@ -95,10 +97,15 @@ G.ui.sprites = {
 G.ui.sprites.animate=function(){
 	if (G.player.y==G.ui.floor) {
 		// Running: animate player 3 times a second
-		if (G.ticks%(G.ui.fps/3)==0) G.player.frame=G.player.frame<5?G.player.frame+1:0;
+		dpd((new Date()).getMilliseconds(), G.ticks,G.ticks%(G.ui.fps/8))
+		if (G.ticks%(G.ui.fps/8)==0) G.player.frame=G.player.frame<5?G.player.frame+1:0;
 	} else {
-		G.player.frame=4; // Jump
+		G.player.frame=5; // Jump
 	}	
+}
+G.ui.sprites.restart=function() {
+	Object.assign(G.player, {w:22, h:25, image: new Image()});
+	G.player.image.src='sprites.png';
 }//FILE: entity.js
 G.entity = {
 	get: function(id) {
@@ -177,39 +184,42 @@ function px(x,y,c) {
 	G.ui.area.ctx.fillRect(x,y,G.ui.scaleX,G.ui.scaleY);
 }//FILE: music.js
 G.music={}
-G.music.restart = function() {
+G.music.init = function() {
+	G.music.ac = typeof AudioContext !== 'undefined' ? new AudioContext : new webkitAudioContext;
 	G.music.tempo=100;
-	G.music.ac = typeof AudioContext !== 'undefined' ? new AudioContext : new webkitAudioContext,
-	lead = [
+	G.music.lead = [
 		'C3  e','C3  e','B3  e','C3  e','C3  s','C3  s','G3  s','C3  s','G3  s','C3  s','C3  s','-  s',
 		'A3  e','G3  e','A3  e','G3  e','C3  e','C3  e','C3  e','-  e',
 	],
-	lead1 = [
+	G.music.lead1 = [
 		'C3  s','C3  s','A3  s','C3  s','G3  s','C4  s','C3  s','-  s','F3  e','C3  e','A3  e','F3  e',
-		'A3  e','G3  e','A3  e','G3  e','C3  e','D4  e','C3  e','-  e',
+		'A3  e','G3  e','C3  s','C3  s','G3  e','C3  e','D4  e','C3  e','-  e',
 	],
-	harmony = [
+	G.music.harmony = [
 		'-   e','D4  e','C4  e','D4  e','C3 e','C4  e','A3  e','C3 e',
 		'G3  e','A3  e','C3 e','A3  e','G3  e','A3  e','F3  q',
 		'-   e','D4  s','C4  s','D4  e','C3 e','C4  e','C3 e','A3  e','C3 e',
 		'G3  e','A3  e','C3 e','A3  e','G3  s','A3  s','G3  e','F3  q'
 	],
-	bass = [
+	G.music.bass = [
 		'D3  q','-   h','D3  q',
 		'A3  q','-   h','A2  q',
 		'C2 q','-   h','C2 q',
 		'G2  h','A2  h'
 	];
-	G.music.seq1 = new TinyMusic.Sequence( G.music.ac, G.music.tempo, lead );
-	G.music.seq2 = new TinyMusic.Sequence( G.music.ac, G.music.tempo, harmony );
-	G.music.seq3 = new TinyMusic.Sequence( G.music.ac, G.music.tempo, bass );
-	G.music.seq4 = new TinyMusic.Sequence( G.music.ac, G.music.tempo, lead1 );
+	G.music.seq1 = new TinyMusic.Sequence( G.music.ac, G.music.tempo, G.music.lead );
+	G.music.seq1.createCustomWave([-1,-0.9,-0.6,-0.3, 0, 0.3, 0.6, 0.9,1])
+	G.music.seq2 = new TinyMusic.Sequence( G.music.ac, G.music.tempo, G.music.harmony );
+	G.music.seq3 = new TinyMusic.Sequence( G.music.ac, G.music.tempo, G.music.bass );
+	G.music.seq3.createCustomWave([-1,-0.9,-0.6,-0.3, 0, 0.3, 0.6, 0.9,1])
+	G.music.seq4 = new TinyMusic.Sequence( G.music.ac, G.music.tempo, G.music.lead1 );
+	G.music.seq4.createCustomWave([-1,-0.8,-0.4,-0.2, 0, 0.2, 0.4, 0.8,1])
 
 	// set staccato and smoothing values for maximum coolness
 	G.music.seq1.staccato = 0.55;
 	G.music.seq4.staccato = 0.55;
 	G.music.seq2.staccato = 0.55;
-	G.music.seq3.staccato = 0.35;
+	G.music.seq3.staccato = 0.15;
 	G.music.seq3.smoothing = 0.9;
 
 	// adjust the levels so the bass and harmony aren't too loud
@@ -226,13 +236,15 @@ G.music.restart = function() {
 	G.music.seq2.mid.frequency.value = 1200;
 	
 	G.music.seq3.mid.gain.value = 3;
-	G.music.seq3.bass.gain.value = 6;
+	G.music.seq3.bass.gain.value = 16;
 	G.music.seq3.bass.frequency.value = 80;
 	G.music.seq3.mid.gain.value = -6;
 	G.music.seq3.mid.frequency.value = 500;
 	G.music.seq3.treble.gain.value = -2;
 	G.music.seq3.treble.frequency.value = 1400;
-	
+}
+G.music.restart = function() {
+	G.music.tempo=100;
 	G.music.seq1.counter=0;
 	G.music.seq4.counter=0;
 };
@@ -282,6 +294,10 @@ G.ui.setupEvents=function(){
 };
 G.click = function(e) {
 	var button0 = e.key==' ' || e.type == 'touchstart' || e.type == 'mousedown';
+	if (button0 && G.menu.next) {
+		e.stopPropagation(); e.preventDefault();
+		G.menu.doNext(); return
+	}
 	if(G.state == 3 && button0) {G.restart(); return;}
 	if (e.key=='p') G.pause();
 	if (button0) {
@@ -297,7 +313,75 @@ G.clickEnd = function(e) {
 		G.clickTimer = 0;
 	}
 };
-//FILE: restart.js
+G.menu = {
+	next: null
+	,font:"Courier New,Courier"
+	,textSize: Math.round(G.ui.width*G.ui.scaleX/30)
+	,lineHeight: Math.round(G.ui.height*G.ui.scaleY/12)
+}
+G.menu.intro0 = function() {
+G.menu.popup('Welcome... or rather not.... You are an illegal alien #BadHombre of questionable race and virtue trying to get into the "Land of the Free"', G.menu.intro1);
+}
+G.menu.intro1 = function() {
+	G.menu.popup('Sooo... until we build The Wall (#NeedSponsor) and according to our new "Merit System" you must earn enough "Freedom Points" in order to be allowed entry...', G.menu.intro2)
+}
+G.menu.intro2 = function() {
+	G.menu.popup('Pass through our desert (#SwampDrained) to earn Freedom Points by jumping cactuseses and we will consider your application...', G.menu.intro3)
+}
+G.menu.intro3 = function() {
+	G.menu.popup('Fail and we will be forced to keep you in a prison camp wearing pink underwear until you die of humiliation #ToughLove ...', G.menu.intro4)
+}
+G.menu.intro4 = function() {
+	G.menu.popup('Gain 1000 points and you will be worthy to enter the "Home of the Brave" where guns are cheap and basic necessities ain\'t. Good Luck!', G.restart)
+}
+G.menu.popup = function(text, next) {
+	
+	G.menu.next=next;
+
+	var rectWidth = (G.ui.width*G.ui.scaleX)/1.5;
+	var rectHeight = (G.ui.height*G.ui.scaleX)/1.5;
+	var rectY = (G.ui.height*G.ui.scaleY)/2-rectHeight/2;
+	var rectX = (G.ui.width*G.ui.scaleX)/2-rectWidth/2;
+	var cornerRadius = 20;
+
+	var ctx = G.ui.area.ctx;
+	ctx.fillStyle = G.ui.palette.light;
+	ctx.strokeStyle = G.ui.palette.light;
+	ctx.lineJoin = "round";
+	ctx.lineWidth = cornerRadius;
+	ctx.strokeRect(rectX+(cornerRadius/2), rectY+(cornerRadius/2), rectWidth-cornerRadius, rectHeight-cornerRadius);
+	ctx.fillRect(rectX+(cornerRadius/2), rectY+(cornerRadius/2), rectWidth-cornerRadius, rectHeight-cornerRadius);
+	
+	G.menu.wrapText(text,rectX+cornerRadius,rectY+cornerRadius, rectWidth-cornerRadius*2);
+}
+G.menu.doNext = function() {
+	this.next();
+}
+G.menu.wrapText = function(text, x, y, maxWidth) {
+	
+	var ctx = G.ui.area.ctx;
+	
+	ctx.fillStyle = G.ui.palette.dark;
+	ctx.font=G.menu.textSize+"px "+this.font;
+	
+	var words = text.split(' ');
+	var line = '';
+
+	for(var n = 0; n < words.length; n++) {
+	  var testLine = line + words[n] + ' ';
+	  var metrics = ctx.measureText(testLine);
+	  var testWidth = metrics.width;
+	  if (testWidth > maxWidth && n > 0) {
+		ctx.fillText(line, x, y);
+		line = words[n] + ' ';
+		y += this.lineHeight;
+	  }
+	  else {
+		line = testLine;
+	  }
+	}
+	ctx.fillText(line, x, y);
+  }//FILE: restart.js
 G.restart = function() {
 	G.ticks = 0;
 	G.state = 1;
@@ -322,22 +406,26 @@ G.restart = function() {
 		score:0,
 		//pts:G.ui.sprites.trex,
 		jumps:0,
-		w:28,
-		h:18,
-		frame:0,
-		image: new Image()
+		frame:0
 	});
-	G.player.image.src = 'sprites.png';
+	G.ui.sprites.restart();
+	
 	G.addCloud(G.ui.width*0.3,1);
 	G.addCloud(G.ui.width*0.7,1);
 	G.addCloud(G.ui.width*0.6,0);
 	G.addCloud(G.ui.width*0.9,0);
+	
+	for (var s=0; s<20; s++) {
+		G.entity.add({tag:'stone'+(s%3),x:rnd(0,G.ui.width),y:rnd(0, G.ui.horizon-1),pts:G.ui.sprites['stone'+(s%3)]})
+	}
 	
 	G.entity.add({tag:'horizon', x:0, y:G.ui.horizon, follow:true, pts:G.ui.sprites.horizon})
 
 	G.entity.add({id:'char3', x:G.ui.width-4*(6+2), y:G.ui.height-2-10, follow:true, pts:G.ui.sprites.char0})
 	G.entity.add({id:'char2', x:G.ui.width-3*(6+2), y:G.ui.height-2-10, follow:true, pts:G.ui.sprites.char0})
 	G.entity.add({id:'char1', x:G.ui.width-2*(6+2), y:G.ui.height-2-10, follow:true, pts:G.ui.sprites.char0})
+	
+	G.menu.next=null;
 	
 	G.ui.camera = {
 		x:0,
@@ -351,25 +439,21 @@ G.update = function() {
 	
 	var test = G.entity.get('char')
 
-	// Generate a random cloud 5 times every second
-	if (G.ticks%(G.ui.fps/5)==0) {
+	// Generate a random cloud
+	if (prob(75) && G.ticks%rnd(10,30)==0) {
 
 		if (prob(80) && G.entity.count('smallCloud')<3) G.addCloud(0,0)
 		if (prob(90) && G.entity.count('cloud' )<3) G.addCloud(0,1)
 	}
-	// Generate random stones 3 times a second
-	if (G.ticks%(G.ui.fps/3)==0) {
-		
-		if (prob(75) && G.entity.count('stone')<6) G.entity.add({tag:'stone',x:G.ui.camera.x+G.ui.width,y:rnd(0, G.ui.horizon-1),pts:G.ui.sprites.stone})
-		if (prob(75) && G.entity.count('stone2')<6) G.entity.add({tag:'stone2',x:G.ui.camera.x+G.ui.width,y:rnd(0, G.ui.horizon-2),pts:G.ui.sprites.stone2})
-		if (prob(75) && G.entity.count('stone6')<6) G.entity.add({tag:'stone3',x:G.ui.camera.x+G.ui.width,y:rnd(0, G.ui.horizon-3),pts:G.ui.sprites.stone3})
-	}
+	// Generate random stones
+	if (prob(75) && G.ticks%rnd(10,30)==0) G.entity.add({tag:'stone0',x:G.ui.camera.x+G.ui.width,y:rnd(0, G.ui.horizon-1),pts:G.ui.sprites.stone0})
+	if (prob(75) && G.ticks%rnd(10,30)==0) G.entity.add({tag:'stone1',x:G.ui.camera.x+G.ui.width,y:rnd(0, G.ui.horizon-2),pts:G.ui.sprites.stone1})
+	if (prob(75) && G.ticks%rnd(10,30)==0) G.entity.add({tag:'stone2',x:G.ui.camera.x+G.ui.width,y:rnd(0, G.ui.horizon-3),pts:G.ui.sprites.stone2})
 
 	if (G.ticks%10==0) {G.speed+=0.005;G.spacing-=.1;}
-	if (G.ticks%100==0) {G.music.tempo+=10;}
 	
-	// Generate cactii 3 times a second according to spacing
-	if (G.ticks%(G.ui.fps/3)==0) {
+	// Generate cactii 
+	if (G.ticks%rnd(10,30)==0) {
 		var nextCactus = (Math.random()*G.spacing)+40;
 		//dp(G.ticks, G.ticks-G.lastCactus, nextCactus,G.ticks-G.lastCactus>nextCactus)
 		if (G.ticks-G.lastCactus>nextCactus) {
@@ -406,8 +490,11 @@ G.update = function() {
 		// Floor (min y) => Stop vertical motion and remain on floor
 		if (typeof ent.minY != 'undefined' && Math.abs(ent.dy)>0 && ent.y <= ent.minY) {
 			ent.dy=0;ent.y=ent.minY;
-			//dp("Jump Down", G.ticks, window.xx, "Diff", G.ticks - window.xx)
-			if (ent===G.player) G.player.jumps++;
+			dpd("Jump Down", G.ticks, window.xx, "Diff", G.ticks - window.xx)
+			if (ent===G.player) {
+				G.player.jumps++;
+				G.player.frame=0;
+			}
 		}
 
 		// Check collision
@@ -425,6 +512,7 @@ G.update = function() {
 	G.level = Math.floor(G.player.score/100)
 	//G.player.score = G.player.jumps
 	G.ui.showScore(G.player.score)
+	//if (G.ticks%100==0) {G.music.tempo=100+100*parseInt(G.player.score)/1000;}
 	if(G.ticks%1000==0) G.ui.palette = G.ui.palette==G.ui.palette0?G.ui.palette1:G.ui.palette0;
 };
 G.loop = function() {
@@ -459,4 +547,4 @@ G.pause = function() {
 		G.music.stop();
 	} else G.start();
 };
-init();
+G.init();
