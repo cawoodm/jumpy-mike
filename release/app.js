@@ -14,7 +14,6 @@ G.ui.height = 150;
 G.ui.scaleX = Math.floor(window.innerWidth/G.ui.width)||1;
 G.ui.scaleY = Math.floor(window.innerHeight/G.ui.height)||1;
 if (G.ui.scaleX>G.ui.scaleY) G.ui.scaleX=G.ui.scaleY; else G.ui.scaleY=G.ui.scaleX;
-dp(G.ui.width, window.innerWidth, G.ui.scaleX)
 G.ui.width=Math.floor(window.innerWidth/G.ui.scaleX)
 G.gravity=.3;
 G.minJump=2;
@@ -25,7 +24,6 @@ G.ui.horizon = 12;
 G.ui.palette0 = {light:'#EEE', dark:'#333', mid:'#CCC'}
 G.ui.palette1 = {light:'#333', dark:'#EEE', mid:'#CCC'}
 G.ui.palette = G.ui.palette0 
-G.music = {}
 G.ui.camera = {}
 
 function init() {
@@ -137,9 +135,9 @@ G.entity = {
 		var hitFront = eX+EasyX<=pMaxX;
 		var hitTop = eMaxX-EasyX>pX;
 		if (hitY && hitFront && hitTop) {
-			dp("pY+EasyY=",G.player.y+EasyY,"eH+eY=",ent.y+eH,"hitY=",hitY)
-			dp("eX=",eX,"pMaxXpX=",pMaxX,"overlap=",pMaxX-eX,"hitFront=",hitFront)
-			dp("eX=",eX,"px=",pX,"eMaxX=",eMaxX,"hitTop=",hitTop)
+			dpd("pY+EasyY=",G.player.y+EasyY,"eH+eY=",ent.y+eH,"hitY=",hitY)
+			dpd("eX=",eX,"pMaxXpX=",pMaxX,"overlap=",pMaxX-eX,"hitFront=",hitFront)
+			dpd	("eX=",eX,"px=",pX,"eMaxX=",eMaxX,"hitTop=",hitTop)
 			return true;}
 	}
 }
@@ -272,6 +270,7 @@ G.music.stop = function() {
 	G.music.seq1.stop();
 	G.music.seq2.stop();
 	G.music.seq3.stop();
+	G.music.seq4.stop();
 };
 //FILE: events.js
 G.clickTimer = 0;

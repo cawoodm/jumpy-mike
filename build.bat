@@ -3,11 +3,6 @@ SETLOCAL
 
 DEL app.js
 
-:: Update HTML5 offline manifest so game will update
-::ECHO #%time% > release\app.appcache
-::TYPE app.appcache >> release\app.appcache
-TYPE app.appcache > release\app.appcache
-
 git add .
 git commit -m "Build %date% %time%"
 
@@ -23,14 +18,20 @@ TYPE events.js >> app.js
 TYPE restart.js >> app.js
 TYPE game.js >> app.js
 
+:: Prepare release
+TYPE app.appcache > release\app.appcache
 COPY /Y app.js release\
+DEL /Y /Q app.js
 COPY /Y sprites.png release\
 ECHO "Ready to test in release\ folder"
 PAUSE
 
-COPY /Y .\release\*.* "C:\Users\marc\Google Drive\Work\cawoodm.github.io\jumpy-mike"
+:: Copy to local cawoodm github site
+COPY /Y .\release\*.* ..\..\..\cawoodm.github.io\jumpy-mike
 ECHO "Ready to test in cawoodm.github.io\jumpy-mike\ folder"
 PAUSE
+
+:: Publish to github
 CD ..\..\..\cawoodm.github.io\jumpy-mike
 git add .
 git commit -m "Release %date% %time%"
