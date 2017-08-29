@@ -24,6 +24,7 @@ TYPE app.appcache > release\app.appcache
 COPY /Y app.js release\
 DEL /Q app.js
 COPY /Y sprites.png release\
+COPY /Y favicon.png release\
 COPY /Y favicon.ico release\
 ECHO "Ready to test in release\ folder"
 PAUSE
