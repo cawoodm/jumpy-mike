@@ -1,3 +1,4 @@
+//FILE: restart.js
 G.restart = function() {
 	G.ticks = 0;
 	G.state = 1;
@@ -22,8 +23,8 @@ G.restart = function() {
 		score:0,
 		//pts:G.ui.sprites.trex,
 		jumps:0,
-		w:26,
-		h:20,
+		w:28,
+		h:18,
 		frame:0,
 		image: new Image()
 	});
@@ -44,4 +45,5 @@ G.restart = function() {
 		y:0
 	}
 	G.player.image.onload = G.start;
-}
+	G.music.restart();
+};

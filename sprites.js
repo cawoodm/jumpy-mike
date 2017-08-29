@@ -48,3 +48,11 @@ G.ui.sprites = {
   ,char8: spriteCombine([spriteQuad(0,0,2,10,10), spriteQuad(0,0,6,2,10), spriteQuad(4,2,2,2,10), spriteQuad(0,4,6,2,10), spriteQuad(4,6,2,2,10), spriteQuad(0,8,6,2,10)])
   ,char9: spriteCombine([spriteQuad(0,0,6,2,10), spriteQuad(0,2,2,4,10), spriteQuad(2,4,2,2,10), spriteQuad(4,2,2,8,10)])
 }
+G.ui.sprites.animate=function(){
+	if (G.player.y==G.ui.floor) {
+		// Running: animate player 3 times a second
+		if (G.ticks%(G.ui.fps/3)==0) G.player.frame=G.player.frame<5?G.player.frame+1:0;
+	} else {
+		G.player.frame=4; // Jump
+	}	
+}

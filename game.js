@@ -1,4 +1,4 @@
-//FILE: loop.js
+//FILE: game.js
 G.update = function() {
 	G.ticks++;
 	
@@ -19,13 +19,14 @@ G.update = function() {
 	}
 
 	if (G.ticks%10==0) {G.speed+=0.005;G.spacing-=.1;}
+	if (G.ticks%100==0) {G.music.tempo+=10;}
 	
 	// Generate cactii 3 times a second according to spacing
 	if (G.ticks%(G.ui.fps/3)==0) {
 		var nextCactus = (Math.random()*G.spacing)+40;
 		//dp(G.ticks, G.ticks-G.lastCactus, nextCactus,G.ticks-G.lastCactus>nextCactus)
 		if (G.ticks-G.lastCactus>nextCactus) {
-			console.log('spacing:',G.spacing,'last:', G.ticks-G.lastCactus,'next:',nextCactus, G.ticks-G.lastCactus>nextCactus)
+			dpd('spacing:',G.spacing,'last:', G.ticks-G.lastCactus,'next:',nextCactus, G.ticks-G.lastCactus>nextCactus)
 			var p=Math.random();
 			G.addCactus(0,Math.round(Math.random()))
 			if(G.level>1 && p>0.75) G.addCactus(10,Math.round(Math.random()))
@@ -42,12 +43,7 @@ G.update = function() {
 	
 	G.ui.camera.x+=G.speed||0;
 
-	if (G.player.y==G.ui.floor) {
-		// Running: animate player 3 times a second
-		if (G.ticks%(G.ui.fps/3)==0) G.player.frame=G.player.frame==0?1:0;
-	} else {
-		G.player.frame=2; // Jump
-	}
+	G.ui.sprites.animate();
 	var e = G.ent.length;
 	while (e--) {
 		var ent = G.ent[e]; 
@@ -83,15 +79,13 @@ G.update = function() {
 	//G.player.score = G.player.jumps
 	G.ui.showScore(G.player.score)
 	if(G.ticks%1000==0) G.ui.palette = G.ui.palette==G.ui.palette0?G.ui.palette1:G.ui.palette0;
-}
-
+};
 G.loop = function() {
 	G.update();
 	G.clear();
 	G.draw();
 	if (G._intervalId) requestAnimationFrame(G.loop);
-}
-
+};
 G.ui.showScore = function(s) {
 	let char = ('00' + s).slice(-3);
 	let c3 = char[0];c2 = char[1];c1 = char[2];
@@ -99,31 +93,23 @@ G.ui.showScore = function(s) {
 	G.entity.get('char2').pts = G.ui.sprites['char'+c2];
 	G.entity.get('char1').pts = G.ui.sprites['char'+c1];
 	//let char3 = char.substring
-}
-
+};
 G.addCloud = function(x,t) {
 	G.entity.add({tag:t==0?'smallCloud':'cloud',x:x||G.ui.camera.x+G.ui.width,y:rnd(t*G.ui.height/60+G.ui.height/3,G.ui.height-15),pts:t==0?G.ui.sprites.smallCloud:G.ui.sprites.cloud,col:2, dx:G.speed/(2+t), dy:.01})
-}
+};
 G.addCactus = function(x,t) {
 	var h=9+t*9;
 	G.entity.add({tag:'cactus',obstacle:[9,h], x:G.ui.camera.x+G.ui.width+x, y:G.ui.floor, pts:G.ui.sprites['cactus'+t]})
-}
+};
 G.start = function() {
 	G._intervalId = requestAnimationFrame(G.loop);//setInterval(G.loop, 1000/G.ui.fps);
-	var when = G.music.ac.currentTime;
-	G.music.seq1.play( when );
-	G.music.seq2.play( when + ( 60 / G.music.tempo ) * 16 );// delay the harmony by 16 beats
-	G.music.seq3.play( when );
-}
+	G.music.play();
+};
 G.pause = function() {
 	if (G._intervalId) {
 		clearInterval(G._intervalId);
 		delete G._intervalId;
-		G.music.seq1.stop();
-		G.music.seq2.stop();
-		G.music.seq3.stop();
+		G.music.stop();
 	} else G.start();
-}
-
-
-init()
+};
+init();

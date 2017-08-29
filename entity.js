@@ -23,10 +23,20 @@ G.entity = {
 		return count;
 	},
 	collision: function(ent) {
-		var X = G.player.x+G.ui.camera.x
-		//dp(G.player.y,ent.obstacle[1],G.player.y<=ent.obstacle[1])
-		if (G.player.y<=ent.obstacle[1]-1 && ent.x<=X+G.player.w-3 && ent.x+ent.obstacle[0]>X) {
-			//dp('player.x=',X,'player.x+w=',X+G.player.w,'cactus.x=', ent.x,'overlap',ent.x-(X+G.player.w),ent.obstacle[0],ent.x<=X+G.player.w)
+		var eX = Math.round(ent.x-+G.ui.camera.x);
+		var eH = ent.obstacle[1];
+		var eMaxX = Math.round(eX+ent.obstacle[0]);
+		var pX = Math.round(G.player.x)
+		var pMaxX = Math.round(pX+G.player.w)
+		var EasyY = Math.floor(eH/1.5);
+		var EasyX = 2;
+		var hitY=G.player.y+EasyY<=ent.y+eH;
+		var hitFront = eX+EasyX<=pMaxX;
+		var hitTop = eMaxX-EasyX>pX;
+		if (hitY && hitFront && hitTop) {
+			dpd("pY+EasyY=",G.player.y+EasyY,"eH+eY=",ent.y+eH,"hitY=",hitY)
+			dpd("eX=",eX,"pMaxXpX=",pMaxX,"overlap=",pMaxX-eX,"hitFront=",hitFront)
+			dpd	("eX=",eX,"px=",pX,"eMaxX=",eMaxX,"hitTop=",hitTop)
 			return true;}
 	}
 }

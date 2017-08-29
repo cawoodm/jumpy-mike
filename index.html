@@ -1,4 +1,4 @@
-<html manifest="app.appcache">
+<html manifest="app.appcache" type="text/cache-manifest">
 <head>
 <title>Jumpy Mike</title>
 <link rel="shortcut icon" type="image/png" href="favicon.ico"/>
@@ -18,11 +18,11 @@ body {position: relative}
 </head>
 <body>
 <canvas id="c" width=30 height=40></canvas>
-<!--
+
 <button onclick="DEBUG=!DEBUG; this.innerText='DEBUG ('+DEBUG+')'">DEBUG</button>
 <button onclick="G.pause(); this.innerText=G._intervalId?'PAUSE':'CONTINUE'">PAUSE</button>
 <button onclick="G.restart();">RESTART</button>
--->
+<!---->
 </body>
 <script src=tinymusic.js></script>
 <script src=functions.js></script>
@@ -30,6 +30,7 @@ body {position: relative}
 <script src=sprites.js></script>
 <script src=entity.js></script>
 <script src=draw.js></script>
+<script src=music.js></script>
 <script src=events.js></script>
 <script src=restart.js></script>
 <script src=game.js></script>

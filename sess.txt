@@ -1,0 +1,20 @@
+<NotepadPlus>
+    <Session activeView="0">
+        <mainView activeIndex="5">
+            <File firstVisibleLine="5" xOffset="0" scrollWidth="30560" startPos="1152" endPos="1120" selMode="0" lang="HTML" encoding="-1" filename="C:\Users\marc\Google Drive\Work\JavaScript\games\trex\index.html" backupFilePath="" originalFileLastModifTimestamp="1503398212" />
+            <File firstVisibleLine="74" xOffset="0" scrollWidth="30560" startPos="3758" endPos="3758" selMode="0" lang="HTML" encoding="-1" filename="C:\Users\marc\Google Drive\Work\JavaScript\games\trex\test.html" backupFilePath="" originalFileLastModifTimestamp="1503409585" />
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="30560" startPos="364" endPos="364" selMode="0" lang="JavaScript" encoding="-1" filename="C:\Users\marc\Google Drive\Work\JavaScript\games\trex\init.js" backupFilePath="" originalFileLastModifTimestamp="1503407075" />
+            <File firstVisibleLine="10" xOffset="0" scrollWidth="30560" startPos="472" endPos="472" selMode="0" lang="JavaScript" encoding="-1" filename="C:\Users\marc\Google Drive\Work\JavaScript\games\trex\restart.js" backupFilePath="" originalFileLastModifTimestamp="1503399781" />
+            <File firstVisibleLine="85" xOffset="0" scrollWidth="30560" startPos="3976" endPos="3976" selMode="0" lang="JavaScript" encoding="-1" filename="C:\Users\marc\Google Drive\Work\JavaScript\games\trex\game.js" backupFilePath="" originalFileLastModifTimestamp="1503409290" />
+            <File firstVisibleLine="58" xOffset="0" scrollWidth="30560" startPos="2977" endPos="2977" selMode="0" lang="JavaScript" encoding="-1" filename="C:\Users\marc\Google Drive\Work\JavaScript\games\trex\music.js" backupFilePath="" originalFileLastModifTimestamp="1503398307" />
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="30560" startPos="216" endPos="216" selMode="0" lang="JavaScript" encoding="-1" filename="C:\Users\marc\Google Drive\Work\JavaScript\games\trex\functions.js" backupFilePath="" originalFileLastModifTimestamp="1503406427" />
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="30560" startPos="12" endPos="12" selMode="0" lang="Batch" encoding="-1" filename="C:\Users\marc\Google Drive\Work\JavaScript\games\trex\build.bat" backupFilePath="" originalFileLastModifTimestamp="1503398968" />
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="30560" startPos="508" endPos="513" selMode="0" lang="JavaScript" encoding="-1" filename="C:\Users\marc\Google Drive\Work\JavaScript\games\trex\events.js" backupFilePath="" originalFileLastModifTimestamp="1503398294" />
+            <File firstVisibleLine="25" xOffset="0" scrollWidth="30560" startPos="3100" endPos="3105" selMode="0" lang="JavaScript" encoding="-1" filename="C:\Users\marc\Google Drive\Work\JavaScript\games\trex\sprites.js" backupFilePath="" originalFileLastModifTimestamp="1503399944" />
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="30560" startPos="665" endPos="665" selMode="0" lang="JavaScript" encoding="-1" filename="C:\Users\marc\Google Drive\Work\JavaScript\games\trex\draw.js" backupFilePath="" originalFileLastModifTimestamp="1503406361" />
+            <File firstVisibleLine="11" xOffset="0" scrollWidth="30560" startPos="757" endPos="757" selMode="0" lang="JavaScript" encoding="-1" filename="C:\Users\marc\Google Drive\Work\JavaScript\games\trex\entity.js" backupFilePath="" originalFileLastModifTimestamp="1503409148" />
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="30560" startPos="283" endPos="283" selMode="0" lang="JavaScript" encoding="-1" filename="C:\Users\marc\Google Drive\Work\JavaScript\games\TinyMusic.js" backupFilePath="" originalFileLastModifTimestamp="1503409470" />
+        </mainView>
+        <subView activeIndex="0" />
+    </Session>
+</NotepadPlus>

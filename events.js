@@ -5,7 +5,7 @@ G.ui.setupEvents=function(){
 	document.body.addEventListener('mouseup', G.clickEnd)
 	document.body.addEventListener('touchstart', G.click, {passive: false})
 	document.body.addEventListener('touchend', G.clickEnd, {passive: false})
-}
+};
 G.click = function(e) {
 	var button0 = e.key==' ' || e.type == 'touchstart' || e.type == 'mousedown';
 	if(G.state == 3 && button0) {G.restart(); return;}
@@ -17,9 +17,9 @@ G.click = function(e) {
 		else if(G.player.y=G.player.minY) {//dp("Jump Up Ticks:",G.ticks);
 		window.xx=G.ticks;G.clickTimer = G.minJump;}
 	}
-}
+};
 G.clickEnd = function(e) {
 	if (G.clickTimer>0) {
 		G.clickTimer = 0;
 	}
-}
+};
