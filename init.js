@@ -2,7 +2,7 @@
 var G = {};
 var DEBUG = false;
 G.ui = {}
-G.ui.fps = 30 //50;
+G.ui.fps = 20 //50;
 G.ui.width = 150;
 G.ui.height = 150;
 G.ui.scaleX = Math.floor(window.innerWidth/G.ui.width)||1;
@@ -20,7 +20,7 @@ G.ui.palette1 = {light:'#333', dark:'#EEE', mid:'#CCC'}
 G.ui.palette = G.ui.palette0 
 G.ui.camera = {}
 
-function init() {
+G.init = function() {
 	document.body.style.padding=document.body.style.margin='0px';
 	document.body.style.backgroundColor='#000';//G.ui.palette.dark;
 	G.ui.area = $('c');
@@ -34,5 +34,7 @@ function init() {
 	G.ui.area.height=Math.floor(G.ui.height*G.ui.scaleY);
 	//G.ui.area.style.backgroundColor='#DDD';
 	G.ui.pts = {}
-	G.restart();
+	G.music.init();
+	//G.restart();G.pause();
+	G.menu.intro0();
 }

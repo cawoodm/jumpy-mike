@@ -4,25 +4,21 @@ G.update = function() {
 	
 	var test = G.entity.get('char')
 
-	// Generate a random cloud 5 times every second
-	if (G.ticks%(G.ui.fps/5)==0) {
+	// Generate a random cloud
+	if (prob(75) && G.ticks%rnd(10,30)==0) {
 
 		if (prob(80) && G.entity.count('smallCloud')<3) G.addCloud(0,0)
 		if (prob(90) && G.entity.count('cloud' )<3) G.addCloud(0,1)
 	}
-	// Generate random stones 3 times a second
-	if (G.ticks%(G.ui.fps/3)==0) {
-		
-		if (prob(75) && G.entity.count('stone')<6) G.entity.add({tag:'stone',x:G.ui.camera.x+G.ui.width,y:rnd(0, G.ui.horizon-1),pts:G.ui.sprites.stone})
-		if (prob(75) && G.entity.count('stone2')<6) G.entity.add({tag:'stone2',x:G.ui.camera.x+G.ui.width,y:rnd(0, G.ui.horizon-2),pts:G.ui.sprites.stone2})
-		if (prob(75) && G.entity.count('stone6')<6) G.entity.add({tag:'stone3',x:G.ui.camera.x+G.ui.width,y:rnd(0, G.ui.horizon-3),pts:G.ui.sprites.stone3})
-	}
+	// Generate random stones
+	if (prob(75) && G.ticks%rnd(10,30)==0) G.entity.add({tag:'stone0',x:G.ui.camera.x+G.ui.width,y:rnd(0, G.ui.horizon-1),pts:G.ui.sprites.stone0})
+	if (prob(75) && G.ticks%rnd(10,30)==0) G.entity.add({tag:'stone1',x:G.ui.camera.x+G.ui.width,y:rnd(0, G.ui.horizon-2),pts:G.ui.sprites.stone1})
+	if (prob(75) && G.ticks%rnd(10,30)==0) G.entity.add({tag:'stone2',x:G.ui.camera.x+G.ui.width,y:rnd(0, G.ui.horizon-3),pts:G.ui.sprites.stone2})
 
 	if (G.ticks%10==0) {G.speed+=0.005;G.spacing-=.1;}
-	if (G.ticks%100==0) {G.music.tempo+=10;}
 	
-	// Generate cactii 3 times a second according to spacing
-	if (G.ticks%(G.ui.fps/3)==0) {
+	// Generate cactii 
+	if (G.ticks%rnd(10,30)==0) {
 		var nextCactus = (Math.random()*G.spacing)+40;
 		//dp(G.ticks, G.ticks-G.lastCactus, nextCactus,G.ticks-G.lastCactus>nextCactus)
 		if (G.ticks-G.lastCactus>nextCactus) {
@@ -59,8 +55,11 @@ G.update = function() {
 		// Floor (min y) => Stop vertical motion and remain on floor
 		if (typeof ent.minY != 'undefined' && Math.abs(ent.dy)>0 && ent.y <= ent.minY) {
 			ent.dy=0;ent.y=ent.minY;
-			//dp("Jump Down", G.ticks, window.xx, "Diff", G.ticks - window.xx)
-			if (ent===G.player) G.player.jumps++;
+			dpd("Jump Down", G.ticks, window.xx, "Diff", G.ticks - window.xx)
+			if (ent===G.player) {
+				G.player.jumps++;
+				G.player.frame=0;
+			}
 		}
 
 		// Check collision
@@ -78,6 +77,7 @@ G.update = function() {
 	G.level = Math.floor(G.player.score/100)
 	//G.player.score = G.player.jumps
 	G.ui.showScore(G.player.score)
+	//if (G.ticks%100==0) {G.music.tempo=100+100*parseInt(G.player.score)/1000;}
 	if(G.ticks%1000==0) G.ui.palette = G.ui.palette==G.ui.palette0?G.ui.palette1:G.ui.palette0;
 };
 G.loop = function() {
@@ -112,4 +112,4 @@ G.pause = function() {
 		G.music.stop();
 	} else G.start();
 };
-init();
+G.init();

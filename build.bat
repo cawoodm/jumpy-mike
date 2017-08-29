@@ -1,12 +1,12 @@
 @ECHO OFF
 SETLOCAL
 
-DEL app.js
-
+:: Commit local changes
 git add .
 git commit -m "Build %date% %time%"
 
 :: Compile JS into one file
+DEL app.js
 TYPE tinymusic.js >> app.js
 TYPE functions.js >> app.js
 TYPE init.js >> app.js
@@ -15,6 +15,7 @@ TYPE entity.js >> app.js
 TYPE draw.js >> app.js
 TYPE music.js >> app.js
 TYPE events.js >> app.js
+TYPE menu.js >> app.js
 TYPE restart.js >> app.js
 TYPE game.js >> app.js
 

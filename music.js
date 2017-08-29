@@ -1,38 +1,41 @@
 //FILE: music.js
 G.music={}
-G.music.restart = function() {
+G.music.init = function() {
+	G.music.ac = typeof AudioContext !== 'undefined' ? new AudioContext : new webkitAudioContext;
 	G.music.tempo=100;
-	G.music.ac = typeof AudioContext !== 'undefined' ? new AudioContext : new webkitAudioContext,
-	lead = [
+	G.music.lead = [
 		'C3  e','C3  e','B3  e','C3  e','C3  s','C3  s','G3  s','C3  s','G3  s','C3  s','C3  s','-  s',
 		'A3  e','G3  e','A3  e','G3  e','C3  e','C3  e','C3  e','-  e',
 	],
-	lead1 = [
+	G.music.lead1 = [
 		'C3  s','C3  s','A3  s','C3  s','G3  s','C4  s','C3  s','-  s','F3  e','C3  e','A3  e','F3  e',
-		'A3  e','G3  e','A3  e','G3  e','C3  e','D4  e','C3  e','-  e',
+		'A3  e','G3  e','C3  s','C3  s','G3  e','C3  e','D4  e','C3  e','-  e',
 	],
-	harmony = [
+	G.music.harmony = [
 		'-   e','D4  e','C4  e','D4  e','C3 e','C4  e','A3  e','C3 e',
 		'G3  e','A3  e','C3 e','A3  e','G3  e','A3  e','F3  q',
 		'-   e','D4  s','C4  s','D4  e','C3 e','C4  e','C3 e','A3  e','C3 e',
 		'G3  e','A3  e','C3 e','A3  e','G3  s','A3  s','G3  e','F3  q'
 	],
-	bass = [
+	G.music.bass = [
 		'D3  q','-   h','D3  q',
 		'A3  q','-   h','A2  q',
 		'C2 q','-   h','C2 q',
 		'G2  h','A2  h'
 	];
-	G.music.seq1 = new TinyMusic.Sequence( G.music.ac, G.music.tempo, lead );
-	G.music.seq2 = new TinyMusic.Sequence( G.music.ac, G.music.tempo, harmony );
-	G.music.seq3 = new TinyMusic.Sequence( G.music.ac, G.music.tempo, bass );
-	G.music.seq4 = new TinyMusic.Sequence( G.music.ac, G.music.tempo, lead1 );
+	G.music.seq1 = new TinyMusic.Sequence( G.music.ac, G.music.tempo, G.music.lead );
+	G.music.seq1.createCustomWave([-1,-0.9,-0.6,-0.3, 0, 0.3, 0.6, 0.9,1])
+	G.music.seq2 = new TinyMusic.Sequence( G.music.ac, G.music.tempo, G.music.harmony );
+	G.music.seq3 = new TinyMusic.Sequence( G.music.ac, G.music.tempo, G.music.bass );
+	G.music.seq3.createCustomWave([-1,-0.9,-0.6,-0.3, 0, 0.3, 0.6, 0.9,1])
+	G.music.seq4 = new TinyMusic.Sequence( G.music.ac, G.music.tempo, G.music.lead1 );
+	G.music.seq4.createCustomWave([-1,-0.8,-0.4,-0.2, 0, 0.2, 0.4, 0.8,1])
 
 	// set staccato and smoothing values for maximum coolness
 	G.music.seq1.staccato = 0.55;
 	G.music.seq4.staccato = 0.55;
 	G.music.seq2.staccato = 0.55;
-	G.music.seq3.staccato = 0.35;
+	G.music.seq3.staccato = 0.15;
 	G.music.seq3.smoothing = 0.9;
 
 	// adjust the levels so the bass and harmony aren't too loud
@@ -49,13 +52,15 @@ G.music.restart = function() {
 	G.music.seq2.mid.frequency.value = 1200;
 	
 	G.music.seq3.mid.gain.value = 3;
-	G.music.seq3.bass.gain.value = 6;
+	G.music.seq3.bass.gain.value = 16;
 	G.music.seq3.bass.frequency.value = 80;
 	G.music.seq3.mid.gain.value = -6;
 	G.music.seq3.mid.frequency.value = 500;
 	G.music.seq3.treble.gain.value = -2;
 	G.music.seq3.treble.frequency.value = 1400;
-	
+}
+G.music.restart = function() {
+	G.music.tempo=100;
 	G.music.seq1.counter=0;
 	G.music.seq4.counter=0;
 };
