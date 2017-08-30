@@ -1,6 +1,6 @@
 CACHE MANIFEST
-#v0.3
-CACHE:
+#v0.3.1
+NETWORK:
 index.html
 app.js
 sprites.png
