@@ -24,7 +24,7 @@ G.menu.intro4 = function() {
 	});
 }
 G.menu.popup = function(text, next) {
-	
+
 	G.menu.next=next;
 	
 	var rectWidth = (G.ui.width*G.ui.scaleX)/1.5;

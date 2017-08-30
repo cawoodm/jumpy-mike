@@ -20,7 +20,6 @@ G.update = function() {
 	// Generate cactii 
 	if (G.ticks%rnd(10,30)==0) {
 		var nextCactus = (Math.random()*G.spacing)+40;
-		//dp(G.ticks, G.ticks-G.lastCactus, nextCactus,G.ticks-G.lastCactus>nextCactus)
 		if (G.ticks-G.lastCactus>nextCactus) {
 			dpd('spacing:',G.spacing,'last:', G.ticks-G.lastCactus,'next:',nextCactus, G.ticks-G.lastCactus>nextCactus)
 			var p=Math.random();
@@ -36,7 +35,6 @@ G.update = function() {
 		G.clickTimer++;
 	}
 	if (G.clickTimer > G.maxJump) g.clickTimer=0;//G.playerJump(G.clickTimer);
-	
 	G.ui.camera.x+=G.speed||0;
 
 	G.ui.sprites.animate();
@@ -63,10 +61,7 @@ G.update = function() {
 		}
 
 		// Check collision
-		if (ent.obstacle && G.entity.collision(ent)) {
-			G.pause();G.state=2;
-			setTimeout(function(){G.state = 3},1000);
-		}
+		if (ent.obstacle && G.entity.collision(ent)) G.gameOver();
 		
 		// Off the board
 		if (ent.x+20<G.ui.camera.x && !ent.follow) G.entity.remove(e);
@@ -92,7 +87,6 @@ G.ui.showScore = function(s) {
 	G.entity.get('char3').pts = G.ui.sprites['char'+c3];
 	G.entity.get('char2').pts = G.ui.sprites['char'+c2];
 	G.entity.get('char1').pts = G.ui.sprites['char'+c1];
-	//let char3 = char.substring
 };
 G.addCloud = function(x,t) {
 	G.entity.add({tag:t==0?'smallCloud':'cloud',x:x||G.ui.camera.x+G.ui.width,y:rnd(t*G.ui.height/60+G.ui.height/3,G.ui.height-15),pts:t==0?G.ui.sprites.smallCloud:G.ui.sprites.cloud,col:2, dx:G.speed/(2+t), dy:.01})
@@ -102,9 +96,15 @@ G.addCactus = function(x,t) {
 	G.entity.add({tag:'cactus',obstacle:[9,h], x:G.ui.camera.x+G.ui.width+x, y:G.ui.floor, pts:G.ui.sprites['cactus'+t]})
 };
 G.start = function() {
+	if (G._intervalId) clearInterval(G._intervalId);
 	G._intervalId = requestAnimationFrame(G.loop);//setInterval(G.loop, 1000/G.ui.fps);
 	G.music.restart();
 };
+G.gameOver = function() {
+	G.pause();
+	G.state=2;
+	setTimeout(function(){G.state = 3},1000);
+}
 G.pause = function() {
 	if (G._intervalId) {
 		clearInterval(G._intervalId);

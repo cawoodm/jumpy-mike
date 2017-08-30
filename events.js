@@ -12,7 +12,7 @@ G.click = function(e) {
 		e.stopPropagation(); e.preventDefault();
 		G.menu.doNext(); return
 	}
-	if(G.state == 3 && button0) {G.restart(); return;}
+	if(G.state == 3 && button0) {e.stopPropagation(); e.preventDefault();G.restart(); return;}
 	if (e.key=='p') G.pause();
 	if (button0) {
 		e.stopPropagation(); e.preventDefault();

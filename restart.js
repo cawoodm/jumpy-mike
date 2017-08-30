@@ -3,6 +3,9 @@ G.startMain = function() {
 	G.menu.intro0();
 };
 G.restart = function() {
+
+	if (G._intervalId) G.pause();
+	
 	G.ticks = 0;
 	G.state = 1;
 	G.speed = 1.2;
