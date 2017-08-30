@@ -60,9 +60,10 @@ G.music.init = function() {
 	G.music.seq3.treble.frequency.value = 1400;
 }
 G.music.restart = function() {
-	G.music.tempo=100;
-	G.music.seq1.counter=0;
-	G.music.seq4.counter=0;
+	this.tempo=100;
+	this.seq1.counter=0;
+	this.seq4.counter=0;
+	this.play();
 };
 G.music.play = function() {
 	G.music.seq1.play( G.music.ac.currentTime );

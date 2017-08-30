@@ -103,7 +103,7 @@ G.addCactus = function(x,t) {
 };
 G.start = function() {
 	G._intervalId = requestAnimationFrame(G.loop);//setInterval(G.loop, 1000/G.ui.fps);
-	G.music.play();
+	G.music.restart();
 };
 G.pause = function() {
 	if (G._intervalId) {

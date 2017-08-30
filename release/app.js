@@ -352,7 +352,7 @@ G.menu.popup = function(text, next) {
 	ctx.strokeRect(rectX+(cornerRadius/2), rectY+(cornerRadius/2), rectWidth-cornerRadius, rectHeight-cornerRadius);
 	ctx.fillRect(rectX+(cornerRadius/2), rectY+(cornerRadius/2), rectWidth-cornerRadius, rectHeight-cornerRadius);
 	
-	G.menu.wrapText(text,rectX+cornerRadius,rectY+cornerRadius, rectWidth-cornerRadius*2);
+	G.menu.wrapText(text,rectX+cornerRadius,rectY+cornerRadius+this.lineHeight*0.8, rectWidth-cornerRadius*2);
 }
 G.menu.doNext = function() {
 	this.next();

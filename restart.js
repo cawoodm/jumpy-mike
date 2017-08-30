@@ -1,4 +1,7 @@
 //FILE: restart.js
+G.startMain = function() {
+	G.menu.intro0();
+};
 G.restart = function() {
 	G.ticks = 0;
 	G.state = 1;
@@ -9,24 +12,8 @@ G.restart = function() {
 	G.level = 0;
 	G.ui.palette = G.ui.palette0;
 	G.ent=[];
-	G.player = G.entity.add({
-		id: 'player',
-		l: '3',
-		x:4,
-		y:G.ui.floor,
-		dx:0,//G.speed,
-		follow:true,
-		dy:0,
-		ddx:0,
-		ddy:-G.gravity,
-		minY:G.ui.floor,
-		score:0,
-		//pts:G.ui.sprites.trex,
-		jumps:0,
-		frame:0
-	});
-	G.ui.sprites.restart();
-	
+	G.player = G.entity.add(G.playerDefault);
+
 	G.addCloud(G.ui.width*0.3,1);
 	G.addCloud(G.ui.width*0.7,1);
 	G.addCloud(G.ui.width*0.6,0);
@@ -48,6 +35,5 @@ G.restart = function() {
 		x:0,
 		y:0
 	}
-	G.player.image.onload = G.start;
-	G.music.restart();
+	G.start();
 };

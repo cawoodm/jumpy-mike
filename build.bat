@@ -1,6 +1,8 @@
 @ECHO OFF
 SETLOCAL
 
+CD %dp0%
+
 :: Commit local changes
 git add .
 git commit -m "Build %date% %time%"

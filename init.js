@@ -32,9 +32,30 @@ G.init = function() {
 	G.ui.area.style.margin='0px';
 	G.ui.area.width=Math.floor(G.ui.width*G.ui.scaleX);
 	G.ui.area.height=Math.floor(G.ui.height*G.ui.scaleY);
+	G.ui.area.ctx.imageSmoothingEnabled=false;
 	//G.ui.area.style.backgroundColor='#DDD';
 	G.ui.pts = {}
 	G.music.init();
 	//G.restart();G.pause();
-	G.menu.intro0();
+	G.playerDefault={
+		id: 'player',
+		l: '3',
+		x:4,
+		y:G.ui.floor,
+		dx:0,
+		follow:true,
+		dy:0,
+		ddx:0,
+		ddy:-G.gravity,
+		minY:G.ui.floor,
+		score:0,
+		jumps:0,
+		frame:0,
+		w:22,
+		h:25,
+		image: new Image()
+	};
+	G.playerDefault.image.src='sprites.png';
+	G.playerDefault.image.onload = G.startMain;
+	G.player=G.playerDefault;
 }
