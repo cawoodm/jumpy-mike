@@ -29,12 +29,12 @@ COPY /Y sprites.png release\
 COPY /Y favicon.png release\
 COPY /Y favicon.ico release\
 ECHO "Ready to test in release\ folder"
-PAUSE
+::PAUSE
 
 :: Copy to local cawoodm github site
 COPY /Y .\release\*.* ..\..\..\cawoodm.github.io\jumpy-mike
 ECHO "Ready to test in cawoodm.github.io\jumpy-mike\ folder"
-PAUSE
+::PAUSE
 
 :: Publish to github
 CD ..\..\..\cawoodm.github.io\jumpy-mike
@@ -43,7 +43,7 @@ git commit -m "Release %date% %time%"
 git push origin master
 ECHO "Ready to test at http://cawoodm.github.io/jumpy-mike/"
 START http://cawoodm.github.io/jumpy-mike/
-PAUSE
+::PAUSE
 ::CD ..\..\JavaScript\games\trex
 ::echo -- %dp0%
 
