@@ -63,7 +63,8 @@ G.init = function() {
 		image: new Image()
 	};
 	G.playerDefault.image.src='sprites.png';
-	G.playerDefault.image.onload = G.startMain;
+	if (G.playerDefault.image.complete) G.startMain();
+	else G.playerDefault.image.onload = G.startMain;
 	G.player=G.playerDefault;
 }
 //FILE: sprites.js
@@ -353,7 +354,7 @@ G.click = function(e) {
 	}
 	if(G.state == 3 && button0) {e.stopPropagation(); e.preventDefault();G.restart(); return;}
 	if (e.key=='p') G.pause();
-	if (button0) {
+	if (G.state==1 && button0) {
 		e.stopPropagation(); e.preventDefault();
 		// Sink player mid-jump
 		if(G.player.y>G.player.minY+5 && G.player.dy>-4) {G.player.dy=-4;}

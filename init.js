@@ -57,7 +57,7 @@ G.init = function() {
 		image: new Image()
 	};
 	G.playerDefault.image.src='sprites.png';
+	G.player=G.playerDefault;
 	if (G.playerDefault.image.complete) G.startMain();
 	else G.playerDefault.image.onload = G.startMain;
-	G.player=G.playerDefault;
 }
