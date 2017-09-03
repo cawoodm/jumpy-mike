@@ -59,6 +59,7 @@ G.init = function() {
 		frame:0,
 		w:22,
 		h:25,
+		spriteSizes: [20, 13, 13, 11, 15, 21],
 		image: new Image()
 	};
 	G.playerDefault.image.src='sprites.png';
@@ -98,27 +99,27 @@ G.ui.sprites = {
 	trex: makeSprite(0,20,[[0,11,18],[1,10,19],[2,10,11],[2,12,12,1],[2,13,19],[3,10,19],[4,10,19],[5,10,14],[6,10,17],[7,0,0],[7,9,13],[8,0,0],[8,8,13],[9,0,1],[9,6,15],[10,0,2],[10,5,13],[11,0,13],[12,0,0,1],[12,1,12],[12,13,13,1],[13,1,12],[14,2,12],[15,3,11],[16,4,10],[17,5,7],[17,9,10],[18,5,6],[18,10,10],[19,5,5],[19,10,10],[20,5,6],[20,10,11]])
 	,cloud: makeSprite(0,7,[[0,6,10],[1,2,6],[1,11,11],[2,1,1],[2,5,5],[2,12,12],[3,0,1],[3,4,4],[3,13,13],[4,0,0],[4,13,13],[5,0,0],[5,13,13],[6,1,1],[6,13,13],[7,2,12]])
 	,smallCloud: makeSprite(0,4,[[0,4,6],[1,1,3],[1,7,7],[2,0,0],[2,2,2],[2,8,8],[3,0,0],[3,8,8],[4,1,7]])
-  ,stone0: [{x:0,y:0}]
-  ,stone1: [{x:0,y:0},{x:1,y:0}]
-  ,stone2: spriteQuad(0,0,3,1,1)
-  ,cactus0:  spriteCombine([spriteQuad(0,2,2,4,10),spriteQuad(6,3,2,3,10),spriteQuad(0,6,8,2,10),spriteQuad(3,0,2,10,10)])
-  ,cactus1:  spriteCombine([spriteQuad(3,3,3,17,20),spriteQuad(6,7,3,2,20),spriteQuad(7,5,2,4,20),spriteQuad(0,9,3,2,20),spriteQuad(0,7 ,2,4,20)])
-  ,horizon: spriteQuad(0,0,G.ui.width,1,1)
-  ,char0: spriteCombine([spriteQuad(0,0,6,2,10), spriteQuad(0,2,2,6,10), spriteQuad(0,8,6,2,10), spriteQuad(4,2,2,6,10)])
-  ,char1: spriteCombine([spriteQuad(0,0,4,2,10), spriteQuad(2,2,2,6,10), spriteQuad(0,8,6,2,10)])
-  ,char2: spriteCombine([spriteQuad(0,0,6,2,10), spriteQuad(4,2,2,2,10), spriteQuad(0,4,6,2,10), spriteQuad(0,6,2,2,10), spriteQuad(0,8,6,2,10)])
-  ,char3: spriteCombine([spriteQuad(0,0,6,2,10), spriteQuad(4,2,2,2,10), spriteQuad(0,4,6,2,10), spriteQuad(4,6,2,2,10), spriteQuad(0,8,6,2,10)])
-  ,char4: spriteCombine([spriteQuad(0,0,2,6,10), spriteQuad(4,0,2,10,10), spriteQuad(0,4,6,2,10)])
-  ,char5: spriteCombine([spriteQuad(0,0,6,2,10), spriteQuad(0,2,2,2,10), spriteQuad(0,4,6,2,10), spriteQuad(4,6,2,2,10), spriteQuad(0,8,6,2,10)])
-  ,char6: spriteCombine([spriteQuad(0,0,2,10,10), spriteQuad(0,4,6,2,10), spriteQuad(4,6,2,2,10), spriteQuad(0,8,6,2,10)])
-  ,char7: spriteCombine([spriteQuad(0,0,6,2,10), spriteQuad(4,2,2,8,10)])
-  ,char8: spriteCombine([spriteQuad(0,0,2,10,10), spriteQuad(0,0,6,2,10), spriteQuad(4,2,2,2,10), spriteQuad(0,4,6,2,10), spriteQuad(4,6,2,2,10), spriteQuad(0,8,6,2,10)])
-  ,char9: spriteCombine([spriteQuad(0,0,6,2,10), spriteQuad(0,2,2,4,10), spriteQuad(2,4,2,2,10), spriteQuad(4,2,2,8,10)])
+	,smallHill: makeSprite(0,5,[[0,5,5],[1,4,4],[1,6,6],[2,3,3],[2,7,7],[3,2,2],[3,8,8],[4,1,1],[4,9,9]])
+	,stone0: [{x:0,y:0}]
+	,stone1: [{x:0,y:0},{x:1,y:0}]
+	,stone2: spriteQuad(0,0,3,1,1)
+	,cactus0:  spriteCombine([spriteQuad(0,2,2,4,10),spriteQuad(6,3,2,3,10),spriteQuad(0,6,8,2,10),spriteQuad(3,0,2,10,10)])
+	,cactus1:  spriteCombine([spriteQuad(3,3,3,17,20),spriteQuad(6,7,3,2,20),spriteQuad(7,5,2,4,20),spriteQuad(0,9,3,2,20),spriteQuad(0,7 ,2,4,20)])
+	,horizon: spriteQuad(0,0,G.ui.width,1,1)
+	,char0: spriteCombine([spriteQuad(0,0,6,2,10), spriteQuad(0,2,2,6,10), spriteQuad(0,8,6,2,10), spriteQuad(4,2,2,6,10)])
+	,char1: spriteCombine([spriteQuad(0,0,4,2,10), spriteQuad(2,2,2,6,10), spriteQuad(0,8,6,2,10)])
+	,char2: spriteCombine([spriteQuad(0,0,6,2,10), spriteQuad(4,2,2,2,10), spriteQuad(0,4,6,2,10), spriteQuad(0,6,2,2,10), spriteQuad(0,8,6,2,10)])
+	,char3: spriteCombine([spriteQuad(0,0,6,2,10), spriteQuad(4,2,2,2,10), spriteQuad(0,4,6,2,10), spriteQuad(4,6,2,2,10), spriteQuad(0,8,6,2,10)])
+	,char4: spriteCombine([spriteQuad(0,0,2,6,10), spriteQuad(4,0,2,10,10), spriteQuad(0,4,6,2,10)])
+	,char5: spriteCombine([spriteQuad(0,0,6,2,10), spriteQuad(0,2,2,2,10), spriteQuad(0,4,6,2,10), spriteQuad(4,6,2,2,10), spriteQuad(0,8,6,2,10)])
+	,char6: spriteCombine([spriteQuad(0,0,2,10,10), spriteQuad(0,4,6,2,10), spriteQuad(4,6,2,2,10), spriteQuad(0,8,6,2,10)])
+	,char7: spriteCombine([spriteQuad(0,0,6,2,10), spriteQuad(4,2,2,8,10)])
+	,char8: spriteCombine([spriteQuad(0,0,2,10,10), spriteQuad(0,0,6,2,10), spriteQuad(4,2,2,2,10), spriteQuad(0,4,6,2,10), spriteQuad(4,6,2,2,10), spriteQuad(0,8,6,2,10)])
+	,char9: spriteCombine([spriteQuad(0,0,6,2,10), spriteQuad(0,2,2,4,10), spriteQuad(2,4,2,2,10), spriteQuad(4,2,2,8,10)])
 }
 G.ui.sprites.animate=function(){
 	if (G.player.y==G.ui.floor) {
 		// Running: animate player 3 times a second
-		dpd((new Date()).getMilliseconds(), G.ticks,G.ticks%(G.ui.fps/8))
 		if (G.ticks%(G.ui.fps/8)==0) G.player.frame=G.player.frame<5?G.player.frame+1:0;
 	} else {
 		G.player.frame=5; // Jump
@@ -160,19 +161,20 @@ G.entity = {
 		return count;
 	},
 	collision: function(ent) {
+		//Need to factor in player's frame for their size
 		var eX = Math.round(ent.x-+G.ui.camera.x);
 		var eH = ent.obstacle[1];
 		var eMaxX = Math.round(eX+ent.obstacle[0]);
 		var pX = Math.round(G.player.x)
-		var pMaxX = Math.round(pX+G.player.w)
-		var EasyY = Math.floor(eH/1.5);
-		var EasyX = 2;
+		var pMaxX = Math.round(pX+G.player.spriteSizes[G.player.frame])
+		var EasyY = 0; Math.floor(eH/1.5);
+		var EasyX = 1;
 		var hitY=G.player.y+EasyY<=ent.y+eH;
-		var hitFront = eX+EasyX<=pMaxX;
+		var hitFront = eX+EasyX<pMaxX;
 		var hitTop = eMaxX-EasyX>pX;
 		if (hitY && hitFront && hitTop) {
 			dpd("pY+EasyY=",G.player.y+EasyY,"eH+eY=",ent.y+eH,"hitY=",hitY)
-			dpd("eX=",eX,"pMaxXpX=",pMaxX,"overlap=",pMaxX-eX,"hitFront=",hitFront)
+			dp("eX=",eX,"pMaxX=",pMaxX,"overlap=",pMaxX-eX,"hitFront=",hitFront,"frame=",G.player.frame)
 			dpd	("eX=",eX,"px=",pX,"eMaxX=",eMaxX,"hitTop=",hitTop)
 			return true;}
 	}
@@ -236,6 +238,8 @@ G.music.init = function() {
 		'C2 q','-   h','C2 q',
 		'G2  h','A2  h'
 	];
+	G.music.jump = ['C5  q','-   q'];
+	
 	G.music.seq1 = new TinyMusic.Sequence( G.music.ac, G.music.tempo, G.music.lead );
 	G.music.seq1.createCustomWave([-1,-0.9,-0.6,-0.3, 0, 0.3, 0.6, 0.9,1])
 	G.music.seq2 = new TinyMusic.Sequence( G.music.ac, G.music.tempo, G.music.harmony );
@@ -243,6 +247,7 @@ G.music.init = function() {
 	G.music.seq3.createCustomWave([-1,-0.9,-0.6,-0.3, 0, 0.3, 0.6, 0.9,1])
 	G.music.seq4 = new TinyMusic.Sequence( G.music.ac, G.music.tempo, G.music.lead1 );
 	G.music.seq4.createCustomWave([-1,-0.8,-0.4,-0.2, 0, 0.2, 0.4, 0.8,1])
+	
 
 	// set staccato and smoothing values for maximum coolness
 	G.music.seq1.staccato = 0.55;
@@ -271,6 +276,24 @@ G.music.init = function() {
 	G.music.seq3.mid.frequency.value = 500;
 	G.music.seq3.treble.gain.value = -2;
 	G.music.seq3.treble.frequency.value = 1400;
+	
+	this.sfxJump = new TinyMusic.Sequence( G.music.ac, G.music.tempo, G.music.jump);
+	with (this.sfxJump) {
+		staccato = 0.45;
+		smoothing = 0.2;
+		gain.gain.value = 0.65 / 2;
+		bass.gain.value = -6;
+		bass.frequency.value = 1400;
+		mid.gain.value = -6;
+		mid.frequency.value = 1400;
+		treble.gain.value = -2;
+		treble.frequency.value = 1400;
+	}
+
+}
+G.music.playJump = function() {
+	this.sfxJump.play(this.ac.currentTime)
+	this.sfxJump.loop=false;
 }
 G.music.restart = function() {
 	this.tempo=100;
@@ -334,8 +357,10 @@ G.click = function(e) {
 		e.stopPropagation(); e.preventDefault();
 		// Sink player mid-jump
 		if(G.player.y>G.player.minY+5 && G.player.dy>-4) {G.player.dy=-4;}
-		else if(G.player.y=G.player.minY) {//dp("Jump Up Ticks:",G.ticks);
-		window.xx=G.ticks;G.clickTimer = G.minJump;}
+		else if(G.player.y=G.player.minY) {
+			G.music.playJump();
+			G.clickTimer = G.minJump;
+		}
 	}
 };
 G.clickEnd = function(e) {
@@ -347,7 +372,7 @@ G.menu = {
 	next: null
 	,font:"Courier New,Courier"
 	,textSize: Math.round(G.ui.width*G.ui.scaleX/25)
-	,lineHeight: Math.round(G.ui.height*G.ui.scaleY/12)
+	,lineHeight: Math.round(G.ui.height*G.ui.scaleY/14)
 }
 G.menu.intro0 = function() {
 	G.ui.speaker.start();
@@ -376,7 +401,7 @@ G.menu.popup = function(text, next) {
 	var rectHeight = (G.ui.height*G.ui.scaleX)/1.5;
 	var rectY = (G.ui.height*G.ui.scaleY)/2-rectHeight/2;
 	var rectX = (G.ui.width*G.ui.scaleX)/2-rectWidth/2;
-	var cornerRadius = 20;
+	var cornerRadius = 8*G.ui.scaleX;
 
 	var ctx = G.ui.area.ctx;
 	ctx.fillStyle = G.ui.palette.light;
@@ -462,9 +487,9 @@ G.update = function() {
 
 	// Generate a random cloud
 	if (prob(75) && G.ticks%rnd(10,30)==0) {
-
 		if (prob(80) && G.entity.count('smallCloud')<3) G.addCloud(0,0)
 		if (prob(90) && G.entity.count('cloud' )<3) G.addCloud(0,1)
+		if (prob(90) && G.entity.count('hill' )<3) G.addHill(0,1)
 	}
 	// Generate random stones
 	if (prob(75) && G.ticks%rnd(10,30)==0) G.entity.add({tag:'stone0',x:G.ui.camera.x+G.ui.width,y:rnd(0, G.ui.horizon-1),pts:G.ui.sprites.stone0})
@@ -493,7 +518,6 @@ G.update = function() {
 	if (G.clickTimer > G.maxJump) g.clickTimer=0;//G.playerJump(G.clickTimer);
 	G.ui.camera.x+=G.speed||0;
 
-	G.ui.sprites.animate();
 	var e = G.ent.length;
 	while (e--) {
 		var ent = G.ent[e]; 
@@ -509,7 +533,6 @@ G.update = function() {
 		// Floor (min y) => Stop vertical motion and remain on floor
 		if (typeof ent.minY != 'undefined' && Math.abs(ent.dy)>0 && ent.y <= ent.minY) {
 			ent.dy=0;ent.y=ent.minY;
-			dpd("Jump Down", G.ticks, window.xx, "Diff", G.ticks - window.xx)
 			if (ent===G.player) {
 				G.player.jumps++;
 				G.player.frame=0;
@@ -524,6 +547,10 @@ G.update = function() {
 		
 	}
 	
+	if (G.state>1) return;
+
+	G.ui.sprites.animate();
+	
 	G.player.score = Math.round(G.ticks/10);
 	G.level = Math.floor(G.player.score/100)
 	//G.player.score = G.player.jumps
@@ -533,6 +560,7 @@ G.update = function() {
 };
 G.loop = function() {
 	G.update();
+	if (G.state>1) return;
 	G.clear();
 	G.draw();
 	if (G._intervalId) requestAnimationFrame(G.loop);
@@ -546,6 +574,9 @@ G.ui.showScore = function(s) {
 };
 G.addCloud = function(x,t) {
 	G.entity.add({tag:t==0?'smallCloud':'cloud',x:x||G.ui.camera.x+G.ui.width,y:rnd(t*G.ui.height/60+G.ui.height/3,G.ui.height-15),pts:t==0?G.ui.sprites.smallCloud:G.ui.sprites.cloud,col:2, dx:G.speed/(2+t), dy:.01})
+};
+G.addHill = function(x,t) {
+	G.entity.add({tag:'hill',x:x||G.ui.camera.x+G.ui.width,y:G.ui.horizon+1,pts:t==0?G.ui.sprites.smallHill:G.ui.sprites.smallHill,col:0})
 };
 G.addCactus = function(x,t) {
 	var h=9+t*9;
