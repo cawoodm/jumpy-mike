@@ -23,19 +23,20 @@ G.entity = {
 		return count;
 	},
 	collision: function(ent) {
+		//Need to factor in player's frame for their size
 		var eX = Math.round(ent.x-+G.ui.camera.x);
 		var eH = ent.obstacle[1];
 		var eMaxX = Math.round(eX+ent.obstacle[0]);
 		var pX = Math.round(G.player.x)
-		var pMaxX = Math.round(pX+G.player.w)
-		var EasyY = Math.floor(eH/1.5);
-		var EasyX = 2;
+		var pMaxX = Math.round(pX+G.player.spriteSizes[G.player.frame])
+		var EasyY = 0; Math.floor(eH/1.5);
+		var EasyX = 1;
 		var hitY=G.player.y+EasyY<=ent.y+eH;
-		var hitFront = eX+EasyX<=pMaxX;
+		var hitFront = eX+EasyX<pMaxX;
 		var hitTop = eMaxX-EasyX>pX;
 		if (hitY && hitFront && hitTop) {
 			dpd("pY+EasyY=",G.player.y+EasyY,"eH+eY=",ent.y+eH,"hitY=",hitY)
-			dpd("eX=",eX,"pMaxXpX=",pMaxX,"overlap=",pMaxX-eX,"hitFront=",hitFront)
+			dp("eX=",eX,"pMaxX=",pMaxX,"overlap=",pMaxX-eX,"hitFront=",hitFront,"frame=",G.player.frame)
 			dpd	("eX=",eX,"px=",pX,"eMaxX=",eMaxX,"hitTop=",hitTop)
 			return true;}
 	}

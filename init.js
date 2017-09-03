@@ -53,6 +53,7 @@ G.init = function() {
 		frame:0,
 		w:22,
 		h:25,
+		spriteSizes: [20, 13, 13, 11, 15, 21],
 		image: new Image()
 	};
 	G.playerDefault.image.src='sprites.png';

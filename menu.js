@@ -2,7 +2,7 @@ G.menu = {
 	next: null
 	,font:"Courier New,Courier"
 	,textSize: Math.round(G.ui.width*G.ui.scaleX/25)
-	,lineHeight: Math.round(G.ui.height*G.ui.scaleY/12)
+	,lineHeight: Math.round(G.ui.height*G.ui.scaleY/14)
 }
 G.menu.intro0 = function() {
 	G.ui.speaker.start();
@@ -31,7 +31,7 @@ G.menu.popup = function(text, next) {
 	var rectHeight = (G.ui.height*G.ui.scaleX)/1.5;
 	var rectY = (G.ui.height*G.ui.scaleY)/2-rectHeight/2;
 	var rectX = (G.ui.width*G.ui.scaleX)/2-rectWidth/2;
-	var cornerRadius = 20;
+	var cornerRadius = 8*G.ui.scaleX;
 
 	var ctx = G.ui.area.ctx;
 	ctx.fillStyle = G.ui.palette.light;

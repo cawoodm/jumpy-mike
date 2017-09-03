@@ -6,9 +6,9 @@ G.update = function() {
 
 	// Generate a random cloud
 	if (prob(75) && G.ticks%rnd(10,30)==0) {
-
 		if (prob(80) && G.entity.count('smallCloud')<3) G.addCloud(0,0)
 		if (prob(90) && G.entity.count('cloud' )<3) G.addCloud(0,1)
+		if (prob(90) && G.entity.count('hill' )<3) G.addHill(0,1)
 	}
 	// Generate random stones
 	if (prob(75) && G.ticks%rnd(10,30)==0) G.entity.add({tag:'stone0',x:G.ui.camera.x+G.ui.width,y:rnd(0, G.ui.horizon-1),pts:G.ui.sprites.stone0})
@@ -37,7 +37,6 @@ G.update = function() {
 	if (G.clickTimer > G.maxJump) g.clickTimer=0;//G.playerJump(G.clickTimer);
 	G.ui.camera.x+=G.speed||0;
 
-	G.ui.sprites.animate();
 	var e = G.ent.length;
 	while (e--) {
 		var ent = G.ent[e]; 
@@ -53,7 +52,6 @@ G.update = function() {
 		// Floor (min y) => Stop vertical motion and remain on floor
 		if (typeof ent.minY != 'undefined' && Math.abs(ent.dy)>0 && ent.y <= ent.minY) {
 			ent.dy=0;ent.y=ent.minY;
-			dpd("Jump Down", G.ticks, window.xx, "Diff", G.ticks - window.xx)
 			if (ent===G.player) {
 				G.player.jumps++;
 				G.player.frame=0;
@@ -68,6 +66,10 @@ G.update = function() {
 		
 	}
 	
+	if (G.state>1) return;
+
+	G.ui.sprites.animate();
+	
 	G.player.score = Math.round(G.ticks/10);
 	G.level = Math.floor(G.player.score/100)
 	//G.player.score = G.player.jumps
@@ -77,6 +79,7 @@ G.update = function() {
 };
 G.loop = function() {
 	G.update();
+	if (G.state>1) return;
 	G.clear();
 	G.draw();
 	if (G._intervalId) requestAnimationFrame(G.loop);
@@ -90,6 +93,9 @@ G.ui.showScore = function(s) {
 };
 G.addCloud = function(x,t) {
 	G.entity.add({tag:t==0?'smallCloud':'cloud',x:x||G.ui.camera.x+G.ui.width,y:rnd(t*G.ui.height/60+G.ui.height/3,G.ui.height-15),pts:t==0?G.ui.sprites.smallCloud:G.ui.sprites.cloud,col:2, dx:G.speed/(2+t), dy:.01})
+};
+G.addHill = function(x,t) {
+	G.entity.add({tag:'hill',x:x||G.ui.camera.x+G.ui.width,y:G.ui.horizon+1,pts:t==0?G.ui.sprites.smallHill:G.ui.sprites.smallHill,col:0})
 };
 G.addCactus = function(x,t) {
 	var h=9+t*9;

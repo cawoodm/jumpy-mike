@@ -18,8 +18,10 @@ G.click = function(e) {
 		e.stopPropagation(); e.preventDefault();
 		// Sink player mid-jump
 		if(G.player.y>G.player.minY+5 && G.player.dy>-4) {G.player.dy=-4;}
-		else if(G.player.y=G.player.minY) {//dp("Jump Up Ticks:",G.ticks);
-		window.xx=G.ticks;G.clickTimer = G.minJump;}
+		else if(G.player.y=G.player.minY) {
+			G.music.playJump();
+			G.clickTimer = G.minJump;
+		}
 	}
 };
 G.clickEnd = function(e) {

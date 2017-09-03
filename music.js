@@ -23,6 +23,8 @@ G.music.init = function() {
 		'C2 q','-   h','C2 q',
 		'G2  h','A2  h'
 	];
+	G.music.jump = ['C5  q','-   q'];
+	
 	G.music.seq1 = new TinyMusic.Sequence( G.music.ac, G.music.tempo, G.music.lead );
 	G.music.seq1.createCustomWave([-1,-0.9,-0.6,-0.3, 0, 0.3, 0.6, 0.9,1])
 	G.music.seq2 = new TinyMusic.Sequence( G.music.ac, G.music.tempo, G.music.harmony );
@@ -30,6 +32,7 @@ G.music.init = function() {
 	G.music.seq3.createCustomWave([-1,-0.9,-0.6,-0.3, 0, 0.3, 0.6, 0.9,1])
 	G.music.seq4 = new TinyMusic.Sequence( G.music.ac, G.music.tempo, G.music.lead1 );
 	G.music.seq4.createCustomWave([-1,-0.8,-0.4,-0.2, 0, 0.2, 0.4, 0.8,1])
+	
 
 	// set staccato and smoothing values for maximum coolness
 	G.music.seq1.staccato = 0.55;
@@ -58,6 +61,24 @@ G.music.init = function() {
 	G.music.seq3.mid.frequency.value = 500;
 	G.music.seq3.treble.gain.value = -2;
 	G.music.seq3.treble.frequency.value = 1400;
+	
+	this.sfxJump = new TinyMusic.Sequence( G.music.ac, G.music.tempo, G.music.jump);
+	with (this.sfxJump) {
+		staccato = 0.45;
+		smoothing = 0.2;
+		gain.gain.value = 0.65 / 2;
+		bass.gain.value = -6;
+		bass.frequency.value = 1400;
+		mid.gain.value = -6;
+		mid.frequency.value = 1400;
+		treble.gain.value = -2;
+		treble.frequency.value = 1400;
+	}
+
+}
+G.music.playJump = function() {
+	this.sfxJump.play(this.ac.currentTime)
+	this.sfxJump.loop=false;
 }
 G.music.restart = function() {
 	this.tempo=100;
