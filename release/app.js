@@ -390,7 +390,7 @@ G.menu.intro3 = function() {
 	G.menu.popup('Fail and we will be forced to keep you in a prison camp wearing pink underwear until you die of humiliation #ToughLove ...', G.menu.intro4)
 }
 G.menu.intro4 = function() {
-	G.menu.popup('Gain 1000 points and you will be worthy to enter the "Home of the Brave" where guns are cheap and basic necessities ain\'t. Good Luck!', function(){
+	G.menu.popup('Gain 2000 points and you will be worthy to enter the "Home of the Brave" where guns are cheap and basic necessities ain\'t. Good Luck!', function(){
 		G.ui.speaker.stop();
 		G.restart();
 	});
