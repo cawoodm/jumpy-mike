@@ -4,7 +4,6 @@ G.menu = {
 	,textSize: Math.round(G.ui.width*G.ui.scaleX/25)
 	,lineHeight: Math.round(G.ui.width*G.ui.scaleX*1.2/25)
 }
-dp(G.menu.textSize, G.menu.lineHeight)
 G.menu.intro0 = function() {
 	G.ui.speaker.start();
 	G.menu.popup('Welcome... or rather not.... You are an illegal alien #BadHombre of questionable race and virtue trying to get into the "Land of the Free"', G.menu.intro1);
