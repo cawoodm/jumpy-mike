@@ -13,6 +13,7 @@ TYPE tinymusic.js >> app.js
 TYPE functions.js >> app.js
 TYPE init.js >> app.js
 TYPE sprites.js >> app.js
+TYPE terrain.js >> app.js
 TYPE entity.js >> app.js
 TYPE draw.js >> app.js
 TYPE music.js >> app.js

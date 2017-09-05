@@ -73,6 +73,7 @@ G.music.init = function() {
 		mid.frequency.value = 1400;
 		treble.gain.value = -2;
 		treble.frequency.value = 1400;
+		loop=false;
 	}
 
 }

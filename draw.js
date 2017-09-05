@@ -1,13 +1,11 @@
-
 //FILE: draw.js
 G.draw = function() {
 	var ctx = G.ui.area.ctx;
 	ctx.fillStyle = G.ui.palette.dark;
 	for (var l=0; l<=3; l++) {
+		if (l==1) G.ui.terrain.draw(); // Mountains in front of clouds
 		var ent = G.entity.layer(l);
-		for (var e=0; e<ent.length; e++) {
-			pte(ent[e]);
-		}
+		for (var e=0; e<ent.length; e++) pte(ent[e]);
 	}
 }
 G.clear = function() {

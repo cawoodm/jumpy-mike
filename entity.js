@@ -11,6 +11,7 @@ G.entity = {
 		return res;
 	},
 	add: function(ent) {
+		ent.l=typeof ent.l == 'undefined'?'2':ent.l;
 		G.ent.push(ent);
 		return ent;
 	},
@@ -36,7 +37,7 @@ G.entity = {
 		var hitTop = eMaxX-EasyX>pX;
 		if (hitY && hitFront && hitTop) {
 			dpd("pY+EasyY=",G.player.y+EasyY,"eH+eY=",ent.y+eH,"hitY=",hitY)
-			dp("eX=",eX,"pMaxX=",pMaxX,"overlap=",pMaxX-eX,"hitFront=",hitFront,"frame=",G.player.frame)
+			dpd("eX=",eX,"pMaxX=",pMaxX,"overlap=",pMaxX-eX,"hitFront=",hitFront,"frame=",G.player.frame)
 			dpd	("eX=",eX,"px=",pX,"eMaxX=",eMaxX,"hitTop=",hitTop)
 			return true;}
 	}

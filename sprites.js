@@ -63,8 +63,7 @@ G.ui.speaker.stop=function() {this.speaking=false;}
 G.ui.speaker.speak=function() {
 	var that = G.ui.speaker;
 	if (!that.speaking) return;
-	
-	G.ui.area.ctx.drawImage(G.player.image, 22*that.frame, that.h, that.w, that.h, (8)*G.ui.scaleX, 8*G.ui.scaleY, that.w*G.ui.scaleX, that.h*G.ui.scaleY)
+	G.ui.area.ctx.drawImage(G.player.image, 22*that.frame, that.h, that.w, that.h, Math.round(G.menu.rectX-that.w*G.ui.scaleX/1.5), Math.round(G.menu.rectY-that.h*G.ui.scaleY/1.3), that.w*G.ui.scaleX, that.h*G.ui.scaleY)
 	if (that.frame<1)that.frame++;else that.frame=0;
 	//G.ui.area.ctx.imageSmoothingEnabled=true;
 	window.setTimeout(that.speak, 300)

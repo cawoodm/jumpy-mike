@@ -32,12 +32,9 @@ G.init = function() {
 	G.ui.area.style.margin='0px';
 	G.ui.area.width=Math.floor(G.ui.width*G.ui.scaleX);
 	G.ui.area.height=Math.floor(G.ui.height*G.ui.scaleY);
-	G.ui.area.style.top=((window.innerHeight-G.ui.area.height)/2)+'px';
+	G.ui.area.style.top=((window.innerHeight-G.ui.area.height)/3)+'px';
 	G.ui.area.ctx.imageSmoothingEnabled=false;
-	//G.ui.area.style.backgroundColor='#DDD';
 	G.ui.pts = {}
-	G.music.init();
-	//G.restart();G.pause();
 	G.playerDefault={
 		id: 'player',
 		l: '3',
@@ -59,6 +56,8 @@ G.init = function() {
 	};
 	G.playerDefault.image.src='sprites.png';
 	G.player=G.playerDefault;
+	G.music.init();
+	G.ui.terrain.init();
 	if (G.playerDefault.image.complete) G.startMain();
 	else G.playerDefault.image.onload = G.startMain;
 }

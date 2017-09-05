@@ -92,10 +92,12 @@ G.ui.showScore = function(s) {
 	G.entity.get('char1').pts = G.ui.sprites['char'+c1];
 };
 G.addCloud = function(x,t) {
-	G.entity.add({tag:t==0?'smallCloud':'cloud',x:x||G.ui.camera.x+G.ui.width,y:rnd(t*G.ui.height/60+G.ui.height/3,G.ui.height-15),pts:t==0?G.ui.sprites.smallCloud:G.ui.sprites.cloud,col:2, dx:G.speed/(2+t), dy:.01})
+	var X = x||G.ui.camera.x+G.ui.width
+	var Y = rnd(t*G.ui.height/60+G.ui.height/2, G.ui.height-15);
+	G.entity.add({tag:t==0?'smallCloud':'cloud',x:X,y:Y,pts:t==0?G.ui.sprites.smallCloud:G.ui.sprites.cloud,col:2, dx:G.speed/(2+t), dy:.01, l: '0'})
 };
 G.addHill = function(x,t) {
-	G.entity.add({tag:'hill',x:x||G.ui.camera.x+G.ui.width,y:G.ui.horizon+1,pts:t==0?G.ui.sprites.smallHill:G.ui.sprites.smallHill,col:0})
+	//G.entity.add({tag:'hill',x:x||G.ui.camera.x+G.ui.width, y:G.ui.horizon+1,pts:t==0?G.ui.sprites.smallHill:G.ui.sprites.smallHill,col:0})
 };
 G.addCactus = function(x,t) {
 	var h=9+t*9;
