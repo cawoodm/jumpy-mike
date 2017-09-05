@@ -38,12 +38,9 @@ G.init = function() {
 	G.ui.area.style.margin='0px';
 	G.ui.area.width=Math.floor(G.ui.width*G.ui.scaleX);
 	G.ui.area.height=Math.floor(G.ui.height*G.ui.scaleY);
-	G.ui.area.style.top=((window.innerHeight-G.ui.area.height)/2)+'px';
+	G.ui.area.style.top=((window.innerHeight-G.ui.area.height)/3)+'px';
 	G.ui.area.ctx.imageSmoothingEnabled=false;
-	//G.ui.area.style.backgroundColor='#DDD';
 	G.ui.pts = {}
-	G.music.init();
-	//G.restart();G.pause();
 	G.playerDefault={
 		id: 'player',
 		l: '3',
@@ -65,6 +62,8 @@ G.init = function() {
 	};
 	G.playerDefault.image.src='sprites.png';
 	G.player=G.playerDefault;
+	G.music.init();
+	G.ui.terrain.init();
 	if (G.playerDefault.image.complete) G.startMain();
 	else G.playerDefault.image.onload = G.startMain;
 }
@@ -133,12 +132,75 @@ G.ui.speaker.stop=function() {this.speaking=false;}
 G.ui.speaker.speak=function() {
 	var that = G.ui.speaker;
 	if (!that.speaking) return;
-	
-	G.ui.area.ctx.drawImage(G.player.image, 22*that.frame, that.h, that.w, that.h, (8)*G.ui.scaleX, 8*G.ui.scaleY, that.w*G.ui.scaleX, that.h*G.ui.scaleY)
+	G.ui.area.ctx.drawImage(G.player.image, 22*that.frame, that.h, that.w, that.h, Math.round(G.menu.rectX-that.w*G.ui.scaleX/1.5), Math.round(G.menu.rectY-that.h*G.ui.scaleY/1.3), that.w*G.ui.scaleX, that.h*G.ui.scaleY)
 	if (that.frame<1)that.frame++;else that.frame=0;
 	//G.ui.area.ctx.imageSmoothingEnabled=true;
 	window.setTimeout(that.speak, 300)
-}//FILE: entity.js
+}//FILE: terrain.js
+G.ui.terrain={}
+G.ui.terrain.generate = function (width, height, displace, roughness, seed) {
+    var points = [],
+        power = Math.pow(2, Math.ceil(Math.log(width) / (Math.log(2)))),
+        seed = seed || {
+            s: height / 2 + (Math.random() * displace * 2) - displace,
+            e: height / 2 + (Math.random() * displace * 2) - displace
+        }; 
+    if(seed.s === 0) seed.s = height / 2 + (Math.random() * displace * 2) - displace;
+    points[0] = seed.s;
+    if(seed.e === 0) seed.e = height / 2 + (Math.random() * displace * 2) - displace
+    points[power] = seed.e;
+    displace *= roughness;
+    for (var i = 1; i < power; i *= 2) {
+        for (var j = (power / i) / 2; j < power; j += power / i) {
+            points[j] = ((points[j - (power / i) / 2] + points[j + (power / i) / 2]) / 2);
+            points[j] += (Math.random() * displace * 2) - displace
+        }
+        displace *= roughness;
+    }
+    return points;
+}
+G.ui.terrain.init = function() {
+	this.ctx=G.ui.area.ctx;
+	this.frames=5;
+	this.tenth=Math.round(G.ui.area.height/10);
+	var pts = [
+		G.ui.terrain.generate(G.ui.area.width*this.frames, G.ui.area.height, G.ui.area.height/1.2, 0.63, {s:G.ui.area.height/2,e:G.ui.area.height/2}),
+		G.ui.terrain.generate(G.ui.area.width*this.frames, G.ui.area.height, G.ui.area.height/2, 0.52, {s:G.ui.area.height/2,e:G.ui.area.height/2}),
+		G.ui.terrain.generate(G.ui.area.width*this.frames, G.ui.area.height, G.ui.area.height/2, 0.30, {s:G.ui.area.height/2,e:G.ui.area.height/2})
+	]
+	var M = Math.max.apply(null, pts[0]);dp(M, pts[0])
+	G.ui.terrain.grad=[];
+	G.ui.terrain.grad[0]=this.ctx.createLinearGradient(0,M,0,G.ui.area.height);
+	this.grad[0].addColorStop(0,'#DD8');this.grad[0].addColorStop(1,"white");
+	this.grad[1]=this.ctx.createLinearGradient(0,G.ui.area.height*0.5,0,G.ui.area.height);
+	this.grad[1].addColorStop(0,'#888');this.grad[1].addColorStop(1,'#AB5');
+	this.grad[2]=this.ctx.createLinearGradient(0,G.ui.area.height*0.75,0,G.ui.area.height);
+	this.grad[2].addColorStop(0,'#EEA');this.grad[2].addColorStop(1,'#885');
+	this.mnt=[
+		 {speed:1,frame:0,offset:1,col:this.grad[0],pts:pts[0]}
+		,{speed:2,frame:0,offset:2,col:this.grad[1],pts:pts[1]}
+		,{speed:4,frame:0,offset:3,col:this.grad[2],pts:pts[2]}
+	];
+	this.frameLast=this.mnt[0].pts.length;
+	dp(this.mnt[0])
+}
+G.ui.terrain.draw = function() {
+	this.drawMountain(this.mnt[0]);
+	this.drawMountain(this.mnt[1]);
+	this.drawMountain(this.mnt[2]);
+}
+G.ui.terrain.drawMountain = function(mnt) {
+	this.ctx.fillStyle=mnt.col;
+	this.ctx.beginPath();
+	this.ctx.moveTo(0, mnt[mnt.frame]);
+	for(var i=mnt.frame; i<=mnt.frame+G.ui.area.width; i++) this.ctx.lineTo(i-mnt.frame, this.tenth*mnt.offset+mnt.pts[i%this.frameLast]);
+	this.ctx.lineTo(G.ui.area.width, G.ui.area.height);
+	this.ctx.lineTo(0, G.ui.area.height);
+	this.ctx.closePath();
+	this.ctx.fill();
+	mnt.frame=mnt.frame+mnt.speed<=this.frameLast?mnt.frame+mnt.speed:0;
+}
+//FILE: entity.js
 G.entity = {
 	get: function(id) {
 		for (var e=0; e<G.ent.length; e++) if (G.ent[e].id==id) return G.ent[e];
@@ -151,6 +213,7 @@ G.entity = {
 		return res;
 	},
 	add: function(ent) {
+		ent.l=typeof ent.l == 'undefined'?'2':ent.l;
 		G.ent.push(ent);
 		return ent;
 	},
@@ -176,20 +239,18 @@ G.entity = {
 		var hitTop = eMaxX-EasyX>pX;
 		if (hitY && hitFront && hitTop) {
 			dpd("pY+EasyY=",G.player.y+EasyY,"eH+eY=",ent.y+eH,"hitY=",hitY)
-			dp("eX=",eX,"pMaxX=",pMaxX,"overlap=",pMaxX-eX,"hitFront=",hitFront,"frame=",G.player.frame)
+			dpd("eX=",eX,"pMaxX=",pMaxX,"overlap=",pMaxX-eX,"hitFront=",hitFront,"frame=",G.player.frame)
 			dpd	("eX=",eX,"px=",pX,"eMaxX=",eMaxX,"hitTop=",hitTop)
 			return true;}
 	}
-}
-//FILE: draw.js
+}//FILE: draw.js
 G.draw = function() {
 	var ctx = G.ui.area.ctx;
 	ctx.fillStyle = G.ui.palette.dark;
 	for (var l=0; l<=3; l++) {
+		if (l==1) G.ui.terrain.draw(); // Mountains in front of clouds
 		var ent = G.entity.layer(l);
-		for (var e=0; e<ent.length; e++) {
-			pte(ent[e]);
-		}
+		for (var e=0; e<ent.length; e++) pte(ent[e]);
 	}
 }
 G.clear = function() {
@@ -290,6 +351,7 @@ G.music.init = function() {
 		mid.frequency.value = 1400;
 		treble.gain.value = -2;
 		treble.frequency.value = 1400;
+		loop=false;
 	}
 
 }
@@ -351,7 +413,8 @@ G.click = function(e) {
 	var button0 = e.key==' ' || e.type == 'touchstart' || e.type == 'mousedown';
 	if (button0 && G.menu.next) {
 		e.stopPropagation(); e.preventDefault();
-		G.menu.doNext(); return
+		if(e.screenX<G.menu.rectX) G.menu.end(); else G.menu.doNext();
+		return
 	}
 	if(G.state == 3 && button0) {e.stopPropagation(); e.preventDefault();G.restart(); return;}
 	if (e.key=='p') G.pause();
@@ -374,8 +437,9 @@ G.menu = {
 	next: null
 	,font:"Courier New,Courier"
 	,textSize: Math.round(G.ui.width*G.ui.scaleX/25)
-	,lineHeight: Math.round(G.ui.height*G.ui.scaleY/14)
+	,lineHeight: Math.round(G.ui.width*G.ui.scaleX*1.2/25)
 }
+dp(G.menu.textSize, G.menu.lineHeight)
 G.menu.intro0 = function() {
 	G.ui.speaker.start();
 	G.menu.popup('Welcome... or rather not.... You are an illegal alien #BadHombre of questionable race and virtue trying to get into the "Land of the Free"', G.menu.intro1);
@@ -390,10 +454,11 @@ G.menu.intro3 = function() {
 	G.menu.popup('Fail and we will be forced to keep you in a prison camp wearing pink underwear until you die of humiliation #ToughLove ...', G.menu.intro4)
 }
 G.menu.intro4 = function() {
-	G.menu.popup('Gain 2000 points and you will be worthy to enter the "Home of the Brave" where guns are cheap and basic necessities ain\'t. Good Luck!', function(){
-		G.ui.speaker.stop();
-		G.restart();
-	});
+	G.menu.popup('Gain 2000 points and you will be worthy to enter the "Home of the Brave" where guns are cheap and basic necessities ain\'t. Good Luck!', G.menu.end);
+}
+G.menu.end = function(){
+	G.ui.speaker.stop();
+	G.restart();
 }
 G.menu.popup = function(text, next) {
 
@@ -401,8 +466,8 @@ G.menu.popup = function(text, next) {
 	
 	var rectWidth = (G.ui.width*G.ui.scaleX)/1.5;
 	var rectHeight = (G.ui.height*G.ui.scaleX)/1.5;
-	var rectY = (G.ui.height*G.ui.scaleY)/2-rectHeight/2;
-	var rectX = (G.ui.width*G.ui.scaleX)/2-rectWidth/2;
+	this.rectY = (G.ui.height*G.ui.scaleY)/2-rectHeight/2;
+	this.rectX = (G.ui.width*G.ui.scaleX)/2-rectWidth/2;
 	var cornerRadius = 8*G.ui.scaleX;
 
 	var ctx = G.ui.area.ctx;
@@ -410,10 +475,10 @@ G.menu.popup = function(text, next) {
 	ctx.strokeStyle = G.ui.palette.light;
 	ctx.lineJoin = "round";
 	ctx.lineWidth = cornerRadius;
-	ctx.strokeRect(rectX+(cornerRadius/2), rectY+(cornerRadius/2), rectWidth-cornerRadius, rectHeight-cornerRadius);
-	ctx.fillRect(rectX+(cornerRadius/2), rectY+(cornerRadius/2), rectWidth-cornerRadius, rectHeight-cornerRadius);
+	ctx.strokeRect(this.rectX+(cornerRadius/2), this.rectY+(cornerRadius/2), rectWidth-cornerRadius, rectHeight-cornerRadius);
+	ctx.fillRect(this.rectX+(cornerRadius/2), this.rectY+(cornerRadius/2), rectWidth-cornerRadius, rectHeight-cornerRadius);
 	
-	G.menu.wrapText(text,rectX+cornerRadius*0.7,rectY+cornerRadius+this.lineHeight*0.5, rectWidth-cornerRadius);
+	G.menu.wrapText(text,this.rectX+cornerRadius*0.7,this.rectY+cornerRadius+this.lineHeight*0.5, rectWidth-cornerRadius);
 }
 G.menu.doNext = function() {
 	this.next();
@@ -468,7 +533,7 @@ G.restart = function() {
 		G.entity.add({tag:'stone'+(s%3),x:rnd(0,G.ui.width),y:rnd(0, G.ui.horizon-1),pts:G.ui.sprites['stone'+(s%3)]})
 	}
 	
-	G.entity.add({tag:'horizon', x:0, y:G.ui.horizon, follow:true, pts:G.ui.sprites.horizon})
+	//G.entity.add({tag:'horizon', x:0, y:G.ui.horizon, follow:true, pts:G.ui.sprites.horizon})
 
 	G.entity.add({id:'char3', x:G.ui.width-4*(6+2), y:G.ui.height-2-10, follow:true, pts:G.ui.sprites.char0})
 	G.entity.add({id:'char2', x:G.ui.width-3*(6+2), y:G.ui.height-2-10, follow:true, pts:G.ui.sprites.char0})
@@ -575,10 +640,12 @@ G.ui.showScore = function(s) {
 	G.entity.get('char1').pts = G.ui.sprites['char'+c1];
 };
 G.addCloud = function(x,t) {
-	G.entity.add({tag:t==0?'smallCloud':'cloud',x:x||G.ui.camera.x+G.ui.width,y:rnd(t*G.ui.height/60+G.ui.height/3,G.ui.height-15),pts:t==0?G.ui.sprites.smallCloud:G.ui.sprites.cloud,col:2, dx:G.speed/(2+t), dy:.01})
+	var X = x||G.ui.camera.x+G.ui.width
+	var Y = rnd(t*G.ui.height/60+G.ui.height/2, G.ui.height-15);
+	G.entity.add({tag:t==0?'smallCloud':'cloud',x:X,y:Y,pts:t==0?G.ui.sprites.smallCloud:G.ui.sprites.cloud,col:2, dx:G.speed/(2+t), dy:.01, l: '0'})
 };
 G.addHill = function(x,t) {
-	G.entity.add({tag:'hill',x:x||G.ui.camera.x+G.ui.width,y:G.ui.horizon+1,pts:t==0?G.ui.sprites.smallHill:G.ui.sprites.smallHill,col:0})
+	//G.entity.add({tag:'hill',x:x||G.ui.camera.x+G.ui.width, y:G.ui.horizon+1,pts:t==0?G.ui.sprites.smallHill:G.ui.sprites.smallHill,col:0})
 };
 G.addCactus = function(x,t) {
 	var h=9+t*9;
