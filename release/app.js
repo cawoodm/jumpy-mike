@@ -138,13 +138,13 @@ G.ui.speaker.speak=function() {
 	window.setTimeout(that.speak, 300)
 }//FILE: terrain.js
 G.ui.terrain={}
-G.ui.terrain.generate = function (width, height, displace, roughness, seed) {
+G.ui.terrain.generate = function (width, height, displace, roughness, seed, delta) {
     var points = [],
         power = Math.pow(2, Math.ceil(Math.log(width) / (Math.log(2)))),
-        seed = seed || {
-            s: height / 2 + (Math.random() * displace * 2) - displace,
-            e: height / 2 + (Math.random() * displace * 2) - displace
-        }; 
+		yMin=seed.s-delta, 
+		yMax=seed.s+delta; 
+		dp("s=",seed.s, "delta=", delta, "ymin=",yMin, "yMax=", yMax)
+	seed.e=seed.s
     if(seed.s === 0) seed.s = height / 2 + (Math.random() * displace * 2) - displace;
     points[0] = seed.s;
     if(seed.e === 0) seed.e = height / 2 + (Math.random() * displace * 2) - displace
@@ -154,6 +154,8 @@ G.ui.terrain.generate = function (width, height, displace, roughness, seed) {
         for (var j = (power / i) / 2; j < power; j += power / i) {
             points[j] = ((points[j - (power / i) / 2] + points[j + (power / i) / 2]) / 2);
             points[j] += (Math.random() * displace * 2) - displace
+			if (points[j]<yMin) {points[j]=yMin+(yMin-points[j]);}
+			else if (points[j]>yMax) {points[j]=yMax-(points[j]-yMin);}
         }
         displace *= roughness;
     }
@@ -164,22 +166,21 @@ G.ui.terrain.init = function() {
 	this.frames=5;
 	this.tenth=Math.round(G.ui.area.height/10);
 	var pts = [
-		G.ui.terrain.generate(G.ui.area.width*this.frames, G.ui.area.height, G.ui.area.height/1.2, 0.63, {s:G.ui.area.height/2,e:G.ui.area.height/2}),
-		G.ui.terrain.generate(G.ui.area.width*this.frames, G.ui.area.height, G.ui.area.height/2, 0.52, {s:G.ui.area.height/2,e:G.ui.area.height/2}),
-		G.ui.terrain.generate(G.ui.area.width*this.frames, G.ui.area.height, G.ui.area.height/2, 0.30, {s:G.ui.area.height/2,e:G.ui.area.height/2})
+		G.ui.terrain.generate(G.ui.area.width*this.frames, G.ui.area.height, G.ui.area.height/1.2, 0.63, {s:G.ui.area.height*0.4}, G.ui.area.height/3),
+		G.ui.terrain.generate(G.ui.area.width*this.frames, G.ui.area.height, G.ui.area.height/2, 0.52, {s:G.ui.area.height*0.6}, G.ui.area.height/4),
+		G.ui.terrain.generate(G.ui.area.width*this.frames, G.ui.area.height, G.ui.area.height/2, 0.30, {s:G.ui.area.height*0.7}, G.ui.area.height/6)
 	]
-	var M = Math.max.apply(null, pts[0]);dp(M, pts[0])
 	G.ui.terrain.grad=[];
-	G.ui.terrain.grad[0]=this.ctx.createLinearGradient(0,M,0,G.ui.area.height);
+	G.ui.terrain.grad[0]=this.ctx.createLinearGradient(0,Math.max.apply(null, pts[0]),0,G.ui.area.height);
 	this.grad[0].addColorStop(0,'#DD8');this.grad[0].addColorStop(1,"white");
 	this.grad[1]=this.ctx.createLinearGradient(0,G.ui.area.height*0.5,0,G.ui.area.height);
 	this.grad[1].addColorStop(0,'#888');this.grad[1].addColorStop(1,'#AB5');
 	this.grad[2]=this.ctx.createLinearGradient(0,G.ui.area.height*0.75,0,G.ui.area.height);
 	this.grad[2].addColorStop(0,'#EEA');this.grad[2].addColorStop(1,'#885');
 	this.mnt=[
-		 {speed:1,frame:0,offset:1,col:this.grad[0],pts:pts[0]}
-		,{speed:2,frame:0,offset:2,col:this.grad[1],pts:pts[1]}
-		,{speed:4,frame:0,offset:3,col:this.grad[2],pts:pts[2]}
+		 {speed:1,frame:0,offset:0,col:this.grad[0],pts:pts[0]}
+		,{speed:2,frame:0,offset:0,col:this.grad[1],pts:pts[1]}
+		,{speed:4,frame:0,offset:0,col:this.grad[2],pts:pts[2]}
 	];
 	this.frameLast=this.mnt[0].pts.length;
 	dp(this.mnt[0])
@@ -439,7 +440,6 @@ G.menu = {
 	,textSize: Math.round(G.ui.width*G.ui.scaleX/25)
 	,lineHeight: Math.round(G.ui.width*G.ui.scaleX*1.2/25)
 }
-dp(G.menu.textSize, G.menu.lineHeight)
 G.menu.intro0 = function() {
 	G.ui.speaker.start();
 	G.menu.popup('Welcome... or rather not.... You are an illegal alien #BadHombre of questionable race and virtue trying to get into the "Land of the Free"', G.menu.intro1);
