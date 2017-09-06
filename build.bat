@@ -6,6 +6,7 @@ CD %dp0%
 :: Commit local changes
 git add .
 git commit -m "Build %date% %time%"
+git push origin master
 
 :: Compile JS into one file
 DEL app.js
