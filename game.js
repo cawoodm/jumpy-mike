@@ -74,8 +74,8 @@ G.update = function() {
 	G.level = Math.floor(G.player.score/100)
 	//G.player.score = G.player.jumps
 	G.ui.showScore(G.player.score)
-	//if (G.ticks%100==0) {G.music.tempo=100+100*parseInt(G.player.score)/1000;}
-	if(G.ticks%1000==0) G.ui.palette = G.ui.palette==G.ui.palette0?G.ui.palette1:G.ui.palette0;
+	// Night every 200 points
+	if(G.player.score%200==0) G.ui.palette = G.ui.palette==G.ui.palette0?G.ui.palette1:G.ui.palette0;
 };
 G.loop = function() {
 	G.update();
