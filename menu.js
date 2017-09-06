@@ -25,7 +25,7 @@ G.menu.end = function(){
 	G.restart();
 }
 G.menu.popup = function(text, next) {
-
+	G.ui.area.ctx.clearRect(0,0,G.ui.width*G.ui.scaleX,G.ui.height*G.ui.scaleY);
 	G.menu.next=next;
 	
 	var rectWidth = (G.ui.width*G.ui.scaleX)/1.5;

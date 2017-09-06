@@ -10,7 +10,8 @@ G.click = function(e) {
 	var button0 = e.key==' ' || e.type == 'touchstart' || e.type == 'mousedown';
 	if (button0 && G.menu.next) {
 		e.stopPropagation(); e.preventDefault();
-		if(e.screenX<G.menu.rectX) G.menu.end(); else G.menu.doNext();
+		var eX = e.screenX||e.touches[0].clientX;
+		if(eX<G.menu.rectX) G.menu.end(); else G.menu.doNext();
 		return
 	}
 	if(G.state == 3 && button0) {e.stopPropagation(); e.preventDefault();G.restart(); return;}
