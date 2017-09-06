@@ -186,6 +186,7 @@ G.ui.terrain.init = function() {
 	dp(this.mnt[0])
 }
 G.ui.terrain.draw = function() {
+	// Sky
 	this.grad[3]=this.ctx.createLinearGradient(0,0,G.ui.area.width/2,G.ui.area.height/3);
 	this.grad[3].addColorStop(0,'#DDE');this.grad[2].addColorStop(1,'#FFF');
 	this.ctx.fillStyle=this.grad[3];
@@ -418,7 +419,8 @@ G.click = function(e) {
 	var button0 = e.key==' ' || e.type == 'touchstart' || e.type == 'mousedown';
 	if (button0 && G.menu.next) {
 		e.stopPropagation(); e.preventDefault();
-		if(e.screenX<G.menu.rectX) G.menu.end(); else G.menu.doNext();
+		var eX = e.screenX||e.touches[0].clientX;
+		if(eX<G.menu.rectX) G.menu.end(); else G.menu.doNext();
 		return
 	}
 	if(G.state == 3 && button0) {e.stopPropagation(); e.preventDefault();G.restart(); return;}
@@ -465,7 +467,7 @@ G.menu.end = function(){
 	G.restart();
 }
 G.menu.popup = function(text, next) {
-
+	G.ui.area.ctx.clearRect(0,0,G.ui.width*G.ui.scaleX,G.ui.height*G.ui.scaleY);
 	G.menu.next=next;
 	
 	var rectWidth = (G.ui.width*G.ui.scaleX)/1.5;
@@ -646,7 +648,7 @@ G.ui.showScore = function(s) {
 G.addCloud = function(x,t) {
 	var X = x||G.ui.camera.x+G.ui.width
 	var Y = rnd(t*G.ui.height/60+G.ui.height/2, G.ui.height-15);
-	G.entity.add({tag:t==0?'smallCloud':'cloud',x:X,y:Y,pts:t==0?G.ui.sprites.smallCloud:G.ui.sprites.cloud,col:2, dx:G.speed/(2+t), dy:.01, l: '0'})
+	G.entity.add({tag:t==0?'smallCloud':'cloud',x:X,y:Y,pts:t==0?G.ui.sprites.smallCloud:G.ui.sprites.cloud,col:2, dx:2*G.speed/(2+t), dy:.01, l: '0'})
 };
 G.addHill = function(x,t) {
 	//G.entity.add({tag:'hill',x:x||G.ui.camera.x+G.ui.width, y:G.ui.horizon+1,pts:t==0?G.ui.sprites.smallHill:G.ui.sprites.smallHill,col:0})
