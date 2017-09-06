@@ -171,7 +171,7 @@ G.ui.terrain.init = function() {
 		G.ui.terrain.generate(G.ui.area.width*this.frames, G.ui.area.height, G.ui.area.height/2, 0.30, {s:G.ui.area.height*0.7}, G.ui.area.height/6)
 	]
 	G.ui.terrain.grad=[];
-	G.ui.terrain.grad[0]=this.ctx.createLinearGradient(0,Math.max.apply(null, pts[0]),0,G.ui.area.height);
+	G.ui.terrain.grad[0]=this.ctx.createLinearGradient(0,Math.max.apply(null, pts[0]),0,G.ui.area.height*.75);
 	this.grad[0].addColorStop(0,'#DD8');this.grad[0].addColorStop(1,"white");
 	this.grad[1]=this.ctx.createLinearGradient(0,G.ui.area.height*0.5,0,G.ui.area.height);
 	this.grad[1].addColorStop(0,'#888');this.grad[1].addColorStop(1,'#AB5');
@@ -186,6 +186,10 @@ G.ui.terrain.init = function() {
 	dp(this.mnt[0])
 }
 G.ui.terrain.draw = function() {
+	this.grad[3]=this.ctx.createLinearGradient(0,0,G.ui.area.width/2,G.ui.area.height/3);
+	this.grad[3].addColorStop(0,'#DDE');this.grad[2].addColorStop(1,'#FFF');
+	this.ctx.fillStyle=this.grad[3];
+	this.ctx.fillRect(0,0,G.ui.area.width,G.ui.area.height)
 	this.drawMountain(this.mnt[0]);
 	this.drawMountain(this.mnt[1]);
 	this.drawMountain(this.mnt[2]);
@@ -622,8 +626,8 @@ G.update = function() {
 	G.level = Math.floor(G.player.score/100)
 	//G.player.score = G.player.jumps
 	G.ui.showScore(G.player.score)
-	//if (G.ticks%100==0) {G.music.tempo=100+100*parseInt(G.player.score)/1000;}
-	if(G.ticks%1000==0) G.ui.palette = G.ui.palette==G.ui.palette0?G.ui.palette1:G.ui.palette0;
+	// Night every 200 points
+	if(G.player.score%200==0) G.ui.palette = G.ui.palette==G.ui.palette0?G.ui.palette1:G.ui.palette0;
 };
 G.loop = function() {
 	G.update();
