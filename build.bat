@@ -31,7 +31,7 @@ COPY /Y sprites.png release\
 COPY /Y favicon.png release\
 COPY /Y favicon.ico release\
 ECHO "Ready to test in release\ folder"
-::PAUSE
+PAUSE
 
 :: Copy to local cawoodm github site
 COPY /Y .\release\*.* ..\..\..\cawoodm.github.io\jumpy-mike
