@@ -1,29 +1,29 @@
 //FILE: music.js
 G.music={}
 G.music.init = function() {
-	G.music.ac = typeof AudioContext !== 'undefined' ? new AudioContext : new webkitAudioContext;
+	G.music.ac = typeof AudioContext !== "undefined" ? new AudioContext : new webkitAudioContext;
 	G.music.tempo=100;
 	G.music.lead = [
-		'C3  e','C3  e','B3  e','C3  e','C3  s','C3  s','G3  s','C3  s','G3  s','C3  s','C3  s','-  s',
-		'A3  e','G3  e','A3  e','G3  e','C3  e','C3  e','C3  e','-  e',
+		"C3  e","C3  e","B3  e","C3  e","C3  s","C3  s","G3  s","C3  s","G3  s","C3  s","C3  s","-  s",
+		"A3  e","G3  e","A3  e","G3  e","C3  e","C3  e","C3  e","-  e",
 	],
 	G.music.lead1 = [
-		'C3  s','C3  s','A3  s','C3  s','G3  s','C4  s','C3  s','-  s','F3  e','C3  e','A3  e','F3  e',
-		'A3  e','G3  e','C3  s','C3  s','G3  e','C3  e','D4  e','C3  e','-  e',
+		"C3  s","C3  s","A3  s","C3  s","G3  s","C4  s","C3  s","-  s","F3  e","C3  e","A3  e","F3  e",
+		"A3  e","G3  e","C3  s","C3  s","G3  e","C3  e","D4  e","C3  e","-  e",
 	],
 	G.music.harmony = [
-		'-   e','D4  e','C4  e','D4  e','C3 e','C4  e','A3  e','C3 e',
-		'G3  e','A3  e','C3 e','A3  e','G3  e','A3  e','F3  q',
-		'-   e','D4  s','C4  s','D4  e','C3 e','C4  e','C3 e','A3  e','C3 e',
-		'G3  e','A3  e','C3 e','A3  e','G3  s','A3  s','G3  e','F3  q'
+		"-   e","D4  e","C4  e","D4  e","C3 e","C4  e","A3  e","C3 e",
+		"G3  e","A3  e","C3 e","A3  e","G3  e","A3  e","F3  q",
+		"-   e","D4  s","C4  s","D4  e","C3 e","C4  e","C3 e","A3  e","C3 e",
+		"G3  e","A3  e","C3 e","A3  e","G3  s","A3  s","G3  e","F3  q"
 	],
 	G.music.bass = [
-		'D3  q','-   h','D3  q',
-		'A3  q','-   h','A2  q',
-		'C2 q','-   h','C2 q',
-		'G2  h','A2  h'
+		"D3  q","-   h","D3  q",
+		"A3  q","-   h","A2  q",
+		"C2 q","-   h","C2 q",
+		"G2  h","A2  h"
 	];
-	G.music.jump = ['C5  q','-   q'];
+	G.music.jump = ["C5  q","-   q"];
 	
 	G.music.seq1 = new TinyMusic.Sequence( G.music.ac, G.music.tempo, G.music.lead );
 	G.music.seq1.createCustomWave([-1,-0.9,-0.6,-0.3, 0, 0.3, 0.6, 0.9,1])
@@ -41,7 +41,7 @@ G.music.init = function() {
 	G.music.seq3.staccato = 0.15;
 	G.music.seq3.smoothing = 0.9;
 
-	// adjust the levels so the bass and harmony aren't too loud
+	// adjust the levels so the bass and harmony aren"t too loud
 	G.music.seq1.gain.gain.value = 1.0 / 10;
 	G.music.seq4.gain.gain.value = 1.0 / 10;
 	G.music.seq2.gain.gain.value = 0.8 / 10;

@@ -21,29 +21,29 @@ G.maxJump=12;
 G.jumpPower=4; 
 G.ui.floor = 8;
 G.ui.horizon = 12;
-G.ui.palette0 = {light:'#EEE', dark:'#333', mid:'#CCC'};
-G.ui.palette1 = {light:'#333', dark:'#EEE', mid:'#CCC'};
+G.ui.palette0 = {light:"#EEE", dark:"#333", mid:"#CCC"};
+G.ui.palette1 = {light:"#333", dark:"#EEE", mid:"#CCC"};
 G.ui.palette = G.ui.palette0;
 G.ui.camera = {};
 
 G.init = function() {
-	document.body.style.padding=document.body.style.margin='0px';
-	document.body.style.backgroundColor='#000';//G.ui.palette.dark;
-	G.ui.area = $('c');
+	document.body.style.padding=document.body.style.margin="0px";
+	document.body.style.backgroundColor="#000";//G.ui.palette.dark;
+	G.ui.area = $("c");
 	G.ui.area.ctx = G.ui.area.getContext("2d");
 	G.ui.setupEvents();
 	window.onkeydown = G.click;
 	window.onkeyup = G.clickEnd;
-	G.ui.area.style.padding='0px';   
-	G.ui.area.style.margin='0px';
+	G.ui.area.style.padding="0px";   
+	G.ui.area.style.margin="0px";
 	G.ui.area.width=Math.floor(G.ui.width*G.ui.scaleX);
 	G.ui.area.height=Math.floor(G.ui.height*G.ui.scaleY);
-	G.ui.area.style.top=((window.innerHeight-G.ui.area.height)/3)+'px';
+	G.ui.area.style.top=((window.innerHeight-G.ui.area.height)/3)+"px";
 	G.ui.area.ctx.imageSmoothingEnabled=false;
 	G.ui.pts = {};
 	G.playerDefault={
-		id: 'player',
-		l: '3',
+		id: "player",
+		l: "3",
 		x:4,
 		y:G.ui.floor,
 		dx:0,
@@ -60,7 +60,7 @@ G.init = function() {
 		spriteSizes: [20, 13, 13, 11, 15, 21],
 		image: new Image()
 	};
-	G.playerDefault.image.src='sprites.png';
+	G.playerDefault.image.src="sprites.png";
 	G.player=G.playerDefault;
 	G.music.init();
 	G.ui.terrain.init();
