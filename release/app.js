@@ -114,6 +114,7 @@ G.ui.sprites = {none:null
 	,char7: spriteCombine([spriteQuad(0,0,6,2,10), spriteQuad(4,2,2,8,10)])
 	,char8: spriteCombine([spriteQuad(0,0,2,10,10), spriteQuad(0,0,6,2,10), spriteQuad(4,2,2,2,10), spriteQuad(0,4,6,2,10), spriteQuad(4,6,2,2,10), spriteQuad(0,8,6,2,10)])
 	,char9: spriteCombine([spriteQuad(0,0,6,2,10), spriteQuad(0,2,2,4,10), spriteQuad(2,4,2,2,10), spriteQuad(4,2,2,8,10)])
+	,mute: spriteCombine([spriteQuad(0,4,2,2,10), spriteQuad(2,3,1,4,10), spriteQuad(3,2,1,6,10), spriteQuad(4,1,1,8,10)])
 };
 G.ui.sprites.animate=function(){
 	if (G.player.y==G.ui.floor) {
@@ -136,27 +137,26 @@ G.ui.speaker.speak=function() {
 }//FILE: terrain.js
 G.ui.terrain={}
 G.ui.terrain.generate = function (width, height, displace, roughness, seed, delta) {
-    var points = [],
-        power = Math.pow(2, Math.ceil(Math.log(width) / (Math.log(2)))),
+	var points = [],
+		power = Math.pow(2, Math.ceil(Math.log(width) / (Math.log(2)))),
 		yMin=seed.s-delta, 
 		yMax=seed.s+delta; 
-		dp("s=",seed.s, "delta=", delta, "ymin=",yMin, "yMax=", yMax)
 	seed.e=seed.s
-    if(seed.s === 0) seed.s = height / 2 + (Math.random() * displace * 2) - displace;
-    points[0] = seed.s;
-    if(seed.e === 0) seed.e = height / 2 + (Math.random() * displace * 2) - displace
-    points[power] = seed.e;
-    displace *= roughness;
-    for (var i = 1; i < power; i *= 2) {
-        for (var j = (power / i) / 2; j < power; j += power / i) {
-            points[j] = ((points[j - (power / i) / 2] + points[j + (power / i) / 2]) / 2);
-            points[j] += (Math.random() * displace * 2) - displace
+	if(seed.s === 0) seed.s = height / 2 + (Math.random() * displace * 2) - displace;
+	points[0] = seed.s;
+	if(seed.e === 0) seed.e = height / 2 + (Math.random() * displace * 2) - displace
+	points[power] = seed.e;
+	displace *= roughness;
+	for (var i = 1; i < power; i *= 2) {
+		for (var j = (power / i) / 2; j < power; j += power / i) {
+			points[j] = ((points[j - (power / i) / 2] + points[j + (power / i) / 2]) / 2);
+			points[j] += (Math.random() * displace * 2) - displace
 			if (points[j]<yMin) {points[j]=yMin+(yMin-points[j]);}
 			else if (points[j]>yMax) {points[j]=yMax-(points[j]-yMin);}
-        }
-        displace *= roughness;
-    }
-    return points;
+		}
+		displace *= roughness;
+	}
+	return points;
 }
 G.ui.terrain.init = function() {
 	this.ctx=G.ui.area.ctx;
@@ -174,17 +174,16 @@ G.ui.terrain.init = function() {
 	this.grad[1].addColorStop(0,"#888");this.grad[1].addColorStop(1,"#AB5");
 	this.grad[2]=this.ctx.createLinearGradient(0,G.ui.area.height*0.75,0,G.ui.area.height);
 	this.grad[2].addColorStop(0,"#EEA");this.grad[2].addColorStop(1,"#885");
+	this.grad[3]=this.ctx.createLinearGradient(0,0,G.ui.area.width/2,G.ui.area.height/3);
+	this.grad[3].addColorStop(0,"#DDE");this.grad[2].addColorStop(1,"#FFF");
 	this.mnt=[
 		 {speed:1,frame:0,offset:0,col:this.grad[0],pts:pts[0]}
 		,{speed:2,frame:0,offset:0,col:this.grad[1],pts:pts[1]}
 		,{speed:4,frame:0,offset:0,col:this.grad[2],pts:pts[2]}
 	];
 	this.frameLast=this.mnt[0].pts.length;
-	dp(this.mnt[0])
 }
 G.ui.terrain.draw = function() {
-	this.grad[3]=this.ctx.createLinearGradient(0,0,G.ui.area.width/2,G.ui.area.height/3);
-	this.grad[3].addColorStop(0,"#DDE");this.grad[2].addColorStop(1,"#FFF");
 	this.ctx.fillStyle=this.grad[3];
 	this.ctx.fillRect(0,0,G.ui.area.width,G.ui.area.height)
 	this.drawMountain(this.mnt[0]);
@@ -281,6 +280,7 @@ function px(x,y,c) {
 }//FILE: music.js
 G.music={}
 G.music.init = function() {
+	this.enabled=true;
 	G.music.ac = typeof AudioContext !== "undefined" ? new AudioContext : new webkitAudioContext;
 	G.music.tempo=100;
 	G.music.lead = [
@@ -313,7 +313,6 @@ G.music.init = function() {
 	G.music.seq4 = new TinyMusic.Sequence( G.music.ac, G.music.tempo, G.music.lead1 );
 	G.music.seq4.createCustomWave([-1,-0.8,-0.4,-0.2, 0, 0.2, 0.4, 0.8,1])
 	
-
 	// set staccato and smoothing values for maximum coolness
 	G.music.seq1.staccato = 0.55;
 	G.music.seq4.staccato = 0.55;
@@ -322,10 +321,10 @@ G.music.init = function() {
 	G.music.seq3.smoothing = 0.9;
 
 	// adjust the levels so the bass and harmony aren"t too loud
-	G.music.seq1.gain.gain.value = 1.0 / 10;
-	G.music.seq4.gain.gain.value = 1.0 / 10;
-	G.music.seq2.gain.gain.value = 0.8 / 10;
-	G.music.seq3.gain.gain.value = 0.65 / 10;
+	G.music.seq1.gain.gain.value = 1.0 / 20;
+	G.music.seq4.gain.gain.value = 1.0 / 20;
+	G.music.seq2.gain.gain.value = 0.8 / 20;
+	G.music.seq3.gain.gain.value = 0.65 / 20;
 
 	// apply EQ settings
 	G.music.seq1.mid.frequency.value = 800;
@@ -346,7 +345,7 @@ G.music.init = function() {
 	with (this.sfxJump) {
 		staccato = 0.45;
 		smoothing = 0.2;
-		gain.gain.value = 0.65 / 2;
+		gain.gain.value = 0.65 / 10;
 		bass.gain.value = -6;
 		bass.frequency.value = 1400;
 		mid.gain.value = -6;
@@ -358,6 +357,7 @@ G.music.init = function() {
 
 }
 G.music.playJump = function() {
+	if (!this.enabled) return;
 	this.sfxJump.play(this.ac.currentTime)
 	this.sfxJump.loop=false;
 }
@@ -365,9 +365,11 @@ G.music.restart = function() {
 	this.tempo=100;
 	this.seq1.counter=0;
 	this.seq4.counter=0;
+	if (!this.enabled) return;
 	this.play();
 };
 G.music.play = function() {
+	this.enabled=true;
 	G.music.seq1.play( G.music.ac.currentTime );
 	var foo1 = function() {
 		++G.music.seq1.counter;
@@ -385,7 +387,7 @@ G.music.play = function() {
 	G.music.seq1.osc.onended = foo1;
 	G.music.seq2.play( G.music.ac.currentTime + ( 60 / G.music.tempo ) * 16 );
 	var foo2 = function() {
-		// After playing harmony once, wait 16 beats then play again
+		// After enabled harmony once, wait 16 beats then play again
 		G.music.seq2.play( G.music.ac.currentTime + ( 60 / G.music.tempo ) * 16 );
 		G.music.seq2.osc.onended = foo2;
 	}
@@ -398,10 +400,21 @@ G.music.play = function() {
 	G.music.seq3.osc.onended = foo3;
 };
 G.music.stop = function() {
+	this.enabled=false;
 	G.music.seq1.stop();
 	G.music.seq2.stop();
 	G.music.seq3.stop();
 	G.music.seq4.stop();
+};
+G.music.toggle=function(){
+	if (this.enabled) {
+		this.stop();
+		G.entity.get('mute').col=2;
+	}
+	else {
+		this.play();
+		G.entity.get('mute').col=0;
+	}
 };
 //FILE: events.js
 G.clickTimer = 0;
@@ -413,16 +426,19 @@ G.ui.setupEvents=function(){
 };
 G.click = function(e) {
 	var button0 = e.key==" " || e.type == "touchstart" || e.type == "mousedown";
+	if (button0) {e.stopPropagation(); e.preventDefault();}
+	var eX = e.screenX||e.touches[0].clientX;
+	eX-=G.ui.area.offsetLeft;
+	var eY = e.screenY||e.touches[0].clientY;
+	eY-=G.ui.area.offsetTop;
 	if (button0 && G.menu.next) {
-		e.stopPropagation(); e.preventDefault();
-		var eX = e.screenX||e.touches[0].clientX;
 		if(eX<G.menu.rectX) G.menu.end(); else G.menu.doNext();
 		return
 	}
-	if(G.state == 3 && button0) {e.stopPropagation(); e.preventDefault();G.restart(); return;}
+	if(G.state == 3 && button0) {G.restart(); return;}
+	if (G.state==1 && eX/G.ui.scaleX<=11 && eY/G.ui.scaleY<=11) {G.music.toggle(); return;}
 	if (e.key=="p") G.pause();
 	if (G.state==1 && button0) {
-		e.stopPropagation(); e.preventDefault();
 		// Sink player mid-jump
 		if(G.player.y>G.player.minY+5 && G.player.dy>-4) {G.player.dy=-4;}
 		else if(G.player.y=G.player.minY) {
@@ -538,6 +554,7 @@ G.restart = function() {
 	G.entity.add({id:'char3', x:G.ui.width-4*(6+2), y:G.ui.height-2-10, follow:true, pts:G.ui.sprites.char0})
 	G.entity.add({id:'char2', x:G.ui.width-3*(6+2), y:G.ui.height-2-10, follow:true, pts:G.ui.sprites.char0})
 	G.entity.add({id:'char1', x:G.ui.width-2*(6+2), y:G.ui.height-2-10, follow:true, pts:G.ui.sprites.char0})
+	G.entity.add({id:'mute', x:1, y:G.ui.height-1-10, follow:true, pts:G.ui.sprites.mute, col:G.music.enabled?0:2})
 	
 	G.menu.next=null;
 	
