@@ -168,7 +168,7 @@ G.ui.terrain.init = function() {
 		G.ui.terrain.generate(G.ui.area.width*this.frames, G.ui.area.height, G.ui.area.height/2, 0.30, {s:G.ui.area.height*0.7}, G.ui.area.height/6)
 	]
 	G.ui.terrain.grad=[];
-	G.ui.terrain.grad[0]=this.ctx.createLinearGradient(0,Math.max.apply(null, pts[0]),0,G.ui.area.height*.75);
+	G.ui.terrain.grad[0]=this.ctx.createLinearGradient(0,Math.max.apply(null, pts[0]),0,G.ui.area.height*0.75);
 	this.grad[0].addColorStop(0,"#DD8");this.grad[0].addColorStop(1,"white");
 	this.grad[1]=this.ctx.createLinearGradient(0,G.ui.area.height*0.5,0,G.ui.area.height);
 	this.grad[1].addColorStop(0,"#888");this.grad[1].addColorStop(1,"#AB5");
@@ -211,11 +211,11 @@ G.entity = {
 		var ret=[];for (var e=0; e<G.ent.length; e++) if (G.ent[e].tag==tag) ret.push(G.ent[e]); return ret;
 	},
 	layer: function(l) {
-		var res=[];for (var e=0; e<G.ent.length; e++) if (G.ent[e].l==l || l==0&&typeof G.ent[e].l =='undefined') res.push(G.ent[e]);
+		var res=[];for (var e=0; e<G.ent.length; e++) if (G.ent[e].l==l || l==0&&typeof G.ent[e].l =="undefined") res.push(G.ent[e]);
 		return res;
 	},
 	add: function(ent) {
-		ent.l=typeof ent.l == 'undefined'?'2':ent.l;
+		ent.l=typeof ent.l == "undefined"?"2":ent.l;
 		G.ent.push(ent);
 		return ent;
 	},
@@ -228,7 +228,7 @@ G.entity = {
 		return count;
 	},
 	collision: function(ent) {
-		//Need to factor in player's frame for their size
+		//Need to factor in player"s frame for their size
 		var eX = Math.round(ent.x-+G.ui.camera.x);
 		var eH = ent.obstacle[1];
 		var eMaxX = Math.round(eX+ent.obstacle[0]);
@@ -240,12 +240,12 @@ G.entity = {
 		var hitFront = eX+EasyX<pMaxX;
 		var hitTop = eMaxX-EasyX>pX;
 		if (hitY && hitFront && hitTop) {
-			dpd("pY+EasyY=",G.player.y+EasyY,"eH+eY=",ent.y+eH,"hitY=",hitY)
-			dpd("eX=",eX,"pMaxX=",pMaxX,"overlap=",pMaxX-eX,"hitFront=",hitFront,"frame=",G.player.frame)
-			dpd	("eX=",eX,"px=",pX,"eMaxX=",eMaxX,"hitTop=",hitTop)
+			//dpd("pY+EasyY=",G.player.y+EasyY,"eH+eY=",ent.y+eH,"hitY=",hitY)
+			//dpd("eX=",eX,"pMaxX=",pMaxX,"overlap=",pMaxX-eX,"hitFront=",hitFront,"frame=",G.player.frame)
+			//dpd	("eX=",eX,"px=",pX,"eMaxX=",eMaxX,"hitTop=",hitTop)
 			return true;}
 	}
-}//FILE: draw.js
+};//FILE: draw.js
 G.draw = function() {
 	var ctx = G.ui.area.ctx;
 	ctx.fillStyle = G.ui.palette.dark;
@@ -406,13 +406,13 @@ G.music.stop = function() {
 //FILE: events.js
 G.clickTimer = 0;
 G.ui.setupEvents=function(){
-	document.body.addEventListener('mousedown', G.click);
-	document.body.addEventListener('mouseup', G.clickEnd);
-	document.body.addEventListener('touchstart', G.click, {passive: false});
-	document.body.addEventListener('touchend', G.clickEnd, {passive: false});
+	document.body.addEventListener("mousedown", G.click);
+	document.body.addEventListener("mouseup", G.clickEnd);
+	document.body.addEventListener("touchstart", G.click, {passive: false});
+	document.body.addEventListener("touchend", G.clickEnd, {passive: false});
 };
 G.click = function(e) {
-	var button0 = e.key==' ' || e.type == 'touchstart' || e.type == 'mousedown';
+	var button0 = e.key==" " || e.type == "touchstart" || e.type == "mousedown";
 	if (button0 && G.menu.next) {
 		e.stopPropagation(); e.preventDefault();
 		var eX = e.screenX||e.touches[0].clientX;
@@ -420,7 +420,7 @@ G.click = function(e) {
 		return
 	}
 	if(G.state == 3 && button0) {e.stopPropagation(); e.preventDefault();G.restart(); return;}
-	if (e.key=='p') G.pause();
+	if (e.key=="p") G.pause();
 	if (G.state==1 && button0) {
 		e.stopPropagation(); e.preventDefault();
 		// Sink player mid-jump
@@ -432,9 +432,7 @@ G.click = function(e) {
 	}
 };
 G.clickEnd = function(e) {
-	if (G.clickTimer>0) {
-		G.clickTimer = 0;
-	}
+	if (G.clickTimer>0) G.clickTimer = 0;
 };
 G.menu = {
 	next: null

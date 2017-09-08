@@ -31,6 +31,7 @@ G.restart = function() {
 	G.entity.add({id:'char3', x:G.ui.width-4*(6+2), y:G.ui.height-2-10, follow:true, pts:G.ui.sprites.char0})
 	G.entity.add({id:'char2', x:G.ui.width-3*(6+2), y:G.ui.height-2-10, follow:true, pts:G.ui.sprites.char0})
 	G.entity.add({id:'char1', x:G.ui.width-2*(6+2), y:G.ui.height-2-10, follow:true, pts:G.ui.sprites.char0})
+	G.entity.add({id:'mute', x:1, y:G.ui.height-1-10, follow:true, pts:G.ui.sprites.mute, col:G.music.enabled?0:2})
 	
 	G.menu.next=null;
 	

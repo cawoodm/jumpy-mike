@@ -1,27 +1,26 @@
 //FILE: terrain.js
 G.ui.terrain={}
 G.ui.terrain.generate = function (width, height, displace, roughness, seed, delta) {
-    var points = [],
-        power = Math.pow(2, Math.ceil(Math.log(width) / (Math.log(2)))),
+	var points = [],
+		power = Math.pow(2, Math.ceil(Math.log(width) / (Math.log(2)))),
 		yMin=seed.s-delta, 
 		yMax=seed.s+delta; 
-		dp("s=",seed.s, "delta=", delta, "ymin=",yMin, "yMax=", yMax)
 	seed.e=seed.s
-    if(seed.s === 0) seed.s = height / 2 + (Math.random() * displace * 2) - displace;
-    points[0] = seed.s;
-    if(seed.e === 0) seed.e = height / 2 + (Math.random() * displace * 2) - displace
-    points[power] = seed.e;
-    displace *= roughness;
-    for (var i = 1; i < power; i *= 2) {
-        for (var j = (power / i) / 2; j < power; j += power / i) {
-            points[j] = ((points[j - (power / i) / 2] + points[j + (power / i) / 2]) / 2);
-            points[j] += (Math.random() * displace * 2) - displace
+	if(seed.s === 0) seed.s = height / 2 + (Math.random() * displace * 2) - displace;
+	points[0] = seed.s;
+	if(seed.e === 0) seed.e = height / 2 + (Math.random() * displace * 2) - displace
+	points[power] = seed.e;
+	displace *= roughness;
+	for (var i = 1; i < power; i *= 2) {
+		for (var j = (power / i) / 2; j < power; j += power / i) {
+			points[j] = ((points[j - (power / i) / 2] + points[j + (power / i) / 2]) / 2);
+			points[j] += (Math.random() * displace * 2) - displace
 			if (points[j]<yMin) {points[j]=yMin+(yMin-points[j]);}
 			else if (points[j]>yMax) {points[j]=yMax-(points[j]-yMin);}
-        }
-        displace *= roughness;
-    }
-    return points;
+		}
+		displace *= roughness;
+	}
+	return points;
 }
 G.ui.terrain.init = function() {
 	this.ctx=G.ui.area.ctx;
@@ -39,17 +38,16 @@ G.ui.terrain.init = function() {
 	this.grad[1].addColorStop(0,"#888");this.grad[1].addColorStop(1,"#AB5");
 	this.grad[2]=this.ctx.createLinearGradient(0,G.ui.area.height*0.75,0,G.ui.area.height);
 	this.grad[2].addColorStop(0,"#EEA");this.grad[2].addColorStop(1,"#885");
+	this.grad[3]=this.ctx.createLinearGradient(0,0,G.ui.area.width/2,G.ui.area.height/3);
+	this.grad[3].addColorStop(0,"#DDE");this.grad[2].addColorStop(1,"#FFF");
 	this.mnt=[
 		 {speed:1,frame:0,offset:0,col:this.grad[0],pts:pts[0]}
 		,{speed:2,frame:0,offset:0,col:this.grad[1],pts:pts[1]}
 		,{speed:4,frame:0,offset:0,col:this.grad[2],pts:pts[2]}
 	];
 	this.frameLast=this.mnt[0].pts.length;
-	dp(this.mnt[0])
 }
 G.ui.terrain.draw = function() {
-	this.grad[3]=this.ctx.createLinearGradient(0,0,G.ui.area.width/2,G.ui.area.height/3);
-	this.grad[3].addColorStop(0,"#DDE");this.grad[2].addColorStop(1,"#FFF");
 	this.ctx.fillStyle=this.grad[3];
 	this.ctx.fillRect(0,0,G.ui.area.width,G.ui.area.height)
 	this.drawMountain(this.mnt[0]);
