@@ -3,11 +3,6 @@ SETLOCAL
 
 CD %dp0%
 
-:: Commit local changes
-git add .
-git commit -m "Build %date% %time%"
-git push origin master
-
 :: Compile JS into one file
 DEL app.js
 TYPE tinymusic.js >> app.js
@@ -33,10 +28,15 @@ COPY /Y favicon.ico release\
 ECHO "Ready to test in release\ folder"
 PAUSE
 
+:: Commit local changes
+git add .
+git commit -m "Build %date% %time%"
+git push origin master
+
 :: Copy to local cawoodm github site
 COPY /Y .\release\*.* ..\..\..\cawoodm.github.io\jumpy-mike
 ECHO "Ready to test in cawoodm.github.io\jumpy-mike\ folder"
-::PAUSE
+PAUSE
 
 :: Publish to github
 CD ..\..\..\cawoodm.github.io\jumpy-mike
