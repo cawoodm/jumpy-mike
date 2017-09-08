@@ -16,7 +16,7 @@ G.ui.terrain.generate = function (width, height, displace, roughness, seed, delt
 			points[j] = ((points[j - (power / i) / 2] + points[j + (power / i) / 2]) / 2);
 			points[j] += (Math.random() * displace * 2) - displace
 			if (points[j]<yMin) {points[j]=yMin+(yMin-points[j]);}
-			else if (points[j]>yMax) {points[j]=yMax-(points[j]-yMin);}
+			else if (points[j]>yMax) {points[j]=yMax;}
 		}
 		displace *= roughness;
 	}

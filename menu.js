@@ -21,14 +21,18 @@ G.menu.intro4 = function() {
 	G.menu.popup({text:'Gain 1000 points and you will be worthy to enter the "Home of the Brave" where guns are cheap and basic necessities ain\'t. Good Luck!', next:G.menu.end});
 }
 G.menu.gameover0 = function() {
-	G.menu.popup({text:'You failed. Get Lost!', next:G.menu.end, title:"Game Over", keep:true});
+	G.ui.speaker.start();
+	G.menu.popup({text:'You failed. Get Lost!', next:G.menu.end, title:"Game Over", keep:true, button:"Try again"});
 }
 G.menu.end = function(){
 	G.ui.speaker.stop();
 	G.restart();
 }
 G.menu.popup = function(o) {
-	G.ui.area.ctx.clearRect(0,0,G.ui.width*G.ui.scaleX,G.ui.height*G.ui.scaleY);
+	var ctx = G.ui.area.ctx;
+	o.button=o.button||"Play!";
+	if (!o.keep) ctx.clearRect(0,0,G.ui.width*G.ui.scaleX,G.ui.height*G.ui.scaleY);
+	
 	G.menu.next=o.next;
 	
 	var rectWidth = (G.ui.width*G.ui.scaleX)/1.5;
@@ -36,22 +40,22 @@ G.menu.popup = function(o) {
 	this.rectY = (G.ui.height*G.ui.scaleY)/2-rectHeight/2;
 	this.rectX = (G.ui.width*G.ui.scaleX)/2-rectWidth/2;
 	var cornerRadius = 8*G.ui.scaleX;
+
+	ctx.fillStyle = G.ui.palette.light;
+	ctx.strokeStyle = G.ui.palette.mid;
+	ctx.lineJoin = "round";
+	ctx.lineWidth = cornerRadius/2;
+	ctx.strokeRect(this.rectX+(cornerRadius/2), this.rectY+(cornerRadius/2), rectWidth-cornerRadius, rectHeight-cornerRadius);
+	ctx.fillRect(this.rectX+(cornerRadius/2), this.rectY+(cornerRadius/2), rectWidth-cornerRadius, rectHeight-cornerRadius);
 	
 	let offY=0;
 	if (o.title) {
+		ctx.fillStyle = G.ui.palette.dark;
 		ctx.font=Math.round(1.5*G.menu.textSize)+"px "+this.font+" bold";
-		ctx.fillText(o.title, this.rectX+cornerRadius*0.7,this.rectY+cornerRadius+this.lineHeight*0.5);
+		ctx.fillText(o.title, this.rectX+cornerRadius*0.7,this.rectY+cornerRadius+this.lineHeight);
 		offY=2*this.lineHeight;
 		rectHeight+=offY;
 	}
-
-	var ctx = G.ui.area.ctx;
-	ctx.fillStyle = G.ui.palette.light;
-	ctx.strokeStyle = G.ui.palette.light;
-	ctx.lineJoin = "round";
-	ctx.lineWidth = cornerRadius;
-	ctx.strokeRect(this.rectX+(cornerRadius/2), this.rectY+(cornerRadius/2), rectWidth-cornerRadius, rectHeight-cornerRadius);
-	ctx.fillRect(this.rectX+(cornerRadius/2), this.rectY+(cornerRadius/2), rectWidth-cornerRadius, rectHeight-cornerRadius);
 	
 	G.menu.wrapText(o.text, this.rectX+cornerRadius*0.7,this.rectY+cornerRadius+this.lineHeight*0.5+offY, rectWidth-cornerRadius);
 }

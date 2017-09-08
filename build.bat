@@ -26,7 +26,7 @@ COPY /Y sprites.png release\
 COPY /Y favicon.png release\
 COPY /Y favicon.ico release\
 ECHO "Ready to test in release\ folder"
-PAUSE
+::PAUSE
 
 :: Commit local changes
 git add .
@@ -36,7 +36,7 @@ git push origin master
 :: Copy to local cawoodm github site
 COPY /Y .\release\*.* ..\..\..\cawoodm.github.io\jumpy-mike
 ECHO "Ready to test in cawoodm.github.io\jumpy-mike\ folder"
-PAUSE
+::PAUSE
 
 :: Publish to github
 CD ..\..\..\cawoodm.github.io\jumpy-mike
