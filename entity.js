@@ -7,11 +7,11 @@ G.entity = {
 		var ret=[];for (var e=0; e<G.ent.length; e++) if (G.ent[e].tag==tag) ret.push(G.ent[e]); return ret;
 	},
 	layer: function(l) {
-		var res=[];for (var e=0; e<G.ent.length; e++) if (G.ent[e].l==l || l==0&&typeof G.ent[e].l =='undefined') res.push(G.ent[e]);
+		var res=[];for (var e=0; e<G.ent.length; e++) if (G.ent[e].l==l || l==0&&typeof G.ent[e].l =="undefined") res.push(G.ent[e]);
 		return res;
 	},
 	add: function(ent) {
-		ent.l=typeof ent.l == 'undefined'?'2':ent.l;
+		ent.l=typeof ent.l == "undefined"?"2":ent.l;
 		G.ent.push(ent);
 		return ent;
 	},
@@ -24,7 +24,7 @@ G.entity = {
 		return count;
 	},
 	collision: function(ent) {
-		//Need to factor in player's frame for their size
+		//Need to factor in player"s frame for their size
 		var eX = Math.round(ent.x-+G.ui.camera.x);
 		var eH = ent.obstacle[1];
 		var eMaxX = Math.round(eX+ent.obstacle[0]);
@@ -36,9 +36,9 @@ G.entity = {
 		var hitFront = eX+EasyX<pMaxX;
 		var hitTop = eMaxX-EasyX>pX;
 		if (hitY && hitFront && hitTop) {
-			dpd("pY+EasyY=",G.player.y+EasyY,"eH+eY=",ent.y+eH,"hitY=",hitY)
-			dpd("eX=",eX,"pMaxX=",pMaxX,"overlap=",pMaxX-eX,"hitFront=",hitFront,"frame=",G.player.frame)
-			dpd	("eX=",eX,"px=",pX,"eMaxX=",eMaxX,"hitTop=",hitTop)
+			//dpd("pY+EasyY=",G.player.y+EasyY,"eH+eY=",ent.y+eH,"hitY=",hitY)
+			//dpd("eX=",eX,"pMaxX=",pMaxX,"overlap=",pMaxX-eX,"hitFront=",hitFront,"frame=",G.player.frame)
+			//dpd	("eX=",eX,"px=",pX,"eMaxX=",eMaxX,"hitTop=",hitTop)
 			return true;}
 	}
-}
+};

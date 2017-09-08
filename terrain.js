@@ -33,7 +33,7 @@ G.ui.terrain.init = function() {
 		G.ui.terrain.generate(G.ui.area.width*this.frames, G.ui.area.height, G.ui.area.height/2, 0.30, {s:G.ui.area.height*0.7}, G.ui.area.height/6)
 	]
 	G.ui.terrain.grad=[];
-	G.ui.terrain.grad[0]=this.ctx.createLinearGradient(0,Math.max.apply(null, pts[0]),0,G.ui.area.height*.75);
+	G.ui.terrain.grad[0]=this.ctx.createLinearGradient(0,Math.max.apply(null, pts[0]),0,G.ui.area.height*0.75);
 	this.grad[0].addColorStop(0,"#DD8");this.grad[0].addColorStop(1,"white");
 	this.grad[1]=this.ctx.createLinearGradient(0,G.ui.area.height*0.5,0,G.ui.area.height);
 	this.grad[1].addColorStop(0,"#888");this.grad[1].addColorStop(1,"#AB5");

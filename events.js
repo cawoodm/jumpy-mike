@@ -1,13 +1,13 @@
 //FILE: events.js
 G.clickTimer = 0;
 G.ui.setupEvents=function(){
-	document.body.addEventListener('mousedown', G.click);
-	document.body.addEventListener('mouseup', G.clickEnd);
-	document.body.addEventListener('touchstart', G.click, {passive: false});
-	document.body.addEventListener('touchend', G.clickEnd, {passive: false});
+	document.body.addEventListener("mousedown", G.click);
+	document.body.addEventListener("mouseup", G.clickEnd);
+	document.body.addEventListener("touchstart", G.click, {passive: false});
+	document.body.addEventListener("touchend", G.clickEnd, {passive: false});
 };
 G.click = function(e) {
-	var button0 = e.key==' ' || e.type == 'touchstart' || e.type == 'mousedown';
+	var button0 = e.key==" " || e.type == "touchstart" || e.type == "mousedown";
 	if (button0 && G.menu.next) {
 		e.stopPropagation(); e.preventDefault();
 		var eX = e.screenX||e.touches[0].clientX;
@@ -15,7 +15,7 @@ G.click = function(e) {
 		return
 	}
 	if(G.state == 3 && button0) {e.stopPropagation(); e.preventDefault();G.restart(); return;}
-	if (e.key=='p') G.pause();
+	if (e.key=="p") G.pause();
 	if (G.state==1 && button0) {
 		e.stopPropagation(); e.preventDefault();
 		// Sink player mid-jump
@@ -27,7 +27,5 @@ G.click = function(e) {
 	}
 };
 G.clickEnd = function(e) {
-	if (G.clickTimer>0) {
-		G.clickTimer = 0;
-	}
+	if (G.clickTimer>0) G.clickTimer = 0;
 };
