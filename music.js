@@ -25,6 +25,7 @@ G.music.init = function() {
 		"G2  h","A2  h"
 	];
 	G.music.jump = ["C5  q","-   q"];
+	G.music.gameover = ["E3  q","D3  q","C2  h"];
 	
 	G.music.seq1 = new TinyMusic.Sequence( G.music.ac, G.music.tempo, G.music.lead );
 	G.music.seq1.createCustomWave([-1,-0.9,-0.6,-0.3, 0, 0.3, 0.6, 0.9,1])
@@ -63,6 +64,7 @@ G.music.init = function() {
 	G.music.seq3.treble.frequency.value = 1400;
 	
 	this.sfxJump = new TinyMusic.Sequence( G.music.ac, G.music.tempo, G.music.jump);
+	this.sfxGameOver = new TinyMusic.Sequence( G.music.ac, G.music.tempo, G.music.gameover);
 	with (this.sfxJump) {
 		staccato = 0.45;
 		smoothing = 0.2;
@@ -73,7 +75,17 @@ G.music.init = function() {
 		mid.frequency.value = 1400;
 		treble.gain.value = -2;
 		treble.frequency.value = 1400;
-		loop=false;
+	}
+	with (this.sfxGameOver) {
+		staccato = 0.45;
+		smoothing = 0.2;
+		gain.gain.value = 0.65 / 10;
+		bass.gain.value = -6;
+		bass.frequency.value = 1400;
+		mid.gain.value = -6;
+		mid.frequency.value = 1400;
+		treble.gain.value = -2;
+		treble.frequency.value = 1400;
 	}
 
 }
@@ -81,6 +93,11 @@ G.music.playJump = function() {
 	if (!this.enabled) return;
 	this.sfxJump.play(this.ac.currentTime)
 	this.sfxJump.loop=false;
+}
+G.music.playGameOver = function() {
+	if (!this.enabled) return;
+	this.sfxGameOver.play(this.ac.currentTime)
+	this.sfxGameOver.loop=false;
 }
 G.music.restart = function() {
 	this.tempo=100;

@@ -6,7 +6,7 @@ G.ui.setupEvents=function(){
 	G.ui.area.addEventListener("touchstart", G.click, {passive: false});
 	G.ui.area.addEventListener("touchend", G.clickEnd, {passive: false});
 	window.onerror = function(msg, url, lineNo, columnNo, error)  {
-		alert("Line " +lineNo + "; Message: " + msg);
+		alert("Line " +lineNo + "; Message: " + msg + "\n" + error);
 	}
 };
 G.click = function(e) {
@@ -23,6 +23,7 @@ G.click = function(e) {
 			if(eX<G.menu.rectX) {
 				// Skip intro menus
 				G.menu.end();
+				goodo()
 			}  else {
 				G.menu.doNext();
 			}

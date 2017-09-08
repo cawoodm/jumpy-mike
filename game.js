@@ -111,6 +111,7 @@ G.gameOver = function() {
 	G.pause();
 	G.state=2;
 	setTimeout(function(){G.state = 3},1000);
+	G.music.playGameOver();
 	G.menu.gameover0();
 }
 G.pause = function() {
