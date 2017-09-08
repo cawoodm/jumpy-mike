@@ -15,6 +15,7 @@ G.ui.scaleX = Math.floor(window.innerWidth/G.ui.width)||1;
 G.ui.scaleY = Math.floor(window.innerHeight/G.ui.height)||1;
 if (G.ui.scaleX>G.ui.scaleY) G.ui.scaleX=G.ui.scaleY; else G.ui.scaleY=G.ui.scaleX;
 G.ui.width=Math.floor(window.innerWidth/G.ui.scaleX);
+G.state = 0;
 G.gravity=0.3;
 G.minJump=2;
 G.maxJump=12;
@@ -369,7 +370,6 @@ G.music.restart = function() {
 	this.play();
 };
 G.music.play = function() {
-	this.enabled=true;
 	G.music.seq1.play( G.music.ac.currentTime );
 	var foo1 = function() {
 		++G.music.seq1.counter;
@@ -400,7 +400,6 @@ G.music.play = function() {
 	G.music.seq3.osc.onended = foo3;
 };
 G.music.stop = function() {
-	this.enabled=false;
 	G.music.seq1.stop();
 	G.music.seq2.stop();
 	G.music.seq3.stop();
@@ -409,42 +408,59 @@ G.music.stop = function() {
 G.music.toggle=function(){
 	if (this.enabled) {
 		this.stop();
+		this.enabled=false;
 		G.entity.get('mute').col=2;
 	}
 	else {
 		this.play();
+		this.enabled=true;
 		G.entity.get('mute').col=0;
 	}
 };
 //FILE: events.js
 G.clickTimer = 0;
 G.ui.setupEvents=function(){
-	document.body.addEventListener("mousedown", G.click);
-	document.body.addEventListener("mouseup", G.clickEnd);
-	document.body.addEventListener("touchstart", G.click, {passive: false});
-	document.body.addEventListener("touchend", G.clickEnd, {passive: false});
+	G.ui.area.addEventListener("mousedown", G.click);
+	G.ui.area.addEventListener("mouseup", G.clickEnd);
+	G.ui.area.addEventListener("touchstart", G.click, {passive: false});
+	G.ui.area.addEventListener("touchend", G.clickEnd, {passive: false});
+	window.onerror = function(msg, url, lineNo, columnNo, error)  {
+		alert("Line " +lineNo + "; Message: " + msg);
+	}
 };
 G.click = function(e) {
 	var button0 = e.key==" " || e.type == "touchstart" || e.type == "mousedown";
-	if (button0) {e.stopPropagation(); e.preventDefault();}
-	var eX = e.screenX||e.touches[0].clientX;
-	eX-=G.ui.area.offsetLeft;
-	var eY = e.screenY||e.touches[0].clientY;
-	eY-=G.ui.area.offsetTop;
-	if (button0 && G.menu.next) {
-		if(eX<G.menu.rectX) G.menu.end(); else G.menu.doNext();
-		return
-	}
-	if(G.state == 3 && button0) {G.restart(); return;}
-	if (G.state==1 && eX/G.ui.scaleX<=11 && eY/G.ui.scaleY<=11) {G.music.toggle(); return;}
-	if (e.key=="p") G.pause();
-	if (G.state==1 && button0) {
-		// Sink player mid-jump
-		if(G.player.y>G.player.minY+5 && G.player.dy>-4) {G.player.dy=-4;}
-		else if(G.player.y=G.player.minY) {
-			G.music.playJump();
-			G.clickTimer = G.minJump;
+	if (button0) {
+		e.stopPropagation(); e.preventDefault();
+		var eX = (e.screenX||e.touches[0].clientX)-G.ui.area.offsetLeft;
+		var eY = (e.screenY||e.touches[0].clientY)-G.ui.area.offsetTop;
+		if(G.state == 3) {
+			// Dead -> tap to restart
+			G.restart();
+		} else if (G.menu.next) {
+			// Goto next menu
+			if(eX<G.menu.rectX) {
+				// Skip intro menus
+				G.menu.end();
+			}  else {
+				G.menu.doNext();
+			}
+		} else if (G.state==1 && eX/G.ui.scaleX<=11 && eY/G.ui.scaleY<=11) {
+			dp("Mute", eX, eY)
+			// Tap mute button
+			G.music.toggle(); 
+		} else if (G.state==1) {
+			// During game
+			if(G.player.y>G.player.minY+5 && G.player.dy>-4) {
+				// Sink player mid-jump
+				G.player.dy=-4;
+			} else if(G.player.y=G.player.minY) {
+				G.music.playJump();
+				G.clickTimer = G.minJump;
+			}
 		}
+	} else {
+		if (e.key=="p") G.pause();
 	}
 };
 G.clickEnd = function(e) {
@@ -458,33 +474,44 @@ G.menu = {
 }
 G.menu.intro0 = function() {
 	G.ui.speaker.start();
-	G.menu.popup('Welcome... or rather not.... You are an illegal alien #BadHombre of questionable race and virtue trying to get into the "Land of the Free"', G.menu.intro1);
+	G.menu.popup({text:'Welcome... or rather not.... You are an illegal alien #BadHombre of questionable race and virtue trying to get into the "Land of the Free"', next:G.menu.intro1});
 }
 G.menu.intro1 = function() {
-	G.menu.popup('Sooo... until we build The Wall (#NeedSponsor) and according to our new "Merit System" you must earn enough "Freedom Points" in order to be allowed entry...', G.menu.intro2)
+	G.menu.popup({text:'Sooo... until we build The Wall (#NeedSponsor) and according to our new "Merit System" you must earn enough "Freedom Points" in order to be allowed entry...', next:G.menu.intro2})
 }
 G.menu.intro2 = function() {
-	G.menu.popup('Pass through our desert (#SwampDrained) to earn Freedom Points by jumping cactuseses and we will consider your application ...', G.menu.intro3)
+	G.menu.popup({text:'Pass through our desert (#SwampDrained) to earn Freedom Points by jumping cactuseses and we will consider your application ...', next:G.menu.intro3})
 }
 G.menu.intro3 = function() {
-	G.menu.popup('Fail and we will be forced to keep you in a prison camp wearing pink underwear until you die of humiliation #ToughLove ...', G.menu.intro4)
+	G.menu.popup({text:'Fail and we will be forced to keep you in a prison camp wearing pink underwear until you die of humiliation #ToughLove ...', next:G.menu.intro4})
 }
 G.menu.intro4 = function() {
-	G.menu.popup('Gain 2000 points and you will be worthy to enter the "Home of the Brave" where guns are cheap and basic necessities ain\'t. Good Luck!', G.menu.end);
+	G.menu.popup({text:'Gain 1000 points and you will be worthy to enter the "Home of the Brave" where guns are cheap and basic necessities ain\'t. Good Luck!', next:G.menu.end});
+}
+G.menu.gameover0 = function() {
+	G.menu.popup({text:'You failed. Get Lost!', next:G.menu.end, title:"Game Over", keep:true});
 }
 G.menu.end = function(){
 	G.ui.speaker.stop();
 	G.restart();
 }
-G.menu.popup = function(text, next) {
+G.menu.popup = function(o) {
 	G.ui.area.ctx.clearRect(0,0,G.ui.width*G.ui.scaleX,G.ui.height*G.ui.scaleY);
-	G.menu.next=next;
+	G.menu.next=o.next;
 	
 	var rectWidth = (G.ui.width*G.ui.scaleX)/1.5;
 	var rectHeight = (G.ui.height*G.ui.scaleX)/1.5;
 	this.rectY = (G.ui.height*G.ui.scaleY)/2-rectHeight/2;
 	this.rectX = (G.ui.width*G.ui.scaleX)/2-rectWidth/2;
 	var cornerRadius = 8*G.ui.scaleX;
+	
+	let offY=0;
+	if (o.title) {
+		ctx.font=Math.round(1.5*G.menu.textSize)+"px "+this.font+" bold";
+		ctx.fillText(o.title, this.rectX+cornerRadius*0.7,this.rectY+cornerRadius+this.lineHeight*0.5);
+		offY=2*this.lineHeight;
+		rectHeight+=offY;
+	}
 
 	var ctx = G.ui.area.ctx;
 	ctx.fillStyle = G.ui.palette.light;
@@ -494,30 +521,26 @@ G.menu.popup = function(text, next) {
 	ctx.strokeRect(this.rectX+(cornerRadius/2), this.rectY+(cornerRadius/2), rectWidth-cornerRadius, rectHeight-cornerRadius);
 	ctx.fillRect(this.rectX+(cornerRadius/2), this.rectY+(cornerRadius/2), rectWidth-cornerRadius, rectHeight-cornerRadius);
 	
-	G.menu.wrapText(text,this.rectX+cornerRadius*0.7,this.rectY+cornerRadius+this.lineHeight*0.5, rectWidth-cornerRadius);
+	G.menu.wrapText(o.text, this.rectX+cornerRadius*0.7,this.rectY+cornerRadius+this.lineHeight*0.5+offY, rectWidth-cornerRadius);
 }
 G.menu.doNext = function() {
 	this.next();
 }
 G.menu.wrapText = function(text, x, y, maxWidth) {
-	
 	var ctx = G.ui.area.ctx;
-	
 	ctx.fillStyle = G.ui.palette.dark;
 	ctx.font=G.menu.textSize+"px "+this.font;
-	
-	var words = text.split(' ');
-	var line = '';
-
+	var words = text.split(' ')
+		 ,line = '';
 	for(var n = 0; n < words.length; n++) {
 	  var testLine = line + words[n] + ' ';
 	  if (ctx.measureText(testLine).width > maxWidth && n > 0) {
-		ctx.fillText(line, x, y);
-		line = words[n] + ' ';
-		y += this.lineHeight;
+			ctx.fillText(line, x, y);
+			line = words[n] + ' ';
+			y += this.lineHeight;
 	  }
 	  else {
-		line = testLine;
+			line = testLine;
 	  }
 	}
 	ctx.fillText(line, x, y);
@@ -636,11 +659,10 @@ G.update = function() {
 	G.ui.sprites.animate();
 	
 	G.player.score = Math.round(G.ticks/10);
-	G.level = Math.floor(G.player.score/100)
-	//G.player.score = G.player.jumps
+	G.level = Math.floor(G.player.score/100);
 	G.ui.showScore(G.player.score)
 	// Night every 200 points
-	if(G.player.score%200==0) G.ui.palette = G.ui.palette==G.ui.palette0?G.ui.palette1:G.ui.palette0;
+	if(G.ticks%2000==0) G.ui.palette = G.ui.palette==G.ui.palette0?G.ui.palette1:G.ui.palette0;
 };
 G.loop = function() {
 	G.update();
@@ -677,6 +699,7 @@ G.gameOver = function() {
 	G.pause();
 	G.state=2;
 	setTimeout(function(){G.state = 3},1000);
+	G.menu.gameover0();
 }
 G.pause = function() {
 	if (G._intervalId) {

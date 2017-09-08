@@ -71,11 +71,10 @@ G.update = function() {
 	G.ui.sprites.animate();
 	
 	G.player.score = Math.round(G.ticks/10);
-	G.level = Math.floor(G.player.score/100)
-	//G.player.score = G.player.jumps
+	G.level = Math.floor(G.player.score/100);
 	G.ui.showScore(G.player.score)
 	// Night every 200 points
-	if(G.player.score%200==0) G.ui.palette = G.ui.palette==G.ui.palette0?G.ui.palette1:G.ui.palette0;
+	if(G.ticks%2000==0) G.ui.palette = G.ui.palette==G.ui.palette0?G.ui.palette1:G.ui.palette0;
 };
 G.loop = function() {
 	G.update();
@@ -112,6 +111,7 @@ G.gameOver = function() {
 	G.pause();
 	G.state=2;
 	setTimeout(function(){G.state = 3},1000);
+	G.menu.gameover0();
 }
 G.pause = function() {
 	if (G._intervalId) {

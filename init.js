@@ -9,6 +9,7 @@ G.ui.scaleX = Math.floor(window.innerWidth/G.ui.width)||1;
 G.ui.scaleY = Math.floor(window.innerHeight/G.ui.height)||1;
 if (G.ui.scaleX>G.ui.scaleY) G.ui.scaleX=G.ui.scaleY; else G.ui.scaleY=G.ui.scaleX;
 G.ui.width=Math.floor(window.innerWidth/G.ui.scaleX);
+G.state = 0;
 G.gravity=0.3;
 G.minJump=2;
 G.maxJump=12;

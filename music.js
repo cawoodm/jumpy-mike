@@ -90,7 +90,6 @@ G.music.restart = function() {
 	this.play();
 };
 G.music.play = function() {
-	this.enabled=true;
 	G.music.seq1.play( G.music.ac.currentTime );
 	var foo1 = function() {
 		++G.music.seq1.counter;
@@ -121,7 +120,6 @@ G.music.play = function() {
 	G.music.seq3.osc.onended = foo3;
 };
 G.music.stop = function() {
-	this.enabled=false;
 	G.music.seq1.stop();
 	G.music.seq2.stop();
 	G.music.seq3.stop();
@@ -130,10 +128,12 @@ G.music.stop = function() {
 G.music.toggle=function(){
 	if (this.enabled) {
 		this.stop();
+		this.enabled=false;
 		G.entity.get('mute').col=2;
 	}
 	else {
 		this.play();
+		this.enabled=true;
 		G.entity.get('mute').col=0;
 	}
 };
