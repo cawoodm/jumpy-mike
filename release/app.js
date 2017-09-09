@@ -491,7 +491,7 @@ G.menu = {
 }
 G.menu.intro0 = function() {
 	G.ui.speaker.start();
-	G.menu.popup({title:"Get LOST!", text:"Welcome... or rather not.... You are an illegal alien #BadHombre of questionable race and virtue trying to get into the Land of the Free ...", next:G.menu.intro1});
+	G.menu.popup({title:"#Get LOST Hombre!", text:"Welcome... or rather not.... You are an illegal alien #BadHombre of questionable race and virtue trying to get into the Land of the Free ...", next:G.menu.intro1});
 }
 G.menu.intro1 = function() {
 	G.menu.popup({text:"Sooo... until we build The Wall (#NeedSponsor) and according to our new Incredible Merit System you must earn enough Freedom Points to be allowed in...", next:G.menu.intro2})
@@ -534,7 +534,7 @@ G.menu.popup = function(o) {
 	let offY=0;
 	if (o.title) {
 		ctx.fillStyle = G.ui.palette.dark;
-		ctx.font=Math.round(1.5*G.menu.textSize)+"px "+this.font+" bold";
+		ctx.font="bold "+Math.round(1.5*G.menu.textSize)+"px "+this.font;
 		ctx.fillText(o.title, this.rectX+cornerRadius*0.7,this.rectY+cornerRadius+this.lineHeight);
 		offY=2*this.lineHeight;
 		this.rectHeight+=offY;
