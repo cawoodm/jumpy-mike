@@ -8,12 +8,11 @@ G.update = function() {
 	if (prob(75) && G.ticks%rnd(10,30)==0) {
 		if (prob(80) && G.entity.count('smallCloud')<3) G.addCloud(0,0)
 		if (prob(90) && G.entity.count('cloud' )<3) G.addCloud(0,1)
-		if (prob(90) && G.entity.count('hill' )<3) G.addHill(0,1)
 	}
 	// Generate random stones
-	if (prob(75) && G.ticks%rnd(10,30)==0) G.entity.add({tag:'stone0',x:G.ui.camera.x+G.ui.width,y:rnd(0, G.ui.horizon-1),pts:G.ui.sprites.stone0})
-	if (prob(75) && G.ticks%rnd(10,30)==0) G.entity.add({tag:'stone1',x:G.ui.camera.x+G.ui.width,y:rnd(0, G.ui.horizon-2),pts:G.ui.sprites.stone1})
-	if (prob(75) && G.ticks%rnd(10,30)==0) G.entity.add({tag:'stone2',x:G.ui.camera.x+G.ui.width,y:rnd(0, G.ui.horizon-3),pts:G.ui.sprites.stone2})
+	if (prob(75) && G.ticks%rnd(10,30)==0 && G.entity.count('stone0')<3) G.addStone(0, 0);
+	if (prob(75) && G.ticks%rnd(10,30)==0 && G.entity.count('stone1')<7) G.addStone(0, 1);
+	if (prob(75) && G.ticks%rnd(10,30)==0 && G.entity.count('stone2')<7) G.addStone(0, 2);
 
 	if (G.ticks%10==0) {G.speed+=0.005;G.spacing-=.1;}
 	
@@ -24,8 +23,9 @@ G.update = function() {
 			dpd('spacing:',G.spacing,'last:', G.ticks-G.lastCactus,'next:',nextCactus, G.ticks-G.lastCactus>nextCactus)
 			var p=Math.random();
 			G.addCactus(0,Math.round(Math.random()))
-			if(G.level>1 && p>0.75) G.addCactus(10,Math.round(Math.random()))
-			if(G.level>3 && p>0.95) G.addCactus(20,Math.round(Math.random()))
+			if(G.level>1 && p>0.75) G.addCactus(10,Math.round(Math.random()));// Double cactii
+			if(G.level>3 && p>0.95) G.addCactus(20,Math.round(Math.random()));// Treble cactii
+			if(G.level>5 && p>0.95) G.addCactus(30,Math.round(Math.random()));// Quadruple cactii
 			G.lastCactus = G.ticks;
 		}
 	}
@@ -92,17 +92,20 @@ G.ui.showScore = function(s) {
 	G.entity.get('char2').pts = G.ui.sprites['char'+c2];
 	G.entity.get('char1').pts = G.ui.sprites['char'+c1];
 };
+G.addStone = function(x,t) {
+	let X = x||G.ui.camera.x+G.ui.width;
+	let Y=G.ui.floor-(t+1)*rnd(0,8)
+	let dX = Y/10;
+	G.entity.add({tag:'stone'+t,x:X,y:8+Y,pts:G.ui.sprites["stone"+t],dx:dX});
+}
 G.addCloud = function(x,t) {
 	var X = x||G.ui.camera.x+G.ui.width
 	var Y = rnd(t*G.ui.height/60+G.ui.height/2, G.ui.height-15);
 	G.entity.add({tag:t==0?'smallCloud':'cloud',x:X,y:Y,pts:t==0?G.ui.sprites.smallCloud:G.ui.sprites.cloud,col:2, dx:2*G.speed/(2+t), dy:.01, l: '0'})
 };
-G.addHill = function(x,t) {
-	//G.entity.add({tag:'hill',x:x||G.ui.camera.x+G.ui.width, y:G.ui.horizon+1,pts:t==0?G.ui.sprites.smallHill:G.ui.sprites.smallHill,col:0})
-};
 G.addCactus = function(x,t) {
 	var h=9+t*9;
-	return G.entity.add({tag:'cactus',obstacle:[9,h], x:G.ui.camera.x+G.ui.width+x, y:G.ui.floor, pts:G.ui.sprites['cactus'+t]})
+	return G.entity.add({tag:'cactus',obstacle:[9,h], x:G.ui.camera.x+G.ui.width+x, y:G.ui.floor, l:3, pts:G.ui.sprites['cactus'+t]})
 };
 G.start = function() {
 	if (G._intervalId) clearInterval(G._intervalId);

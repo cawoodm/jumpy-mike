@@ -1,6 +1,6 @@
 game loop
 pause on tab
-skip intro button
+bigger cactii
 finale
 compress to 13k!
 

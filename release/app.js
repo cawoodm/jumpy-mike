@@ -21,7 +21,7 @@ G.minJump=2;
 G.maxJump=12;
 G.jumpPower=4; 
 G.ui.floor = 8;
-G.ui.horizon = 12;
+G.ui.horizon = 18;
 G.ui.palette0 = {light:"#EEE", dark:"#333", mid:"#CCC"};
 G.ui.palette1 = {light:"#333", dark:"#EEE", mid:"#CCC"};
 G.ui.palette = G.ui.palette0;
@@ -44,7 +44,7 @@ G.init = function() {
 	G.ui.pts = {};
 	G.playerDefault={
 		id: "player",
-		l: "3",
+		l: "4",
 		x:4,
 		y:G.ui.floor,
 		dx:0,
@@ -164,9 +164,9 @@ G.ui.terrain.init = function() {
 	this.frames=5;
 	this.tenth=Math.round(G.ui.area.height/10);
 	var pts = [
-		G.ui.terrain.generate(G.ui.area.width*this.frames, G.ui.area.height, G.ui.area.height/1.2, 0.63, {s:G.ui.area.height*0.4}, G.ui.area.height/3),
-		G.ui.terrain.generate(G.ui.area.width*this.frames, G.ui.area.height, G.ui.area.height/2, 0.52, {s:G.ui.area.height*0.6}, G.ui.area.height/4),
-		G.ui.terrain.generate(G.ui.area.width*this.frames, G.ui.area.height, G.ui.area.height/2, 0.30, {s:G.ui.area.height*0.7}, G.ui.area.height/6)
+		G.ui.terrain.generate(G.ui.area.width*this.frames, G.ui.area.height, G.ui.area.height/1.2, 0.63, {s:G.ui.area.height*0.4}, G.ui.area.height/3)
+		,G.ui.terrain.generate(G.ui.area.width*this.frames, G.ui.area.height, G.ui.area.height/2, 0.52, {s:G.ui.area.height*0.6}, G.ui.area.height/4)
+		,G.ui.terrain.generate(G.ui.area.width*this.frames, G.ui.area.height, G.ui.area.height/2, 0.30, {s:G.ui.area.height*0.7}, G.ui.area.height/6)
 	]
 	G.ui.terrain.grad=[];
 	G.ui.terrain.grad[0]=this.ctx.createLinearGradient(0,Math.max.apply(null, pts[0]),0,G.ui.area.height*0.75);
@@ -175,6 +175,8 @@ G.ui.terrain.init = function() {
 	this.grad[1].addColorStop(0,"#888");this.grad[1].addColorStop(1,"#AB5");
 	this.grad[2]=this.ctx.createLinearGradient(0,G.ui.area.height*0.75,0,G.ui.area.height);
 	this.grad[2].addColorStop(0,"#EEA");this.grad[2].addColorStop(1,"#885");
+	this.grad[3]=this.ctx.createLinearGradient(0,(G.ui.height-G.ui.horizon)*G.ui.scaleY,0,G.ui.area.height);
+	this.grad[3].addColorStop(0,"#AA8");this.grad[3].addColorStop(1,"#663");
 	//this.grad[3]=this.ctx.createLinearGradient(0,0,G.ui.area.width/2,G.ui.area.height/3); this.grad[3].addColorStop(0,"#DDE");this.grad[2].addColorStop(1,"#FFF");
 	this.mnt=[
 		 {speed:1,frame:0,offset:0,col:this.grad[0],pts:pts[0]}
@@ -185,9 +187,11 @@ G.ui.terrain.init = function() {
 }
 G.ui.terrain.draw = function() {
 	//Sky: this.ctx.fillStyle=this.grad[3];this.ctx.fillRect(0,0,G.ui.area.width,G.ui.area.height)
+	//Earth
 	this.drawMountain(this.mnt[0]);
 	this.drawMountain(this.mnt[1]);
 	this.drawMountain(this.mnt[2]);
+	this.ctx.fillStyle=this.grad[3];this.ctx.fillRect(0,(G.ui.height-G.ui.horizon)*G.ui.scaleY,G.ui.area.width,G.ui.area.height)
 }
 G.ui.terrain.drawMountain = function(mnt) {
 	this.ctx.fillStyle=mnt.col;
@@ -244,10 +248,15 @@ G.entity = {
 			return true;}
 	}
 };//FILE: draw.js
+// Layer 0 = clouds
+// Layer 1 = mountains
+// Layer 2 = stones
+// Layer 3 = cactii
+// Layer 4 = player
 G.draw = function() {
 	var ctx = G.ui.area.ctx;
 	ctx.fillStyle = G.ui.palette.dark;
-	for (var l=0; l<=3; l++) {
+	for (var l=0; l<=4; l++) {
 		if (l==1) G.ui.terrain.draw(); // Mountains in front of clouds
 		var ent = G.entity.layer(l);
 		for (var e=0; e<ent.length; e++) pte(ent[e]);
@@ -447,8 +456,8 @@ G.click = function(e) {
 	var button0 = e.key==" " || e.type == "touchstart" || e.type == "mousedown";
 	if (button0) {
 		e.stopPropagation(); e.preventDefault();
-		var eX = (e.screenX||e.touches[0].clientX)-G.ui.area.offsetLeft;
-		var eY = (e.screenY||e.touches[0].clientY)-G.ui.area.offsetTop;
+		var eX = (e.clientX||(e.touches?e.touches[0].clientX:-999))-G.ui.area.offsetLeft;
+		var eY = (e.clientY||(e.touches?e.touches[0].clientY:-999))-G.ui.area.offsetTop;
 		if(G.state == 2) {
 			// Cool-off period
 		} else if(G.state == 3) {
@@ -456,14 +465,13 @@ G.click = function(e) {
 			G.menu.end();
 		} else if (G.menu.next) {
 			// Goto next menu
-			if(eX<G.menu.rectX || eX>G.menu.rectX+G.menu.rectWidth || eY<G.menu.rectY || eY>G.menu.rectY+G.menu.rectHeight) {
+			if(eX<G.menu.rectX || eX>G.menu.rectX+G.menu.rectWidth || eY<G.menu.rectY || eY>(G.menu.rectY+G.menu.rectHeight*0.75	)) {
 				// Skip intro menus
 				G.menu.end();
 			}  else {
 				G.menu.doNext();
 			}
-		} else if (G.state==1 && eX/G.ui.scaleX<=11 && eY/G.ui.scaleY<=11) {
-			dp("Mute", eX, eY)
+		} else if (G.state==1 && eX>0 && eX/G.ui.scaleX<=11 && eY/G.ui.scaleY<=11) {
 			// Tap mute button
 			G.music.toggle(); 
 		} else if (G.state==1) {
@@ -486,28 +494,28 @@ G.clickEnd = function(e) {
 G.menu = {
 	next: null
 	,font:"Courier New,Courier"
-	,textSize: Math.round(G.ui.width*G.ui.scaleX/25)
-	,lineHeight: Math.round(G.ui.width*G.ui.scaleX*1.2/25)
+	,textSize: Math.round((G.ui.width+G.ui.height)*G.ui.scaleX/50)
+	,lineHeight: Math.round((G.ui.width+G.ui.height)*G.ui.scaleX/50)
 }
 G.menu.intro0 = function() {
 	G.ui.speaker.start();
-	G.menu.popup({title:"#Get LOST Hombre!", text:"Welcome... or rather not.... You are an illegal alien #BadHombre of questionable race and virtue trying to get into the Land of the Free ...", next:G.menu.intro1});
+	G.menu.popup({title:"Get #LOST Hombre!", text:"Welcome... or rather not.... You are an illegal alien #BadHombre of questionable race and virtue trying to get into the Land of the Free ...", next:G.menu.intro1});
 }
 G.menu.intro1 = function() {
-	G.menu.popup({text:"Sooo... until we build The Wall (#NeedSponsor) and according to our new Incredible Merit System you must earn enough Freedom Points to be allowed in...", next:G.menu.intro2})
+	G.menu.popup({title:"Get #LOST Hombre!", text:"Sooo... until we build The Wall (#NeedSponsor) and according to our new Incredible Merit System you must earn enough Freedom Points to be allowed in...", next:G.menu.intro2})
 }
 G.menu.intro2 = function() {
-	G.menu.popup({text:"Pass through our desert (#SwampDrained) to earn Freedom Points by jumping cactuseses and we will consider your application ...", next:G.menu.intro3})
+	G.menu.popup({title:"Get #LOST Hombre!", text:"Pass through our desert (#SwampDrained) to earn Freedom Points by jumping cactuseses and we will consider your application ...", next:G.menu.intro3})
 }
 G.menu.intro3 = function() {
-	G.menu.popup({text:"Fail and we will be forced to keep you in a prison camp wearing pink underwear until you die of humiliation #ToughLove ...", next:G.menu.intro4})
+	G.menu.popup({title:"Get #LOST Hombre!", text:"Fail and we will be forced to keep you in a prison camp wearing pink underwear until you die of humiliation #ToughLove ...", next:G.menu.intro4})
 }
 G.menu.intro4 = function() {
-	G.menu.popup({text:"Gain 1000 points and you will be worthy to enter the Home of the Brave where guns are cheap and basic necessities ain't. Good Luck!", next:G.menu.end});
+	G.menu.popup({title:"Get #LOST Hombre!", text:"Gain 1000 points and you will be worthy to enter the Home of the Brave where guns are cheap and basic necessities ain't. Good Luck!", next:G.menu.end});
 }
 G.menu.gameover0 = function() {
 	G.ui.speaker.start();
-	G.menu.popup({text:"You failed. Get Lost!", next:G.menu.end, title:"Game Over", button:"Try again"});
+	G.menu.popup({title:"Get #LOST Hombre!", text:"You failed. Get Lost! #GameOver", next:G.menu.end, button:"Try again!"});
 }
 G.menu.end = function(){
 	G.ui.speaker.stop();
@@ -515,7 +523,7 @@ G.menu.end = function(){
 }
 G.menu.popup = function(o) {
 	var ctx = G.ui.area.ctx;
-	o.button=o.button||"Play!";
+	o.button=o.button||"Let's Go!";
 	G.menu.next=o.next;
 	
 	this.rectWidth = (G.ui.width*G.ui.scaleX)/1.5;
@@ -540,8 +548,18 @@ G.menu.popup = function(o) {
 		this.rectHeight+=offY;
 	}
 	
+	// Main text
 	G.menu.wrapText(o.text, this.rectX+cornerRadius*0.7,this.rectY+cornerRadius+this.lineHeight*0.5+offY, this.rectWidth-cornerRadius);
 	
+	// Play button
+	ctx.fillStyle = '#FB6';
+	ctx.strokeStyle = G.ui.palette.dark;
+	ctx.strokeRect(G.ui.width*G.ui.scaleX/2-4*this.textSize, this.rectY+this.rectHeight-4*this.textSize, 8*this.textSize, 2*this.textSize);
+	ctx.fillRect(G.ui.width*G.ui.scaleX/2-4*this.textSize, this.rectY+this.rectHeight-4*this.textSize, 8*this.textSize, 2*this.textSize);
+	ctx.fillStyle = G.ui.palette.dark;
+	ctx.font="bold "+G.menu.textSize+"px "+this.font;
+	let cX=o.button.length*this.textSize;
+	ctx.fillText(o.button, G.ui.width*G.ui.scaleX/2-2.5*this.textSize, this.rectY+this.rectHeight-2.8*this.textSize, 10*this.textSize, 2*this.textSize);
 	
 };
 G.menu.doNext = function() {
@@ -596,9 +614,7 @@ G.restart = function(intro) {
 	let c = G.addCactus(40-G.ui.width,1); c.kill=true;
 	c = G.addCactus(120-G.ui.width,0); c.kill=true;
 	
-	for (var s=0; s<20; s++) {
-		G.entity.add({tag:'stone'+(s%3),x:rnd(0,G.ui.width),y:rnd(0, G.ui.horizon-1),pts:G.ui.sprites['stone'+(s%3)]})
-	}
+	for (var s=0; s<13; s++) G.addStone(rnd(0,G.ui.width),s%3);
 	
 	G.entity.add({id:'char3', x:G.ui.width-4*(6+2), y:G.ui.height-2-10, follow:true, pts:G.ui.sprites.char0})
 	G.entity.add({id:'char2', x:G.ui.width-3*(6+2), y:G.ui.height-2-10, follow:true, pts:G.ui.sprites.char0})
@@ -621,12 +637,11 @@ G.update = function() {
 	if (prob(75) && G.ticks%rnd(10,30)==0) {
 		if (prob(80) && G.entity.count('smallCloud')<3) G.addCloud(0,0)
 		if (prob(90) && G.entity.count('cloud' )<3) G.addCloud(0,1)
-		if (prob(90) && G.entity.count('hill' )<3) G.addHill(0,1)
 	}
 	// Generate random stones
-	if (prob(75) && G.ticks%rnd(10,30)==0) G.entity.add({tag:'stone0',x:G.ui.camera.x+G.ui.width,y:rnd(0, G.ui.horizon-1),pts:G.ui.sprites.stone0})
-	if (prob(75) && G.ticks%rnd(10,30)==0) G.entity.add({tag:'stone1',x:G.ui.camera.x+G.ui.width,y:rnd(0, G.ui.horizon-2),pts:G.ui.sprites.stone1})
-	if (prob(75) && G.ticks%rnd(10,30)==0) G.entity.add({tag:'stone2',x:G.ui.camera.x+G.ui.width,y:rnd(0, G.ui.horizon-3),pts:G.ui.sprites.stone2})
+	if (prob(75) && G.ticks%rnd(10,30)==0 && G.entity.count('stone0')<3) G.addStone(0, 0);
+	if (prob(75) && G.ticks%rnd(10,30)==0 && G.entity.count('stone1')<7) G.addStone(0, 1);
+	if (prob(75) && G.ticks%rnd(10,30)==0 && G.entity.count('stone2')<7) G.addStone(0, 2);
 
 	if (G.ticks%10==0) {G.speed+=0.005;G.spacing-=.1;}
 	
@@ -637,8 +652,9 @@ G.update = function() {
 			dpd('spacing:',G.spacing,'last:', G.ticks-G.lastCactus,'next:',nextCactus, G.ticks-G.lastCactus>nextCactus)
 			var p=Math.random();
 			G.addCactus(0,Math.round(Math.random()))
-			if(G.level>1 && p>0.75) G.addCactus(10,Math.round(Math.random()))
-			if(G.level>3 && p>0.95) G.addCactus(20,Math.round(Math.random()))
+			if(G.level>1 && p>0.75) G.addCactus(10,Math.round(Math.random()));// Double cactii
+			if(G.level>3 && p>0.95) G.addCactus(20,Math.round(Math.random()));// Treble cactii
+			if(G.level>5 && p>0.95) G.addCactus(30,Math.round(Math.random()));// Quadruple cactii
 			G.lastCactus = G.ticks;
 		}
 	}
@@ -705,17 +721,20 @@ G.ui.showScore = function(s) {
 	G.entity.get('char2').pts = G.ui.sprites['char'+c2];
 	G.entity.get('char1').pts = G.ui.sprites['char'+c1];
 };
+G.addStone = function(x,t) {
+	let X = x||G.ui.camera.x+G.ui.width;
+	let Y=G.ui.floor-(t+1)*rnd(0,8)
+	let dX = Y/10;
+	G.entity.add({tag:'stone'+t,x:X,y:8+Y,pts:G.ui.sprites["stone"+t],dx:dX});
+}
 G.addCloud = function(x,t) {
 	var X = x||G.ui.camera.x+G.ui.width
 	var Y = rnd(t*G.ui.height/60+G.ui.height/2, G.ui.height-15);
 	G.entity.add({tag:t==0?'smallCloud':'cloud',x:X,y:Y,pts:t==0?G.ui.sprites.smallCloud:G.ui.sprites.cloud,col:2, dx:2*G.speed/(2+t), dy:.01, l: '0'})
 };
-G.addHill = function(x,t) {
-	//G.entity.add({tag:'hill',x:x||G.ui.camera.x+G.ui.width, y:G.ui.horizon+1,pts:t==0?G.ui.sprites.smallHill:G.ui.sprites.smallHill,col:0})
-};
 G.addCactus = function(x,t) {
 	var h=9+t*9;
-	return G.entity.add({tag:'cactus',obstacle:[9,h], x:G.ui.camera.x+G.ui.width+x, y:G.ui.floor, pts:G.ui.sprites['cactus'+t]})
+	return G.entity.add({tag:'cactus',obstacle:[9,h], x:G.ui.camera.x+G.ui.width+x, y:G.ui.floor, l:3, pts:G.ui.sprites['cactus'+t]})
 };
 G.start = function() {
 	if (G._intervalId) clearInterval(G._intervalId);

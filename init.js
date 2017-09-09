@@ -15,7 +15,7 @@ G.minJump=2;
 G.maxJump=12;
 G.jumpPower=4; 
 G.ui.floor = 8;
-G.ui.horizon = 12;
+G.ui.horizon = 18;
 G.ui.palette0 = {light:"#EEE", dark:"#333", mid:"#CCC"};
 G.ui.palette1 = {light:"#333", dark:"#EEE", mid:"#CCC"};
 G.ui.palette = G.ui.palette0;
@@ -38,7 +38,7 @@ G.init = function() {
 	G.ui.pts = {};
 	G.playerDefault={
 		id: "player",
-		l: "3",
+		l: "4",
 		x:4,
 		y:G.ui.floor,
 		dx:0,

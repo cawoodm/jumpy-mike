@@ -27,9 +27,9 @@ G.ui.terrain.init = function() {
 	this.frames=5;
 	this.tenth=Math.round(G.ui.area.height/10);
 	var pts = [
-		G.ui.terrain.generate(G.ui.area.width*this.frames, G.ui.area.height, G.ui.area.height/1.2, 0.63, {s:G.ui.area.height*0.4}, G.ui.area.height/3),
-		G.ui.terrain.generate(G.ui.area.width*this.frames, G.ui.area.height, G.ui.area.height/2, 0.52, {s:G.ui.area.height*0.6}, G.ui.area.height/4),
-		G.ui.terrain.generate(G.ui.area.width*this.frames, G.ui.area.height, G.ui.area.height/2, 0.30, {s:G.ui.area.height*0.7}, G.ui.area.height/6)
+		G.ui.terrain.generate(G.ui.area.width*this.frames, G.ui.area.height, G.ui.area.height/1.2, 0.63, {s:G.ui.area.height*0.4}, G.ui.area.height/3)
+		,G.ui.terrain.generate(G.ui.area.width*this.frames, G.ui.area.height, G.ui.area.height/2, 0.52, {s:G.ui.area.height*0.6}, G.ui.area.height/4)
+		,G.ui.terrain.generate(G.ui.area.width*this.frames, G.ui.area.height, G.ui.area.height/2, 0.30, {s:G.ui.area.height*0.7}, G.ui.area.height/6)
 	]
 	G.ui.terrain.grad=[];
 	G.ui.terrain.grad[0]=this.ctx.createLinearGradient(0,Math.max.apply(null, pts[0]),0,G.ui.area.height*0.75);
@@ -38,6 +38,8 @@ G.ui.terrain.init = function() {
 	this.grad[1].addColorStop(0,"#888");this.grad[1].addColorStop(1,"#AB5");
 	this.grad[2]=this.ctx.createLinearGradient(0,G.ui.area.height*0.75,0,G.ui.area.height);
 	this.grad[2].addColorStop(0,"#EEA");this.grad[2].addColorStop(1,"#885");
+	this.grad[3]=this.ctx.createLinearGradient(0,(G.ui.height-G.ui.horizon)*G.ui.scaleY,0,G.ui.area.height);
+	this.grad[3].addColorStop(0,"#AA8");this.grad[3].addColorStop(1,"#663");
 	//this.grad[3]=this.ctx.createLinearGradient(0,0,G.ui.area.width/2,G.ui.area.height/3); this.grad[3].addColorStop(0,"#DDE");this.grad[2].addColorStop(1,"#FFF");
 	this.mnt=[
 		 {speed:1,frame:0,offset:0,col:this.grad[0],pts:pts[0]}
@@ -48,9 +50,11 @@ G.ui.terrain.init = function() {
 }
 G.ui.terrain.draw = function() {
 	//Sky: this.ctx.fillStyle=this.grad[3];this.ctx.fillRect(0,0,G.ui.area.width,G.ui.area.height)
+	//Earth
 	this.drawMountain(this.mnt[0]);
 	this.drawMountain(this.mnt[1]);
 	this.drawMountain(this.mnt[2]);
+	this.ctx.fillStyle=this.grad[3];this.ctx.fillRect(0,(G.ui.height-G.ui.horizon)*G.ui.scaleY,G.ui.area.width,G.ui.area.height)
 }
 G.ui.terrain.drawMountain = function(mnt) {
 	this.ctx.fillStyle=mnt.col;

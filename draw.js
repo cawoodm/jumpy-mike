@@ -1,8 +1,13 @@
 //FILE: draw.js
+// Layer 0 = clouds
+// Layer 1 = mountains
+// Layer 2 = stones
+// Layer 3 = cactii
+// Layer 4 = player
 G.draw = function() {
 	var ctx = G.ui.area.ctx;
 	ctx.fillStyle = G.ui.palette.dark;
-	for (var l=0; l<=3; l++) {
+	for (var l=0; l<=4; l++) {
 		if (l==1) G.ui.terrain.draw(); // Mountains in front of clouds
 		var ent = G.entity.layer(l);
 		for (var e=0; e<ent.length; e++) pte(ent[e]);

@@ -29,9 +29,7 @@ G.restart = function(intro) {
 	let c = G.addCactus(40-G.ui.width,1); c.kill=true;
 	c = G.addCactus(120-G.ui.width,0); c.kill=true;
 	
-	for (var s=0; s<20; s++) {
-		G.entity.add({tag:'stone'+(s%3),x:rnd(0,G.ui.width),y:rnd(0, G.ui.horizon-1),pts:G.ui.sprites['stone'+(s%3)]})
-	}
+	for (var s=0; s<13; s++) G.addStone(rnd(0,G.ui.width),s%3);
 	
 	G.entity.add({id:'char3', x:G.ui.width-4*(6+2), y:G.ui.height-2-10, follow:true, pts:G.ui.sprites.char0})
 	G.entity.add({id:'char2', x:G.ui.width-3*(6+2), y:G.ui.height-2-10, follow:true, pts:G.ui.sprites.char0})

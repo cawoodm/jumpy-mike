@@ -1,28 +1,28 @@
 G.menu = {
 	next: null
 	,font:"Courier New,Courier"
-	,textSize: Math.round(G.ui.width*G.ui.scaleX/25)
-	,lineHeight: Math.round(G.ui.width*G.ui.scaleX*1.2/25)
+	,textSize: Math.round((G.ui.width+G.ui.height)*G.ui.scaleX/50)
+	,lineHeight: Math.round((G.ui.width+G.ui.height)*G.ui.scaleX/50)
 }
 G.menu.intro0 = function() {
 	G.ui.speaker.start();
-	G.menu.popup({title:"#Get LOST Hombre!", text:"Welcome... or rather not.... You are an illegal alien #BadHombre of questionable race and virtue trying to get into the Land of the Free ...", next:G.menu.intro1});
+	G.menu.popup({title:"Get #LOST Hombre!", text:"Welcome... or rather not.... You are an illegal alien #BadHombre of questionable race and virtue trying to get into the Land of the Free ...", next:G.menu.intro1});
 }
 G.menu.intro1 = function() {
-	G.menu.popup({text:"Sooo... until we build The Wall (#NeedSponsor) and according to our new Incredible Merit System you must earn enough Freedom Points to be allowed in...", next:G.menu.intro2})
+	G.menu.popup({title:"Get #LOST Hombre!", text:"Sooo... until we build The Wall (#NeedSponsor) and according to our new Incredible Merit System you must earn enough Freedom Points to be allowed in...", next:G.menu.intro2})
 }
 G.menu.intro2 = function() {
-	G.menu.popup({text:"Pass through our desert (#SwampDrained) to earn Freedom Points by jumping cactuseses and we will consider your application ...", next:G.menu.intro3})
+	G.menu.popup({title:"Get #LOST Hombre!", text:"Pass through our desert (#SwampDrained) to earn Freedom Points by jumping cactuseses and we will consider your application ...", next:G.menu.intro3})
 }
 G.menu.intro3 = function() {
-	G.menu.popup({text:"Fail and we will be forced to keep you in a prison camp wearing pink underwear until you die of humiliation #ToughLove ...", next:G.menu.intro4})
+	G.menu.popup({title:"Get #LOST Hombre!", text:"Fail and we will be forced to keep you in a prison camp wearing pink underwear until you die of humiliation #ToughLove ...", next:G.menu.intro4})
 }
 G.menu.intro4 = function() {
-	G.menu.popup({text:"Gain 1000 points and you will be worthy to enter the Home of the Brave where guns are cheap and basic necessities ain't. Good Luck!", next:G.menu.end});
+	G.menu.popup({title:"Get #LOST Hombre!", text:"Gain 1000 points and you will be worthy to enter the Home of the Brave where guns are cheap and basic necessities ain't. Good Luck!", next:G.menu.end});
 }
 G.menu.gameover0 = function() {
 	G.ui.speaker.start();
-	G.menu.popup({text:"You failed. Get Lost!", next:G.menu.end, title:"Game Over", button:"Try again"});
+	G.menu.popup({title:"Get #LOST Hombre!", text:"You failed. Get Lost! #GameOver", next:G.menu.end, button:"Try again!"});
 }
 G.menu.end = function(){
 	G.ui.speaker.stop();
@@ -30,7 +30,7 @@ G.menu.end = function(){
 }
 G.menu.popup = function(o) {
 	var ctx = G.ui.area.ctx;
-	o.button=o.button||"Play!";
+	o.button=o.button||"Let's Go!";
 	G.menu.next=o.next;
 	
 	this.rectWidth = (G.ui.width*G.ui.scaleX)/1.5;
@@ -55,8 +55,18 @@ G.menu.popup = function(o) {
 		this.rectHeight+=offY;
 	}
 	
+	// Main text
 	G.menu.wrapText(o.text, this.rectX+cornerRadius*0.7,this.rectY+cornerRadius+this.lineHeight*0.5+offY, this.rectWidth-cornerRadius);
 	
+	// Play button
+	ctx.fillStyle = '#FB6';
+	ctx.strokeStyle = G.ui.palette.dark;
+	ctx.strokeRect(G.ui.width*G.ui.scaleX/2-4*this.textSize, this.rectY+this.rectHeight-4*this.textSize, 8*this.textSize, 2*this.textSize);
+	ctx.fillRect(G.ui.width*G.ui.scaleX/2-4*this.textSize, this.rectY+this.rectHeight-4*this.textSize, 8*this.textSize, 2*this.textSize);
+	ctx.fillStyle = G.ui.palette.dark;
+	ctx.font="bold "+G.menu.textSize+"px "+this.font;
+	let cX=o.button.length*this.textSize;
+	ctx.fillText(o.button, G.ui.width*G.ui.scaleX/2-2.5*this.textSize, this.rectY+this.rectHeight-2.8*this.textSize, 10*this.textSize, 2*this.textSize);
 	
 };
 G.menu.doNext = function() {

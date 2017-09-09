@@ -13,8 +13,8 @@ G.click = function(e) {
 	var button0 = e.key==" " || e.type == "touchstart" || e.type == "mousedown";
 	if (button0) {
 		e.stopPropagation(); e.preventDefault();
-		var eX = (e.screenX||e.touches[0].clientX)-G.ui.area.offsetLeft;
-		var eY = (e.screenY||e.touches[0].clientY)-G.ui.area.offsetTop;
+		var eX = (e.clientX||(e.touches?e.touches[0].clientX:-999))-G.ui.area.offsetLeft;
+		var eY = (e.clientY||(e.touches?e.touches[0].clientY:-999))-G.ui.area.offsetTop;
 		if(G.state == 2) {
 			// Cool-off period
 		} else if(G.state == 3) {
@@ -22,14 +22,13 @@ G.click = function(e) {
 			G.menu.end();
 		} else if (G.menu.next) {
 			// Goto next menu
-			if(eX<G.menu.rectX || eX>G.menu.rectX+G.menu.rectWidth || eY<G.menu.rectY || eY>G.menu.rectY+G.menu.rectHeight) {
+			if(eX<G.menu.rectX || eX>G.menu.rectX+G.menu.rectWidth || eY<G.menu.rectY || eY>(G.menu.rectY+G.menu.rectHeight*0.75	)) {
 				// Skip intro menus
 				G.menu.end();
 			}  else {
 				G.menu.doNext();
 			}
-		} else if (G.state==1 && eX/G.ui.scaleX<=11 && eY/G.ui.scaleY<=11) {
-			dp("Mute", eX, eY)
+		} else if (G.state==1 && eX>0 && eX/G.ui.scaleX<=11 && eY/G.ui.scaleY<=11) {
 			// Tap mute button
 			G.music.toggle(); 
 		} else if (G.state==1) {
