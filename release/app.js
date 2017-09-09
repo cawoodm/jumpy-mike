@@ -30,6 +30,8 @@ G.ui.camera = {};
 G.init = function() {
 	document.body.style.padding=document.body.style.margin="0px";
 	document.body.style.backgroundColor="#000";//G.ui.palette.dark;
+	document.body.style.width=window.innerWidth+'px'
+	document.body.style.height=window.innerHeight+'px'
 	G.ui.area = $("c");
 	G.ui.area.ctx = G.ui.area.getContext("2d");
 	G.ui.setupEvents();
