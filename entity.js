@@ -36,7 +36,7 @@ G.entity = {
 		var hitFront = eX+EasyX<pMaxX;
 		var hitTop = eMaxX-EasyX>pX;
 		if (hitY && hitFront && hitTop) {
-			//dpd("pY+EasyY=",G.player.y+EasyY,"eH+eY=",ent.y+eH,"hitY=",hitY)
+			//dp("pY+EasyY=",G.player.y+EasyY,"eH=",eH,"eH+eY=",ent.y+eH,"hitY=",hitY)
 			//dpd("eX=",eX,"pMaxX=",pMaxX,"overlap=",pMaxX-eX,"hitFront=",hitFront,"frame=",G.player.frame)
 			//dpd	("eX=",eX,"px=",pX,"eMaxX=",eMaxX,"hitTop=",hitTop)
 			return true;}

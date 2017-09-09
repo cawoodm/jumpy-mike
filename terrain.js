@@ -42,9 +42,9 @@ G.ui.terrain.init = function() {
 	this.grad[3].addColorStop(0,"#AA8");this.grad[3].addColorStop(1,"#663");
 	//this.grad[3]=this.ctx.createLinearGradient(0,0,G.ui.area.width/2,G.ui.area.height/3); this.grad[3].addColorStop(0,"#DDE");this.grad[2].addColorStop(1,"#FFF");
 	this.mnt=[
-		 {speed:1,frame:0,offset:0,col:this.grad[0],pts:pts[0]}
-		,{speed:2,frame:0,offset:0,col:this.grad[1],pts:pts[1]}
-		,{speed:4,frame:0,offset:0,col:this.grad[2],pts:pts[2]}
+		 {speed:.9,frame:0,offset:0,col:this.grad[0],pts:pts[0]}
+		,{speed:.6,frame:0,offset:0,col:this.grad[1],pts:pts[1]}
+		,{speed:1.5,frame:0,offset:0,col:this.grad[2],pts:pts[2]}
 	];
 	this.frameLast=this.mnt[0].pts.length;
 }
@@ -65,5 +65,6 @@ G.ui.terrain.drawMountain = function(mnt) {
 	this.ctx.lineTo(0, G.ui.area.height);
 	this.ctx.closePath();
 	this.ctx.fill();
-	mnt.frame=mnt.frame+mnt.speed<=this.frameLast?mnt.frame+mnt.speed:0;
+	mnt.frameReal=mnt.frame+mnt.speed<=this.frameLast?mnt.frame+mnt.speed:0;
+	mnt.frame=Math.round(mnt.frameReal);
 }

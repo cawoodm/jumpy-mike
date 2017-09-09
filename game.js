@@ -20,21 +20,20 @@ G.update = function() {
 	if (G.ticks%rnd(10,30)==0) {
 		var nextCactus = (Math.random()*G.spacing)+40;
 		if (G.ticks-G.lastCactus>nextCactus) {
-			dpd('spacing:',G.spacing,'last:', G.ticks-G.lastCactus,'next:',nextCactus, G.ticks-G.lastCactus>nextCactus)
-			var p=Math.random();
-			G.addCactus(0,Math.round(Math.random()))
-			if(G.level>1 && p>0.75) G.addCactus(10,Math.round(Math.random()));// Double cactii
-			if(G.level>3 && p>0.95) G.addCactus(20,Math.round(Math.random()));// Treble cactii
-			if(G.level>5 && p>0.95) G.addCactus(30,Math.round(Math.random()));// Quadruple cactii
+			let cNum=Math.min(2, Math.round(G.level)); // Cactus size
+			G.addCactus(0,rnd(0,cNum))
+			if(G.level>1 && prob(50)) G.addCactus(10,rnd(0,cNum));// Double cactii
+			if(G.level>3 && prob(25)) G.addCactus(20,rnd(0,cNum));// Treble cactii
+			if(G.level>5 && prob(25)) G.addCactus(30,rnd(0,cNum));// Quadruple cactii
 			G.lastCactus = G.ticks;
 		}
 	}
-
+	// Power the jump the longer the press
 	if (G.clickTimer > 0 && G.clickTimer < G.maxJump) {
 		G.player.dy = G.jumpPower;
 		G.clickTimer++;
 	}
-	if (G.clickTimer > G.maxJump) g.clickTimer=0;//G.playerJump(G.clickTimer);
+	if (G.clickTimer > G.maxJump) g.clickTimer=0;
 	G.ui.camera.x+=G.speed||0;
 
 	var e = G.ent.length;
@@ -94,9 +93,10 @@ G.ui.showScore = function(s) {
 };
 G.addStone = function(x,t) {
 	let X = x||G.ui.camera.x+G.ui.width;
-	let Y=G.ui.floor-(t+1)*rnd(0,8)
-	let dX = Y/10;
-	G.entity.add({tag:'stone'+t,x:X,y:8+Y,pts:G.ui.sprites["stone"+t],dx:dX});
+	let step = G.ui.horizon/3;
+	Y=t*(step)+rnd(0,step-1)
+	//dp("addStone", t, Y,G.ui.horizon-Y)
+	G.entity.add({tag:'stone'+t,x:X,y:G.ui.horizon-Y-1,pts:G.ui.sprites["stone"+t],dx:(G.ui.horizon-Y)/20});
 }
 G.addCloud = function(x,t) {
 	var X = x||G.ui.camera.x+G.ui.width
@@ -126,4 +126,10 @@ G.pause = function() {
 		G.music.stop();
 	} else G.start();
 };
+G.cheat=function(n){
+	G.ticks=n*1000;
+	G.score=n*100;
+	G.speed=1.2+G.ticks*0.0005;
+	G.spacing=50-G.ticks*0.01;
+}
 G.init();

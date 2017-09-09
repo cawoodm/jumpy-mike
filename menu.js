@@ -6,23 +6,23 @@ G.menu = {
 }
 G.menu.intro0 = function() {
 	G.ui.speaker.start();
-	G.menu.popup({title:"Get #LOST Hombre!", text:"Welcome... or rather not.... You are an illegal alien #BadHombre of questionable race and virtue trying to get into the Land of the Free ...", next:G.menu.intro1});
+	G.menu.popup({title:"Get LOST Hombre!", text:"Welcome... or rather not.... You are an illegal alien #BadHombre of questionable race and virtue trying to get into the Land of the Free ...", next:G.menu.intro1});
 }
 G.menu.intro1 = function() {
-	G.menu.popup({title:"Get #LOST Hombre!", text:"Sooo... until we build The Wall (#NeedSponsor) and according to our new Incredible Merit System you must earn enough Freedom Points to be allowed in...", next:G.menu.intro2})
+	G.menu.popup({title:"Get LOST Hombre!", text:"Sooo... until we build The Wall (#NeedSponsor) and according to our new Incredible Merit System you must earn enough Freedom Points to be allowed in...", next:G.menu.intro2})
 }
 G.menu.intro2 = function() {
-	G.menu.popup({title:"Get #LOST Hombre!", text:"Pass through our desert (#SwampDrained) to earn Freedom Points by jumping cactuseses and we will consider your application ...", next:G.menu.intro3})
+	G.menu.popup({title:"Get LOST Hombre!", text:"Pass through our desert (#SwampDrained) to earn Freedom Points by jumping cactuseses and we will consider your application ...", next:G.menu.intro3})
 }
 G.menu.intro3 = function() {
-	G.menu.popup({title:"Get #LOST Hombre!", text:"Fail and we will be forced to keep you in a prison camp wearing pink underwear until you die of humiliation #ToughLove ...", next:G.menu.intro4})
+	G.menu.popup({title:"Get LOST Hombre!", text:"Fail and we will be forced to keep you in a prison camp wearing pink underwear until you die of humiliation #ToughLove ...", next:G.menu.intro4})
 }
 G.menu.intro4 = function() {
-	G.menu.popup({title:"Get #LOST Hombre!", text:"Gain 1000 points and you will be worthy to enter the Home of the Brave where guns are cheap and basic necessities ain't. Good Luck!", next:G.menu.end});
+	G.menu.popup({title:"Get LOST Hombre!", text:"Gain 1000 points and you will be worthy to enter the Home of the Brave where guns are cheap and basic necessities ain't. Good Luck!", next:G.menu.end});
 }
 G.menu.gameover0 = function() {
 	G.ui.speaker.start();
-	G.menu.popup({title:"Get #LOST Hombre!", text:"You failed. Get Lost! #GameOver", next:G.menu.end, button:"Try again!"});
+	G.menu.popup({title:"Get LOST Hombre!", text:"You failed. Get Lost!          Get 'em outta here!!                 #GameOver                        Sad!                   ramble ramble                                             I love Hexicans                                 covefe...", next:G.menu.end, button:"Try again!"});
 }
 G.menu.end = function(){
 	G.ui.speaker.stop();

@@ -32,8 +32,9 @@ G.ui.sprites = {none:null
 	,stone0: [{x:0,y:0}]
 	,stone1: [{x:0,y:0},{x:1,y:0}]
 	,stone2: spriteQuad(0,0,3,1,1)
-	,cactus0:  spriteCombine([spriteQuad(0,2,2,4,10),spriteQuad(6,3,2,3,10),spriteQuad(0,6,8,2,10),spriteQuad(3,0,2,10,10)])
-	,cactus1:  spriteCombine([spriteQuad(3,3,3,17,20),spriteQuad(6,7,3,2,20),spriteQuad(7,5,2,4,20),spriteQuad(0,9,3,2,20),spriteQuad(0,7 ,2,4,20)])
+	,cactus0: spriteCombine([spriteQuad(0,2,2,4,10),spriteQuad(6,3,2,3,10),spriteQuad(0,6,8,2,10),spriteQuad(3,0,2,10,10)])
+	,cactus1: spriteCombine([spriteQuad(3,3,3,17,20),spriteQuad(6,7,3,2,20),spriteQuad(7,5,2,4,20),spriteQuad(0,9,3,2,20),spriteQuad(0,7,2,4,20)])
+	,cactus2: spriteCombine([spriteQuad(3,3,3,22,25),spriteQuad(6,7,3,2,25),spriteQuad(7,5,2,4,25),spriteQuad(0,9,3,2,25),spriteQuad(0,7,2,4,25),spriteQuad(2,18,2,2,25),spriteQuad(1,16,1,4,25)])
 	,horizon: spriteQuad(0,0,G.ui.width,1,1)
 	,char0: spriteCombine([spriteQuad(0,0,6,2,10), spriteQuad(0,2,2,6,10), spriteQuad(0,8,6,2,10), spriteQuad(4,2,2,6,10)])
 	,char1: spriteCombine([spriteQuad(0,0,4,2,10), spriteQuad(2,2,2,6,10), spriteQuad(0,8,6,2,10)])

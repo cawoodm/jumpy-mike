@@ -20,7 +20,7 @@ G.gravity=0.3;
 G.minJump=2;
 G.maxJump=12;
 G.jumpPower=4; 
-G.ui.floor = 8;
+G.ui.floor = 9;
 G.ui.horizon = 18;
 G.ui.palette0 = {light:"#EEE", dark:"#333", mid:"#CCC"};
 G.ui.palette1 = {light:"#333", dark:"#EEE", mid:"#CCC"};
@@ -102,8 +102,9 @@ G.ui.sprites = {none:null
 	,stone0: [{x:0,y:0}]
 	,stone1: [{x:0,y:0},{x:1,y:0}]
 	,stone2: spriteQuad(0,0,3,1,1)
-	,cactus0:  spriteCombine([spriteQuad(0,2,2,4,10),spriteQuad(6,3,2,3,10),spriteQuad(0,6,8,2,10),spriteQuad(3,0,2,10,10)])
-	,cactus1:  spriteCombine([spriteQuad(3,3,3,17,20),spriteQuad(6,7,3,2,20),spriteQuad(7,5,2,4,20),spriteQuad(0,9,3,2,20),spriteQuad(0,7 ,2,4,20)])
+	,cactus0: spriteCombine([spriteQuad(0,2,2,4,10),spriteQuad(6,3,2,3,10),spriteQuad(0,6,8,2,10),spriteQuad(3,0,2,10,10)])
+	,cactus1: spriteCombine([spriteQuad(3,3,3,17,20),spriteQuad(6,7,3,2,20),spriteQuad(7,5,2,4,20),spriteQuad(0,9,3,2,20),spriteQuad(0,7,2,4,20)])
+	,cactus2: spriteCombine([spriteQuad(3,3,3,22,25),spriteQuad(6,7,3,2,25),spriteQuad(7,5,2,4,25),spriteQuad(0,9,3,2,25),spriteQuad(0,7,2,4,25),spriteQuad(2,18,2,2,25),spriteQuad(1,16,1,4,25)])
 	,horizon: spriteQuad(0,0,G.ui.width,1,1)
 	,char0: spriteCombine([spriteQuad(0,0,6,2,10), spriteQuad(0,2,2,6,10), spriteQuad(0,8,6,2,10), spriteQuad(4,2,2,6,10)])
 	,char1: spriteCombine([spriteQuad(0,0,4,2,10), spriteQuad(2,2,2,6,10), spriteQuad(0,8,6,2,10)])
@@ -179,9 +180,9 @@ G.ui.terrain.init = function() {
 	this.grad[3].addColorStop(0,"#AA8");this.grad[3].addColorStop(1,"#663");
 	//this.grad[3]=this.ctx.createLinearGradient(0,0,G.ui.area.width/2,G.ui.area.height/3); this.grad[3].addColorStop(0,"#DDE");this.grad[2].addColorStop(1,"#FFF");
 	this.mnt=[
-		 {speed:1,frame:0,offset:0,col:this.grad[0],pts:pts[0]}
-		,{speed:2,frame:0,offset:0,col:this.grad[1],pts:pts[1]}
-		,{speed:4,frame:0,offset:0,col:this.grad[2],pts:pts[2]}
+		 {speed:.9,frame:0,offset:0,col:this.grad[0],pts:pts[0]}
+		,{speed:.6,frame:0,offset:0,col:this.grad[1],pts:pts[1]}
+		,{speed:1.5,frame:0,offset:0,col:this.grad[2],pts:pts[2]}
 	];
 	this.frameLast=this.mnt[0].pts.length;
 }
@@ -202,7 +203,8 @@ G.ui.terrain.drawMountain = function(mnt) {
 	this.ctx.lineTo(0, G.ui.area.height);
 	this.ctx.closePath();
 	this.ctx.fill();
-	mnt.frame=mnt.frame+mnt.speed<=this.frameLast?mnt.frame+mnt.speed:0;
+	mnt.frameReal=mnt.frame+mnt.speed<=this.frameLast?mnt.frame+mnt.speed:0;
+	mnt.frame=Math.round(mnt.frameReal);
 }
 //FILE: entity.js
 G.entity = {
@@ -242,7 +244,7 @@ G.entity = {
 		var hitFront = eX+EasyX<pMaxX;
 		var hitTop = eMaxX-EasyX>pX;
 		if (hitY && hitFront && hitTop) {
-			//dpd("pY+EasyY=",G.player.y+EasyY,"eH+eY=",ent.y+eH,"hitY=",hitY)
+			//dp("pY+EasyY=",G.player.y+EasyY,"eH=",eH,"eH+eY=",ent.y+eH,"hitY=",hitY)
 			//dpd("eX=",eX,"pMaxX=",pMaxX,"overlap=",pMaxX-eX,"hitFront=",hitFront,"frame=",G.player.frame)
 			//dpd	("eX=",eX,"px=",pX,"eMaxX=",eMaxX,"hitTop=",hitTop)
 			return true;}
@@ -499,23 +501,23 @@ G.menu = {
 }
 G.menu.intro0 = function() {
 	G.ui.speaker.start();
-	G.menu.popup({title:"Get #LOST Hombre!", text:"Welcome... or rather not.... You are an illegal alien #BadHombre of questionable race and virtue trying to get into the Land of the Free ...", next:G.menu.intro1});
+	G.menu.popup({title:"Get LOST Hombre!", text:"Welcome... or rather not.... You are an illegal alien #BadHombre of questionable race and virtue trying to get into the Land of the Free ...", next:G.menu.intro1});
 }
 G.menu.intro1 = function() {
-	G.menu.popup({title:"Get #LOST Hombre!", text:"Sooo... until we build The Wall (#NeedSponsor) and according to our new Incredible Merit System you must earn enough Freedom Points to be allowed in...", next:G.menu.intro2})
+	G.menu.popup({title:"Get LOST Hombre!", text:"Sooo... until we build The Wall (#NeedSponsor) and according to our new Incredible Merit System you must earn enough Freedom Points to be allowed in...", next:G.menu.intro2})
 }
 G.menu.intro2 = function() {
-	G.menu.popup({title:"Get #LOST Hombre!", text:"Pass through our desert (#SwampDrained) to earn Freedom Points by jumping cactuseses and we will consider your application ...", next:G.menu.intro3})
+	G.menu.popup({title:"Get LOST Hombre!", text:"Pass through our desert (#SwampDrained) to earn Freedom Points by jumping cactuseses and we will consider your application ...", next:G.menu.intro3})
 }
 G.menu.intro3 = function() {
-	G.menu.popup({title:"Get #LOST Hombre!", text:"Fail and we will be forced to keep you in a prison camp wearing pink underwear until you die of humiliation #ToughLove ...", next:G.menu.intro4})
+	G.menu.popup({title:"Get LOST Hombre!", text:"Fail and we will be forced to keep you in a prison camp wearing pink underwear until you die of humiliation #ToughLove ...", next:G.menu.intro4})
 }
 G.menu.intro4 = function() {
-	G.menu.popup({title:"Get #LOST Hombre!", text:"Gain 1000 points and you will be worthy to enter the Home of the Brave where guns are cheap and basic necessities ain't. Good Luck!", next:G.menu.end});
+	G.menu.popup({title:"Get LOST Hombre!", text:"Gain 1000 points and you will be worthy to enter the Home of the Brave where guns are cheap and basic necessities ain't. Good Luck!", next:G.menu.end});
 }
 G.menu.gameover0 = function() {
 	G.ui.speaker.start();
-	G.menu.popup({title:"Get #LOST Hombre!", text:"You failed. Get Lost! #GameOver", next:G.menu.end, button:"Try again!"});
+	G.menu.popup({title:"Get LOST Hombre!", text:"You failed. Get Lost!          Get 'em outta here!!                 #GameOver                        Sad!                   ramble ramble                                             I love Hexicans                                 covefe...", next:G.menu.end, button:"Try again!"});
 }
 G.menu.end = function(){
 	G.ui.speaker.stop();
@@ -649,21 +651,20 @@ G.update = function() {
 	if (G.ticks%rnd(10,30)==0) {
 		var nextCactus = (Math.random()*G.spacing)+40;
 		if (G.ticks-G.lastCactus>nextCactus) {
-			dpd('spacing:',G.spacing,'last:', G.ticks-G.lastCactus,'next:',nextCactus, G.ticks-G.lastCactus>nextCactus)
-			var p=Math.random();
-			G.addCactus(0,Math.round(Math.random()))
-			if(G.level>1 && p>0.75) G.addCactus(10,Math.round(Math.random()));// Double cactii
-			if(G.level>3 && p>0.95) G.addCactus(20,Math.round(Math.random()));// Treble cactii
-			if(G.level>5 && p>0.95) G.addCactus(30,Math.round(Math.random()));// Quadruple cactii
+			let cNum=Math.min(2, Math.round(G.level)); // Cactus size
+			G.addCactus(0,rnd(0,cNum))
+			if(G.level>1 && prob(50)) G.addCactus(10,rnd(0,cNum));// Double cactii
+			if(G.level>3 && prob(25)) G.addCactus(20,rnd(0,cNum));// Treble cactii
+			if(G.level>5 && prob(25)) G.addCactus(30,rnd(0,cNum));// Quadruple cactii
 			G.lastCactus = G.ticks;
 		}
 	}
-
+	// Power the jump the longer the press
 	if (G.clickTimer > 0 && G.clickTimer < G.maxJump) {
 		G.player.dy = G.jumpPower;
 		G.clickTimer++;
 	}
-	if (G.clickTimer > G.maxJump) g.clickTimer=0;//G.playerJump(G.clickTimer);
+	if (G.clickTimer > G.maxJump) g.clickTimer=0;
 	G.ui.camera.x+=G.speed||0;
 
 	var e = G.ent.length;
@@ -723,9 +724,10 @@ G.ui.showScore = function(s) {
 };
 G.addStone = function(x,t) {
 	let X = x||G.ui.camera.x+G.ui.width;
-	let Y=G.ui.floor-(t+1)*rnd(0,8)
-	let dX = Y/10;
-	G.entity.add({tag:'stone'+t,x:X,y:8+Y,pts:G.ui.sprites["stone"+t],dx:dX});
+	let step = G.ui.horizon/3;
+	Y=t*(step)+rnd(0,step-1)
+	//dp("addStone", t, Y,G.ui.horizon-Y)
+	G.entity.add({tag:'stone'+t,x:X,y:G.ui.horizon-Y-1,pts:G.ui.sprites["stone"+t],dx:(G.ui.horizon-Y)/20});
 }
 G.addCloud = function(x,t) {
 	var X = x||G.ui.camera.x+G.ui.width
@@ -755,4 +757,10 @@ G.pause = function() {
 		G.music.stop();
 	} else G.start();
 };
+G.cheat=function(n){
+	G.ticks=n*1000;
+	G.score=n*100;
+	G.speed=1.2+G.ticks*0.0005;
+	G.spacing=50-G.ticks*0.01;
+}
 G.init();
