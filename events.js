@@ -15,15 +15,16 @@ G.click = function(e) {
 		e.stopPropagation(); e.preventDefault();
 		var eX = (e.screenX||e.touches[0].clientX)-G.ui.area.offsetLeft;
 		var eY = (e.screenY||e.touches[0].clientY)-G.ui.area.offsetTop;
-		if(G.state == 3) {
+		if(G.state == 2) {
+			// Cool-off period
+		} else if(G.state == 3) {
 			// Dead -> tap to restart
-			G.restart();
+			G.menu.end();
 		} else if (G.menu.next) {
 			// Goto next menu
-			if(eX<G.menu.rectX) {
+			if(eX<G.menu.rectX || eX>G.menu.rectX+G.menu.rectWidth || eY<G.menu.rectY || eY>G.menu.rectY+G.menu.rectHeight) {
 				// Skip intro menus
 				G.menu.end();
-				goodo()
 			}  else {
 				G.menu.doNext();
 			}

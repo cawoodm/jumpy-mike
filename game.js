@@ -64,6 +64,8 @@ G.update = function() {
 		// Off the board
 		if (ent.x+20<G.ui.camera.x && !ent.follow) G.entity.remove(e);
 		
+		if (ent.kill) G.entity.remove(e);
+		
 	}
 	
 	if (G.state>1) return;
@@ -100,7 +102,7 @@ G.addHill = function(x,t) {
 };
 G.addCactus = function(x,t) {
 	var h=9+t*9;
-	G.entity.add({tag:'cactus',obstacle:[9,h], x:G.ui.camera.x+G.ui.width+x, y:G.ui.floor, pts:G.ui.sprites['cactus'+t]})
+	return G.entity.add({tag:'cactus',obstacle:[9,h], x:G.ui.camera.x+G.ui.width+x, y:G.ui.floor, pts:G.ui.sprites['cactus'+t]})
 };
 G.start = function() {
 	if (G._intervalId) clearInterval(G._intervalId);

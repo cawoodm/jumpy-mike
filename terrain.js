@@ -38,8 +38,7 @@ G.ui.terrain.init = function() {
 	this.grad[1].addColorStop(0,"#888");this.grad[1].addColorStop(1,"#AB5");
 	this.grad[2]=this.ctx.createLinearGradient(0,G.ui.area.height*0.75,0,G.ui.area.height);
 	this.grad[2].addColorStop(0,"#EEA");this.grad[2].addColorStop(1,"#885");
-	this.grad[3]=this.ctx.createLinearGradient(0,0,G.ui.area.width/2,G.ui.area.height/3);
-	this.grad[3].addColorStop(0,"#DDE");this.grad[2].addColorStop(1,"#FFF");
+	//this.grad[3]=this.ctx.createLinearGradient(0,0,G.ui.area.width/2,G.ui.area.height/3); this.grad[3].addColorStop(0,"#DDE");this.grad[2].addColorStop(1,"#FFF");
 	this.mnt=[
 		 {speed:1,frame:0,offset:0,col:this.grad[0],pts:pts[0]}
 		,{speed:2,frame:0,offset:0,col:this.grad[1],pts:pts[1]}
@@ -48,8 +47,7 @@ G.ui.terrain.init = function() {
 	this.frameLast=this.mnt[0].pts.length;
 }
 G.ui.terrain.draw = function() {
-	this.ctx.fillStyle=this.grad[3];
-	this.ctx.fillRect(0,0,G.ui.area.width,G.ui.area.height)
+	//Sky: this.ctx.fillStyle=this.grad[3];this.ctx.fillRect(0,0,G.ui.area.width,G.ui.area.height)
 	this.drawMountain(this.mnt[0]);
 	this.drawMountain(this.mnt[1]);
 	this.drawMountain(this.mnt[2]);

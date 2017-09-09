@@ -175,8 +175,7 @@ G.ui.terrain.init = function() {
 	this.grad[1].addColorStop(0,"#888");this.grad[1].addColorStop(1,"#AB5");
 	this.grad[2]=this.ctx.createLinearGradient(0,G.ui.area.height*0.75,0,G.ui.area.height);
 	this.grad[2].addColorStop(0,"#EEA");this.grad[2].addColorStop(1,"#885");
-	this.grad[3]=this.ctx.createLinearGradient(0,0,G.ui.area.width/2,G.ui.area.height/3);
-	this.grad[3].addColorStop(0,"#DDE");this.grad[2].addColorStop(1,"#FFF");
+	//this.grad[3]=this.ctx.createLinearGradient(0,0,G.ui.area.width/2,G.ui.area.height/3); this.grad[3].addColorStop(0,"#DDE");this.grad[2].addColorStop(1,"#FFF");
 	this.mnt=[
 		 {speed:1,frame:0,offset:0,col:this.grad[0],pts:pts[0]}
 		,{speed:2,frame:0,offset:0,col:this.grad[1],pts:pts[1]}
@@ -185,8 +184,7 @@ G.ui.terrain.init = function() {
 	this.frameLast=this.mnt[0].pts.length;
 }
 G.ui.terrain.draw = function() {
-	this.ctx.fillStyle=this.grad[3];
-	this.ctx.fillRect(0,0,G.ui.area.width,G.ui.area.height)
+	//Sky: this.ctx.fillStyle=this.grad[3];this.ctx.fillRect(0,0,G.ui.area.width,G.ui.area.height)
 	this.drawMountain(this.mnt[0]);
 	this.drawMountain(this.mnt[1]);
 	this.drawMountain(this.mnt[2]);
@@ -451,15 +449,16 @@ G.click = function(e) {
 		e.stopPropagation(); e.preventDefault();
 		var eX = (e.screenX||e.touches[0].clientX)-G.ui.area.offsetLeft;
 		var eY = (e.screenY||e.touches[0].clientY)-G.ui.area.offsetTop;
-		if(G.state == 3) {
+		if(G.state == 2) {
+			// Cool-off period
+		} else if(G.state == 3) {
 			// Dead -> tap to restart
-			G.restart();
+			G.menu.end();
 		} else if (G.menu.next) {
 			// Goto next menu
-			if(eX<G.menu.rectX) {
+			if(eX<G.menu.rectX || eX>G.menu.rectX+G.menu.rectWidth || eY<G.menu.rectY || eY>G.menu.rectY+G.menu.rectHeight) {
 				// Skip intro menus
 				G.menu.end();
-				goodo()
 			}  else {
 				G.menu.doNext();
 			}
@@ -492,23 +491,23 @@ G.menu = {
 }
 G.menu.intro0 = function() {
 	G.ui.speaker.start();
-	G.menu.popup({text:'Welcome... or rather not.... You are an illegal alien #BadHombre of questionable race and virtue trying to get into the "Land of the Free"', next:G.menu.intro1});
+	G.menu.popup({title:"Get LOST!", text:"Welcome... or rather not.... You are an illegal alien #BadHombre of questionable race and virtue trying to get into the Land of the Free ...", next:G.menu.intro1});
 }
 G.menu.intro1 = function() {
-	G.menu.popup({text:'Sooo... until we build The Wall (#NeedSponsor) and according to our new "Merit System" you must earn enough "Freedom Points" in order to be allowed entry...', next:G.menu.intro2})
+	G.menu.popup({text:"Sooo... until we build The Wall (#NeedSponsor) and according to our new Incredible Merit System you must earn enough Freedom Points to be allowed in...", next:G.menu.intro2})
 }
 G.menu.intro2 = function() {
-	G.menu.popup({text:'Pass through our desert (#SwampDrained) to earn Freedom Points by jumping cactuseses and we will consider your application ...', next:G.menu.intro3})
+	G.menu.popup({text:"Pass through our desert (#SwampDrained) to earn Freedom Points by jumping cactuseses and we will consider your application ...", next:G.menu.intro3})
 }
 G.menu.intro3 = function() {
-	G.menu.popup({text:'Fail and we will be forced to keep you in a prison camp wearing pink underwear until you die of humiliation #ToughLove ...', next:G.menu.intro4})
+	G.menu.popup({text:"Fail and we will be forced to keep you in a prison camp wearing pink underwear until you die of humiliation #ToughLove ...", next:G.menu.intro4})
 }
 G.menu.intro4 = function() {
-	G.menu.popup({text:'Gain 1000 points and you will be worthy to enter the "Home of the Brave" where guns are cheap and basic necessities ain\'t. Good Luck!', next:G.menu.end});
+	G.menu.popup({text:"Gain 1000 points and you will be worthy to enter the Home of the Brave where guns are cheap and basic necessities ain't. Good Luck!", next:G.menu.end});
 }
 G.menu.gameover0 = function() {
 	G.ui.speaker.start();
-	G.menu.popup({text:'You failed. Get Lost!', next:G.menu.end, title:"Game Over", keep:true, button:"Try again"});
+	G.menu.popup({text:"You failed. Get Lost!", next:G.menu.end, title:"Game Over", button:"Try again"});
 }
 G.menu.end = function(){
 	G.ui.speaker.stop();
@@ -517,22 +516,20 @@ G.menu.end = function(){
 G.menu.popup = function(o) {
 	var ctx = G.ui.area.ctx;
 	o.button=o.button||"Play!";
-	if (!o.keep) ctx.clearRect(0,0,G.ui.width*G.ui.scaleX,G.ui.height*G.ui.scaleY);
-	
 	G.menu.next=o.next;
 	
-	var rectWidth = (G.ui.width*G.ui.scaleX)/1.5;
-	var rectHeight = (G.ui.height*G.ui.scaleX)/1.5;
-	this.rectY = (G.ui.height*G.ui.scaleY)/2-rectHeight/2;
-	this.rectX = (G.ui.width*G.ui.scaleX)/2-rectWidth/2;
+	this.rectWidth = (G.ui.width*G.ui.scaleX)/1.5;
+	this.rectHeight = (G.ui.height*G.ui.scaleX)/1.5;
+	this.rectX = (G.ui.width*G.ui.scaleX)/2-this.rectWidth/2;
+	this.rectY = (G.ui.height*G.ui.scaleY)/2-this.rectHeight/2;
 	var cornerRadius = 8*G.ui.scaleX;
 
 	ctx.fillStyle = G.ui.palette.light;
-	ctx.strokeStyle = G.ui.palette.mid;
+	ctx.strokeStyle = G.ui.palette.dark;
 	ctx.lineJoin = "round";
-	ctx.lineWidth = cornerRadius/2;
-	ctx.strokeRect(this.rectX+(cornerRadius/2), this.rectY+(cornerRadius/2), rectWidth-cornerRadius, rectHeight-cornerRadius);
-	ctx.fillRect(this.rectX+(cornerRadius/2), this.rectY+(cornerRadius/2), rectWidth-cornerRadius, rectHeight-cornerRadius);
+	ctx.lineWidth = cornerRadius;
+	ctx.strokeRect(this.rectX+(cornerRadius/2), this.rectY+(cornerRadius/2), this.rectWidth-cornerRadius, this.rectHeight-cornerRadius);
+	ctx.fillRect(this.rectX+(cornerRadius/2), this.rectY+(cornerRadius/2), this.rectWidth-cornerRadius, this.rectHeight-cornerRadius);
 	
 	let offY=0;
 	if (o.title) {
@@ -540,25 +537,27 @@ G.menu.popup = function(o) {
 		ctx.font=Math.round(1.5*G.menu.textSize)+"px "+this.font+" bold";
 		ctx.fillText(o.title, this.rectX+cornerRadius*0.7,this.rectY+cornerRadius+this.lineHeight);
 		offY=2*this.lineHeight;
-		rectHeight+=offY;
+		this.rectHeight+=offY;
 	}
 	
-	G.menu.wrapText(o.text, this.rectX+cornerRadius*0.7,this.rectY+cornerRadius+this.lineHeight*0.5+offY, rectWidth-cornerRadius);
-}
+	G.menu.wrapText(o.text, this.rectX+cornerRadius*0.7,this.rectY+cornerRadius+this.lineHeight*0.5+offY, this.rectWidth-cornerRadius);
+	
+	
+};
 G.menu.doNext = function() {
 	this.next();
-}
+};
 G.menu.wrapText = function(text, x, y, maxWidth) {
 	var ctx = G.ui.area.ctx;
 	ctx.fillStyle = G.ui.palette.dark;
 	ctx.font=G.menu.textSize+"px "+this.font;
-	var words = text.split(' ')
-		 ,line = '';
+	var words = text.split(" ")
+		 ,line = "";
 	for(var n = 0; n < words.length; n++) {
-	  var testLine = line + words[n] + ' ';
+	  var testLine = line + words[n] + " ";
 	  if (ctx.measureText(testLine).width > maxWidth && n > 0) {
 			ctx.fillText(line, x, y);
-			line = words[n] + ' ';
+			line = words[n] + " ";
 			y += this.lineHeight;
 	  }
 	  else {
@@ -566,11 +565,14 @@ G.menu.wrapText = function(text, x, y, maxWidth) {
 	  }
 	}
 	ctx.fillText(line, x, y);
-}//FILE: restart.js
+};//FILE: restart.js
 G.startMain = function() {
+	G.restart(true);
+	G.clear();
+	G.draw();
 	G.menu.intro0();
 };
-G.restart = function() {
+G.restart = function(intro) {
 
 	if (G._intervalId) G.pause();
 	
@@ -582,6 +584,7 @@ G.restart = function() {
 	G.lastCactus = 0;
 	G.level = 0;
 	G.ui.palette = G.ui.palette0;
+	G.ui.camera = {x:0, y:0};
 	G.ent=[];
 	G.player = G.entity.add(G.playerDefault);
 
@@ -590,12 +593,13 @@ G.restart = function() {
 	G.addCloud(G.ui.width*0.6,0);
 	G.addCloud(G.ui.width*0.9,0);
 	
+	let c = G.addCactus(40-G.ui.width,1); c.kill=true;
+	c = G.addCactus(120-G.ui.width,0); c.kill=true;
+	
 	for (var s=0; s<20; s++) {
 		G.entity.add({tag:'stone'+(s%3),x:rnd(0,G.ui.width),y:rnd(0, G.ui.horizon-1),pts:G.ui.sprites['stone'+(s%3)]})
 	}
 	
-	//G.entity.add({tag:'horizon', x:0, y:G.ui.horizon, follow:true, pts:G.ui.sprites.horizon})
-
 	G.entity.add({id:'char3', x:G.ui.width-4*(6+2), y:G.ui.height-2-10, follow:true, pts:G.ui.sprites.char0})
 	G.entity.add({id:'char2', x:G.ui.width-3*(6+2), y:G.ui.height-2-10, follow:true, pts:G.ui.sprites.char0})
 	G.entity.add({id:'char1', x:G.ui.width-2*(6+2), y:G.ui.height-2-10, follow:true, pts:G.ui.sprites.char0})
@@ -603,11 +607,10 @@ G.restart = function() {
 	
 	G.menu.next=null;
 	
-	G.ui.camera = {
-		x:0,
-		y:0
-	}
+	if (intro) return;
+	
 	G.start();
+	
 };//FILE: game.js
 G.update = function() {
 	G.ticks++;
@@ -674,6 +677,8 @@ G.update = function() {
 		// Off the board
 		if (ent.x+20<G.ui.camera.x && !ent.follow) G.entity.remove(e);
 		
+		if (ent.kill) G.entity.remove(e);
+		
 	}
 	
 	if (G.state>1) return;
@@ -710,7 +715,7 @@ G.addHill = function(x,t) {
 };
 G.addCactus = function(x,t) {
 	var h=9+t*9;
-	G.entity.add({tag:'cactus',obstacle:[9,h], x:G.ui.camera.x+G.ui.width+x, y:G.ui.floor, pts:G.ui.sprites['cactus'+t]})
+	return G.entity.add({tag:'cactus',obstacle:[9,h], x:G.ui.camera.x+G.ui.width+x, y:G.ui.floor, pts:G.ui.sprites['cactus'+t]})
 };
 G.start = function() {
 	if (G._intervalId) clearInterval(G._intervalId);
