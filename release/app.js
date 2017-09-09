@@ -444,10 +444,10 @@ G.music.toggle=function(){
 //FILE: events.js
 G.clickTimer = 0;
 G.ui.setupEvents=function(){
-	G.ui.area.addEventListener("mousedown", G.click);
-	G.ui.area.addEventListener("mouseup", G.clickEnd);
-	G.ui.area.addEventListener("touchstart", G.click, {passive: false});
-	G.ui.area.addEventListener("touchend", G.clickEnd, {passive: false});
+	document.body.addEventListener("mousedown", G.click);
+	document.body.addEventListener("mouseup", G.clickEnd);
+	document.body.addEventListener("touchstart", G.click, {passive: false});
+	document.body.addEventListener("touchend", G.clickEnd, {passive: false});
 	window.onerror = function(msg, url, lineNo, columnNo, error)  {
 		alert("Line " +lineNo + "; Message: " + msg + "\n" + error);
 	}
