@@ -2,8 +2,7 @@
 SETLOCAL
 
 CD %dp0%
-ECHO HELLO
-ECHO %1
+SET STR=%1
 if "%1"=="" SET STR=%date% %time%
 ECHO %STR%
 PAUSE
