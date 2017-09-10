@@ -186,7 +186,6 @@ G.ui.terrain.init = function() {
 	dp(this.mnt[0])
 }
 G.ui.terrain.draw = function() {
-	// Sky
 	this.grad[3]=this.ctx.createLinearGradient(0,0,G.ui.area.width/2,G.ui.area.height/3);
 	this.grad[3].addColorStop(0,'#DDE');this.grad[2].addColorStop(1,'#FFF');
 	this.ctx.fillStyle=this.grad[3];
