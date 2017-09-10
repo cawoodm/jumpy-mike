@@ -2,11 +2,8 @@
 SETLOCAL
 
 CD %dp0%
-
-:: Commit local changes
-git add .
-git commit -m "Build %date% %time%"
-git push origin master
+SET STR=%1
+IF "%1"=="" SET STR=%date% %time%
 
 :: Compile JS into one file
 DEL app.js
@@ -33,6 +30,11 @@ COPY /Y favicon.ico release\
 ECHO "Ready to test in release\ folder"
 ::PAUSE
 
+:: Commit local changes
+git add .
+git commit -m "Build %STR%"
+git push origin master
+
 :: Copy to local cawoodm github site
 COPY /Y .\release\*.* ..\..\..\cawoodm.github.io\jumpy-mike
 ECHO "Ready to test in cawoodm.github.io\jumpy-mike\ folder"
@@ -41,7 +43,7 @@ ECHO "Ready to test in cawoodm.github.io\jumpy-mike\ folder"
 :: Publish to github
 CD ..\..\..\cawoodm.github.io\jumpy-mike
 git add .
-git commit -m "Release %date% %time%"
+git commit -m "Release %STR%"
 git push origin master
 ECHO "Ready to test at http://cawoodm.github.io/jumpy-mike/"
 START http://cawoodm.github.io/jumpy-mike/

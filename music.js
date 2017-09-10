@@ -1,29 +1,31 @@
 //FILE: music.js
 G.music={}
 G.music.init = function() {
-	G.music.ac = typeof AudioContext !== 'undefined' ? new AudioContext : new webkitAudioContext;
+	this.enabled=true;
+	G.music.ac = typeof AudioContext !== "undefined" ? new AudioContext : new webkitAudioContext;
 	G.music.tempo=100;
 	G.music.lead = [
-		'C3  e','C3  e','B3  e','C3  e','C3  s','C3  s','G3  s','C3  s','G3  s','C3  s','C3  s','-  s',
-		'A3  e','G3  e','A3  e','G3  e','C3  e','C3  e','C3  e','-  e',
+		"C3  e","C3  e","B3  e","C3  e","C3  s","C3  s","G3  s","C3  s","G3  s","C3  s","C3  s","-  s",
+		"A3  e","G3  e","A3  e","G3  e","C3  e","C3  e","C3  e","-  e",
 	],
 	G.music.lead1 = [
-		'C3  s','C3  s','A3  s','C3  s','G3  s','C4  s','C3  s','-  s','F3  e','C3  e','A3  e','F3  e',
-		'A3  e','G3  e','C3  s','C3  s','G3  e','C3  e','D4  e','C3  e','-  e',
+		"C3  s","C3  s","A3  s","C3  s","G3  s","C4  s","C3  s","-  s","F3  e","C3  e","A3  e","F3  e",
+		"A3  e","G3  e","C3  s","C3  s","G3  e","C3  e","D4  e","C3  e","-  e",
 	],
 	G.music.harmony = [
-		'-   e','D4  e','C4  e','D4  e','C3 e','C4  e','A3  e','C3 e',
-		'G3  e','A3  e','C3 e','A3  e','G3  e','A3  e','F3  q',
-		'-   e','D4  s','C4  s','D4  e','C3 e','C4  e','C3 e','A3  e','C3 e',
-		'G3  e','A3  e','C3 e','A3  e','G3  s','A3  s','G3  e','F3  q'
+		"-   e","D4  e","C4  e","D4  e","C3 e","C4  e","A3  e","C3 e",
+		"G3  e","A3  e","C3 e","A3  e","G3  e","A3  e","F3  q",
+		"-   e","D4  s","C4  s","D4  e","C3 e","C4  e","C3 e","A3  e","C3 e",
+		"G3  e","A3  e","C3 e","A3  e","G3  s","A3  s","G3  e","F3  q"
 	],
 	G.music.bass = [
-		'D3  q','-   h','D3  q',
-		'A3  q','-   h','A2  q',
-		'C2 q','-   h','C2 q',
-		'G2  h','A2  h'
+		"D3  q","-   h","D3  q",
+		"A3  q","-   h","A2  q",
+		"C2 q","-   h","C2 q",
+		"G2  h","A2  h"
 	];
-	G.music.jump = ['C5  q','-   q'];
+	G.music.jump = ["C5  q","-   q"];
+	G.music.gameover = ["E3  q","D3  q","C2  h"];
 	
 	G.music.seq1 = new TinyMusic.Sequence( G.music.ac, G.music.tempo, G.music.lead );
 	G.music.seq1.createCustomWave([-1,-0.9,-0.6,-0.3, 0, 0.3, 0.6, 0.9,1])
@@ -33,7 +35,6 @@ G.music.init = function() {
 	G.music.seq4 = new TinyMusic.Sequence( G.music.ac, G.music.tempo, G.music.lead1 );
 	G.music.seq4.createCustomWave([-1,-0.8,-0.4,-0.2, 0, 0.2, 0.4, 0.8,1])
 	
-
 	// set staccato and smoothing values for maximum coolness
 	G.music.seq1.staccato = 0.55;
 	G.music.seq4.staccato = 0.55;
@@ -41,11 +42,11 @@ G.music.init = function() {
 	G.music.seq3.staccato = 0.15;
 	G.music.seq3.smoothing = 0.9;
 
-	// adjust the levels so the bass and harmony aren't too loud
-	G.music.seq1.gain.gain.value = 1.0 / 10;
-	G.music.seq4.gain.gain.value = 1.0 / 10;
-	G.music.seq2.gain.gain.value = 0.8 / 10;
-	G.music.seq3.gain.gain.value = 0.65 / 10;
+	// adjust the levels so the bass and harmony aren"t too loud
+	G.music.seq1.gain.gain.value = 1.0 / 20;
+	G.music.seq4.gain.gain.value = 1.0 / 20;
+	G.music.seq2.gain.gain.value = 0.8 / 20;
+	G.music.seq3.gain.gain.value = 0.65 / 20;
 
 	// apply EQ settings
 	G.music.seq1.mid.frequency.value = 800;
@@ -63,28 +64,46 @@ G.music.init = function() {
 	G.music.seq3.treble.frequency.value = 1400;
 	
 	this.sfxJump = new TinyMusic.Sequence( G.music.ac, G.music.tempo, G.music.jump);
+	this.sfxGameOver = new TinyMusic.Sequence( G.music.ac, G.music.tempo, G.music.gameover);
 	with (this.sfxJump) {
 		staccato = 0.45;
 		smoothing = 0.2;
-		gain.gain.value = 0.65 / 2;
+		gain.gain.value = 0.65 / 10;
 		bass.gain.value = -6;
 		bass.frequency.value = 1400;
 		mid.gain.value = -6;
 		mid.frequency.value = 1400;
 		treble.gain.value = -2;
 		treble.frequency.value = 1400;
-		loop=false;
+	}
+	with (this.sfxGameOver) {
+		staccato = 0.45;
+		smoothing = 0.2;
+		gain.gain.value = 0.65 / 10;
+		bass.gain.value = -6;
+		bass.frequency.value = 1400;
+		mid.gain.value = -6;
+		mid.frequency.value = 1400;
+		treble.gain.value = -2;
+		treble.frequency.value = 1400;
 	}
 
 }
 G.music.playJump = function() {
+	if (!this.enabled) return;
 	this.sfxJump.play(this.ac.currentTime)
 	this.sfxJump.loop=false;
+}
+G.music.playGameOver = function() {
+	if (!this.enabled) return;
+	this.sfxGameOver.play(this.ac.currentTime)
+	this.sfxGameOver.loop=false;
 }
 G.music.restart = function() {
 	this.tempo=100;
 	this.seq1.counter=0;
 	this.seq4.counter=0;
+	if (!this.enabled) return;
 	this.play();
 };
 G.music.play = function() {
@@ -105,7 +124,7 @@ G.music.play = function() {
 	G.music.seq1.osc.onended = foo1;
 	G.music.seq2.play( G.music.ac.currentTime + ( 60 / G.music.tempo ) * 16 );
 	var foo2 = function() {
-		// After playing harmony once, wait 16 beats then play again
+		// After enabled harmony once, wait 16 beats then play again
 		G.music.seq2.play( G.music.ac.currentTime + ( 60 / G.music.tempo ) * 16 );
 		G.music.seq2.osc.onended = foo2;
 	}
@@ -122,4 +141,16 @@ G.music.stop = function() {
 	G.music.seq2.stop();
 	G.music.seq3.stop();
 	G.music.seq4.stop();
+};
+G.music.toggle=function(){
+	if (this.enabled) {
+		this.stop();
+		this.enabled=false;
+		G.entity.get('mute').col=2;
+	}
+	else {
+		this.play();
+		this.enabled=true;
+		G.entity.get('mute').col=0;
+	}
 };
