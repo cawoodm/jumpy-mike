@@ -108,6 +108,7 @@ G.addCactus = function(x,t) {
 	return G.entity.add({tag:'cactus',obstacle:[9,h], x:G.ui.camera.x+G.ui.width+x, y:G.ui.floor, l:3, pts:G.ui.sprites['cactus'+t]})
 };
 G.start = function() {
+	G.menu.next=null;
 	G.paused=false;
 	if (G._intervalId) clearInterval(G._intervalId);
 	G._intervalId = requestAnimationFrame(G.loop);

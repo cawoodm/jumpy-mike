@@ -27,7 +27,8 @@ G.menu.gameover0 = function() {
 	G.ui.speaker.start();
 	G.menu.popup({title:"Get LOST Hombre!", text:"You failed. Get Lost! ##  Get 'em outta here!! ##   #GameOver    ## Sad! ## ramble ramble ##    I love Hexicans ##     covefe...", next:G.menu.end, button:"Try again!"});
 }
-G.menu.end = function(){
+G.menu.end = function() {
+	G.menu.next=null;
 	G.ui.speaker.stop();
 	G.restart();
 }
