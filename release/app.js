@@ -367,6 +367,7 @@ G.music.init = function() {
 	this.sfxJump.treble.gain.value = -2;
 	this.sfxJump.treble.frequency.value = 1400;
 
+	this.sfxGameOver = new TinyMusic.Sequence( G.music.ac, G.music.tempo, G.music.gameover);
 	this.sfxGameOver.staccato = 0.45;
 	this.sfxGameOver.smoothing = 0.2;
 	this.sfxGameOver.gain.gain.value = 0.65 / 10;
@@ -508,26 +509,23 @@ G.menu.intro0 = function() {
 	G.menu.popup({title:"Get LOST Hombre!", text:"Welcome... or rather not.... You are an illegal alien #BadHombre of questionable race and virtue trying to get into the Land of the Free ...", next:G.menu.intro1});
 }
 G.menu.intro1 = function() {
-	G.menu.popup({title:"Get LOST Hombre!", text:"Sooo... until we build The Wall (#NeedSponsor) and according to our new Incredible Merit System you must earn enough Freedom Points to be allowed in...", next:G.menu.intro2})
+	G.menu.popup({title:"Get LOST Hombre!", text:"Sooo... until we build The Wall (#NeedSponsor) and according to our new Incredible Merit System you must earn enough 1000 Freedom Points to be allowed in...", next:G.menu.intro2})
 }
 G.menu.intro2 = function() {
-	G.menu.popup({title:"Get LOST Hombre!", text:"Pass through our desert (#SwampDrained) to earn Freedom Points by jumping cactuseses and we will consider your application ...", next:G.menu.intro3})
+	G.menu.popup({title:"Get LOST Hombre!", text:"Pass through our desert #SwampDrained to earn Freedom Points by jumping cactuseses and we will consider your application ...", next:G.menu.intro3})
 }
 G.menu.intro3 = function() {
-	G.menu.popup({title:"Get LOST Hombre!", text:"Fail and we will be forced to keep you in a prison camp wearing pink underwear until you die of humiliation #ToughLove ...", next:G.menu.intro4})
-}
-G.menu.intro4 = function() {
-	G.menu.popup({title:"Get LOST Hombre!", text:"Gain 1000 points and you will be worthy to enter the Home of the Brave where guns are cheap and basic necessities ain't. Good Luck!", next:G.menu.end, button:"Let's go!"});
+	G.menu.popup({title:"Get LOST Hombre!", text:"Fail and we will be forced to keep you in a prison camp wearing pink underwear until you die of humiliation #ToughLove ...", next:G.menu.end, button:"Let's go!"})
 }
 G.menu.info = function() {
-	G.menu.popup({title:"Get LOST Hombre!", text:"Developed by: Marc Cawood        Inspired by: T-Rex Runner Chrome   Thanks to: TinyMusic", next:function(){
+	G.menu.popup({title:"Get LOST Hombre!", text:"Developed by: Marc Cawood ##  ## Inspired by: T-Rex Runner Chrome ##  ## Thanks to: TinyMusic, Loktar", next:function(){
 		G.menu.end();
 		G.start();
 	}, button:"Let's go!"});
 }
 G.menu.gameover0 = function() {
 	G.ui.speaker.start();
-	G.menu.popup({title:"Get LOST Hombre!", text:"You failed. Get Lost!          Get 'em outta here!!                 #GameOver                        Sad!               ramble ramble                                  I love Hexicans                            covefe...", next:G.menu.end, button:"Try again!"});
+	G.menu.popup({title:"Get LOST Hombre!", text:"You failed. Get Lost! ##  Get 'em outta here!! ##   #GameOver    ## Sad! ## ramble ramble ##    I love Hexicans ##     covefe...", next:G.menu.end, button:"Try again!"});
 }
 G.menu.end = function(){
 	G.ui.speaker.stop();
@@ -537,7 +535,7 @@ G.menu.popup = function(o) {
 	var ctx = G.ui.area.ctx;
 	G.menu.next=o.next;
 	
-	this.rectWidth = (G.ui.width*G.ui.scaleX)/1.5;
+	this.rectWidth = (G.ui.width*G.ui.scaleX)/1.3;
 	this.rectHeight = (G.ui.height*G.ui.scaleX)/1.5;
 	this.rectX = (G.ui.width*G.ui.scaleX)/2-this.rectWidth/2;
 	this.rectY = (G.ui.height*G.ui.scaleY)/2-this.rectHeight/2;
@@ -583,13 +581,13 @@ G.menu.wrapText = function(text, x, y, maxWidth) {
 	ctx.strokeStyle = G.ui.palette.dark;
 	ctx.lineWidth = "1";
 	ctx.font=G.menu.textSize+"px "+this.font;
-	var words = text.split(" ")
+	var words = text.split(/\s/)
 		 ,line = "";
 	for(var n = 0; n < words.length; n++) {
 	  var testLine = line + words[n] + " ";
-	  if (ctx.measureText(testLine).width > maxWidth && n > 0) {
+	  if (words[n]=="##" || ctx.measureText(testLine).width > maxWidth && n > 0) {
 			ctx.strokeText(line, x, y);
-			line = words[n] + " ";
+			line = words[n]!="##"?words[n] + " ":"";
 			y += this.lineHeight;
 	  }
 	  else {

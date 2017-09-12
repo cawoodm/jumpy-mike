@@ -74,6 +74,7 @@ G.music.init = function() {
 	this.sfxJump.treble.gain.value = -2;
 	this.sfxJump.treble.frequency.value = 1400;
 
+	this.sfxGameOver = new TinyMusic.Sequence( G.music.ac, G.music.tempo, G.music.gameover);
 	this.sfxGameOver.staccato = 0.45;
 	this.sfxGameOver.smoothing = 0.2;
 	this.sfxGameOver.gain.gain.value = 0.65 / 10;
