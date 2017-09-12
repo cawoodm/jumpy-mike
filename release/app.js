@@ -1,4 +1,5 @@
-!function(t,e){"function"==typeof define&&define.amd?define(["exports"],e):e("object"==typeof exports&&"string"!=typeof exports.nodeName?exports:t.TinyMusic={})}(this,function(t){function e(t){var s=t.split(c);this.frequency=e.getFrequency(s[0])||0,this.duration=e.getDuration(s[1])||0}function s(t,e,s){this.ac=t||new AudioContext,this.createFxNodes(),this.tempo=e||120,this.loop=!0,this.smoothing=0,this.staccato=0,this.notes=[],this.push.apply(this,s||[])}var i="B#-C|C#-Db|D|D#-Eb|E-Fb|E#-F|F#-Gb|G|G#-Ab|A|A#-Bb|B-Cb",o=440*Math.pow(Math.pow(2,1/12),-9),n=/^[0-9.]+$/,r=4,c=/\s+/,h=/(\d+)/,a={};i.split("|").forEach(function(t,e){t.split("-").forEach(function(t){a[t]=e})}),e.getFrequency=function(t){var e=t.split(h),s=a[e[0]],i=(e[1]||r)-r,n=o*Math.pow(Math.pow(2,1/12),s);return n*Math.pow(2,i)},e.getDuration=function(t){return n.test(t)?parseFloat(t):t.toLowerCase().split("").reduce(function(t,e){return t+("w"===e?4:"h"===e?2:"q"===e?1:"e"===e?.5:"s"===e?.25:0)},0)},s.prototype.createFxNodes=function(){var t=[["bass",100],["mid",1e3],["treble",2500]],e=this.gain=this.ac.createGain();return t.forEach(function(t,s){s=this[t[0]]=this.ac.createBiquadFilter(),s.type="peaking",s.frequency.value=t[1],e.connect(e=s)}.bind(this)),e.connect(this.ac.destination),this},s.prototype.push=function(){return Array.prototype.forEach.call(arguments,function(t){this.notes.push(t instanceof e?t:new e(t))}.bind(this)),this},s.prototype.createCustomWave=function(t,e){e||(e=t),this.waveType="custom",this.customWave=[new Float32Array(t),new Float32Array(e)]},s.prototype.createOscillator=function(){return this.stop(),this.osc=this.ac.createOscillator(),this.customWave?this.osc.setPeriodicWave(this.ac.createPeriodicWave.apply(this.ac,this.customWave)):this.osc.type=this.waveType||"square",this.osc.connect(this.gain),this},s.prototype.scheduleNote=function(t,e){var s=60/this.tempo*this.notes[t].duration,i=s*(1-(this.staccato||0));return this.setFrequency(this.notes[t].frequency,e),this.smoothing&&this.notes[t].frequency&&this.slide(t,e,i),this.setFrequency(0,e+i),e+s},s.prototype.getNextNote=function(t){return this.notes[t<this.notes.length-1?t+1:0]},s.prototype.getSlideStartDelay=function(t){return t-Math.min(t,60/this.tempo*this.smoothing)},s.prototype.slide=function(t,e,s){var i=this.getNextNote(t),o=this.getSlideStartDelay(s);return this.setFrequency(this.notes[t].frequency,e+o),this.rampFrequency(i.frequency,e+s),this},s.prototype.setFrequency=function(t,e){return this.osc.frequency.setValueAtTime(t,e),this},s.prototype.rampFrequency=function(t,e){return this.osc.frequency.linearRampToValueAtTime(t,e),this},s.prototype.play=function(t){return t="number"==typeof t?t:this.ac.currentTime,this.createOscillator(),this.osc.start(t),this.notes.forEach(function(e,s){t=this.scheduleNote(s,t)}.bind(this)),this.osc.stop(t),this.osc.onended=this.loop?this.play.bind(this,t):null,this},s.prototype.stop=function(){return this.osc&&(this.osc.onended=null,this.osc.disconnect(),this.osc=null),this},t.Note=e,t.Sequence=s});//FILE: functions.js
+!function(t,e){"function"==typeof define&&define.amd?define(["exports"],e):e("object"==typeof exports&&"string"!=typeof exports.nodeName?exports:t.TinyMusic={})}(this,function(t){function e(t){var s=t.split(c);this.frequency=e.getFrequency(s[0])||0,this.duration=e.getDuration(s[1])||0}function s(t,e,s){this.ac=t||new AudioContext,this.createFxNodes(),this.tempo=e||120,this.loop=!0,this.smoothing=0,this.staccato=0,this.notes=[],this.push.apply(this,s||[])}var i="B#-C|C#-Db|D|D#-Eb|E-Fb|E#-F|F#-Gb|G|G#-Ab|A|A#-Bb|B-Cb",o=440*Math.pow(Math.pow(2,1/12),-9),n=/^[0-9.]+$/,r=4,c=/\s+/,h=/(\d+)/,a={};i.split("|").forEach(function(t,e){t.split("-").forEach(function(t){a[t]=e})}),e.getFrequency=function(t){var e=t.split(h),s=a[e[0]],i=(e[1]||r)-r,n=o*Math.pow(Math.pow(2,1/12),s);return n*Math.pow(2,i)},e.getDuration=function(t){return n.test(t)?parseFloat(t):t.toLowerCase().split("").reduce(function(t,e){return t+("w"===e?4:"h"===e?2:"q"===e?1:"e"===e?.5:"s"===e?.25:0)},0)},s.prototype.createFxNodes=function(){var t=[["bass",100],["mid",1e3],["treble",2500]],e=this.gain=this.ac.createGain();return t.forEach(function(t,s){s=this[t[0]]=this.ac.createBiquadFilter(),s.type="peaking",s.frequency.value=t[1],e.connect(e=s)}.bind(this)),e.connect(this.ac.destination),this},s.prototype.push=function(){return Array.prototype.forEach.call(arguments,function(t){this.notes.push(t instanceof e?t:new e(t))}.bind(this)),this},s.prototype.createCustomWave=function(t,e){e||(e=t),this.waveType="custom",this.customWave=[new Float32Array(t),new Float32Array(e)]},s.prototype.createOscillator=function(){return this.stop(),this.osc=this.ac.createOscillator(),this.customWave?this.osc.setPeriodicWave(this.ac.createPeriodicWave.apply(this.ac,this.customWave)):this.osc.type=this.waveType||"square",this.osc.connect(this.gain),this},s.prototype.scheduleNote=function(t,e){var s=60/this.tempo*this.notes[t].duration,i=s*(1-(this.staccato||0));return this.setFrequency(this.notes[t].frequency,e),this.smoothing&&this.notes[t].frequency&&this.slide(t,e,i),this.setFrequency(0,e+i),e+s},s.prototype.getNextNote=function(t){return this.notes[t<this.notes.length-1?t+1:0]},s.prototype.getSlideStartDelay=function(t){return t-Math.min(t,60/this.tempo*this.smoothing)},s.prototype.slide=function(t,e,s){var i=this.getNextNote(t),o=this.getSlideStartDelay(s);return this.setFrequency(this.notes[t].frequency,e+o),this.rampFrequency(i.frequency,e+s),this},s.prototype.setFrequency=function(t,e){return this.osc.frequency.setValueAtTime(t,e),this},s.prototype.rampFrequency=function(t,e){return this.osc.frequency.linearRampToValueAtTime(t,e),this},s.prototype.play=function(t){return t="number"==typeof t?t:this.ac.currentTime,this.createOscillator(),this.osc.start(t),this.notes.forEach(function(e,s){t=this.scheduleNote(s,t)}.bind(this)),this.osc.stop(t),this.osc.onended=this.loop?this.play.bind(this,t):null,this},s.prototype.stop=function(){return this.osc&&(this.osc.onended=null,this.osc.disconnect(),this.osc=null),this},t.Note=e,t.Sequence=s});
+//FILE: functions.js
 function rnd(min,max){return Math.round(Math.random() * (max - min) + min);}
 function prob(p){return Math.random()*100<=p;}
 function dpd() {if(DEBUG) console.log.apply(this, arguments);}
@@ -119,6 +120,7 @@ G.ui.sprites = {none:null
 	,char8: spriteCombine([spriteQuad(0,0,2,10,10), spriteQuad(0,0,6,2,10), spriteQuad(4,2,2,2,10), spriteQuad(0,4,6,2,10), spriteQuad(4,6,2,2,10), spriteQuad(0,8,6,2,10)])
 	,char9: spriteCombine([spriteQuad(0,0,6,2,10), spriteQuad(0,2,2,4,10), spriteQuad(2,4,2,2,10), spriteQuad(4,2,2,8,10)])
 	,mute: spriteCombine([spriteQuad(0,4,2,2,10), spriteQuad(2,3,1,4,10), spriteQuad(3,2,1,6,10), spriteQuad(4,1,1,8,10)])
+	,info: spriteCombine([spriteQuad(4,0,2,2,10), spriteQuad(4,3,2,7,10)])
 };
 G.ui.sprites.animate=function(){
 	if (G.player.y==G.ui.floor) {
@@ -355,25 +357,25 @@ G.music.init = function() {
 	G.music.seq3.treble.frequency.value = 1400;
 	
 	this.sfxJump = new TinyMusic.Sequence( G.music.ac, G.music.tempo, G.music.jump);
-	this.sfxJumpstaccato = 0.45;
-	this.sfxJumpsmoothing = 0.2;
-	this.sfxJumpgain.gain.value = 0.65 / 10;
-	this.sfxJumpbass.gain.value = -6;
-	this.sfxJumpbass.frequency.value = 1400;
-	this.sfxJumpmid.gain.value = -6;
-	this.sfxJumpmid.frequency.value = 1400;
-	this.sfxJumptreble.gain.value = -2;
-	this.sfxJumptreble.frequency.value = 1400;
+	this.sfxJump.staccato = 0.45;
+	this.sfxJump.smoothing = 0.2;
+	this.sfxJump.gain.gain.value = 0.65 / 10;
+	this.sfxJump.bass.gain.value = -6;
+	this.sfxJump.bass.frequency.value = 1400;
+	this.sfxJump.mid.gain.value = -6;
+	this.sfxJump.mid.frequency.value = 1400;
+	this.sfxJump.treble.gain.value = -2;
+	this.sfxJump.treble.frequency.value = 1400;
 
-	this.sfxGameOverstaccato = 0.45;
-	this.sfxGameOversmoothing = 0.2;
-	this.sfxGameOvergain.gain.value = 0.65 / 10;
-	this.sfxGameOverbass.gain.value = -6;
-	this.sfxGameOverbass.frequency.value = 1400;
-	this.sfxGameOvermid.gain.value = -6;
-	this.sfxGameOvermid.frequency.value = 1400;
-	this.sfxGameOvertreble.gain.value = -2;
-	this.sfxGameOvertreble.frequency.value = 1400;
+	this.sfxGameOver.staccato = 0.45;
+	this.sfxGameOver.smoothing = 0.2;
+	this.sfxGameOver.gain.gain.value = 0.65 / 10;
+	this.sfxGameOver.bass.gain.value = -6;
+	this.sfxGameOver.bass.frequency.value = 1400;
+	this.sfxGameOver.mid.gain.value = -6;
+	this.sfxGameOver.mid.frequency.value = 1400;
+	this.sfxGameOver.treble.gain.value = -2;
+	this.sfxGameOver.treble.frequency.value = 1400;
 
 }
 G.music.playJump = function() {
@@ -465,18 +467,22 @@ G.click = function(e) {
 			G.menu.end();
 		} else if (G.menu.next) {
 			// Goto next menu
-			if(eX<G.menu.rectX || eX>G.menu.rectX+G.menu.rectWidth || eY<G.menu.rectY || eY>(G.menu.rectY+G.menu.rectHeight*0.75	)) {
+			if (G.paused) {
+				G.start();
+			} else if(eX<G.menu.rectX || eX>G.menu.rectX+G.menu.rectWidth || eY<G.menu.rectY || eY>(G.menu.rectY+G.menu.rectHeight*0.75	)) {
 				// Skip intro menus
 				G.menu.end();
 			}  else {
 				G.menu.doNext();
 			}
-		} else if (G.state==1 && eX>0 && eX/G.ui.scaleX<=11 && eY/G.ui.scaleY<=11) {
-			// Tap mute button
-			G.music.toggle(); 
-		} else if (G.state==1) {
-			// During game
-			if(G.player.y>G.player.minY+5 && G.player.dy>-4) {
+		} else if (G.state==1) { // During game
+			if (eX>0 && eX/G.ui.scaleX<10 && eY/G.ui.scaleY<10) {
+				// Tap mute button
+				G.music.toggle(); 
+			} else if (eX/G.ui.scaleX>20 && eX/G.ui.scaleX<30 && eY/G.ui.scaleY<10) {
+				G.pause();
+				G.menu.info();
+			} else if(G.player.y>G.player.minY+5 && G.player.dy>-4) {
 				// Sink player mid-jump
 				G.player.dy=-4;
 			} else if(G.player.y=G.player.minY) {
@@ -495,7 +501,7 @@ G.menu = {
 	next: null
 	,font:"Courier New,Courier"
 	,textSize: Math.round((G.ui.width+G.ui.height)*G.ui.scaleX/50)
-	,lineHeight: Math.round((G.ui.width+G.ui.height)*G.ui.scaleX/50)
+	,lineHeight: Math.round((G.ui.width+G.ui.height)*G.ui.scaleX/40)
 }
 G.menu.intro0 = function() {
 	G.ui.speaker.start();
@@ -511,11 +517,17 @@ G.menu.intro3 = function() {
 	G.menu.popup({title:"Get LOST Hombre!", text:"Fail and we will be forced to keep you in a prison camp wearing pink underwear until you die of humiliation #ToughLove ...", next:G.menu.intro4})
 }
 G.menu.intro4 = function() {
-	G.menu.popup({title:"Get LOST Hombre!", text:"Gain 1000 points and you will be worthy to enter the Home of the Brave where guns are cheap and basic necessities ain't. Good Luck!", next:G.menu.end});
+	G.menu.popup({title:"Get LOST Hombre!", text:"Gain 1000 points and you will be worthy to enter the Home of the Brave where guns are cheap and basic necessities ain't. Good Luck!", next:G.menu.end, button:"Let's go!"});
+}
+G.menu.info = function() {
+	G.menu.popup({title:"Get LOST Hombre!", text:"Developed by: Marc Cawood        Inspired by: T-Rex Runner Chrome   Thanks to: TinyMusic", next:function(){
+		G.menu.end();
+		G.start();
+	}, button:"Let's go!"});
 }
 G.menu.gameover0 = function() {
 	G.ui.speaker.start();
-	G.menu.popup({title:"Get LOST Hombre!", text:"You failed. Get Lost!          Get 'em outta here!!                 #GameOver                        Sad!                   ramble ramble                                             I love Hexicans                                 covefe...", next:G.menu.end, button:"Try again!"});
+	G.menu.popup({title:"Get LOST Hombre!", text:"You failed. Get Lost!          Get 'em outta here!!                 #GameOver                        Sad!               ramble ramble                                  I love Hexicans                            covefe...", next:G.menu.end, button:"Try again!"});
 }
 G.menu.end = function(){
 	G.ui.speaker.stop();
@@ -523,7 +535,6 @@ G.menu.end = function(){
 }
 G.menu.popup = function(o) {
 	var ctx = G.ui.area.ctx;
-	o.button=o.button||"Let's Go!";
 	G.menu.next=o.next;
 	
 	this.rectWidth = (G.ui.width*G.ui.scaleX)/1.5;
@@ -547,34 +558,37 @@ G.menu.popup = function(o) {
 		offY=2*this.lineHeight;
 		this.rectHeight+=offY;
 	}
-	
 	// Main text
 	G.menu.wrapText(o.text, this.rectX+cornerRadius*0.7,this.rectY+cornerRadius+this.lineHeight*0.5+offY, this.rectWidth-cornerRadius);
 	
-	// Play button
-	ctx.fillStyle = '#FB6';
-	ctx.strokeStyle = G.ui.palette.dark;
-	ctx.strokeRect(G.ui.width*G.ui.scaleX/2-4*this.textSize, this.rectY+this.rectHeight-4*this.textSize, 8*this.textSize, 2*this.textSize);
-	ctx.fillRect(G.ui.width*G.ui.scaleX/2-4*this.textSize, this.rectY+this.rectHeight-4*this.textSize, 8*this.textSize, 2*this.textSize);
-	ctx.fillStyle = G.ui.palette.dark;
-	ctx.font="bold "+G.menu.textSize+"px "+this.font;
-	let cX=o.button.length*this.textSize;
-	ctx.fillText(o.button, G.ui.width*G.ui.scaleX/2-2.5*this.textSize, this.rectY+this.rectHeight-2.8*this.textSize, 10*this.textSize, 2*this.textSize);
-	
+	if (o.button) {
+		// Play button
+		ctx.fillStyle = '#FB6';
+		ctx.lineWidth = cornerRadius;
+		ctx.strokeStyle = G.ui.palette.dark;
+		ctx.strokeRect(G.ui.width*G.ui.scaleX/2-4*this.textSize, this.rectY+this.rectHeight-4*this.textSize, 8*this.textSize, 2*this.textSize);
+		ctx.fillRect(G.ui.width*G.ui.scaleX/2-4*this.textSize, this.rectY+this.rectHeight-4*this.textSize, 8*this.textSize, 2*this.textSize);
+		ctx.fillStyle = G.ui.palette.dark;
+		ctx.font=G.menu.textSize+"px "+this.font;
+		let cX=o.button.length*this.textSize;
+		ctx.lineWidth = "1";
+		ctx.strokeText(o.button, G.ui.width*G.ui.scaleX/2-2.5*this.textSize, this.rectY+this.rectHeight-2.8*this.textSize, 10*this.textSize, 2*this.textSize);
+	}	
 };
 G.menu.doNext = function() {
 	this.next();
 };
 G.menu.wrapText = function(text, x, y, maxWidth) {
 	var ctx = G.ui.area.ctx;
-	ctx.fillStyle = G.ui.palette.dark;
+	ctx.strokeStyle = G.ui.palette.dark;
+	ctx.lineWidth = "1";
 	ctx.font=G.menu.textSize+"px "+this.font;
 	var words = text.split(" ")
 		 ,line = "";
 	for(var n = 0; n < words.length; n++) {
 	  var testLine = line + words[n] + " ";
 	  if (ctx.measureText(testLine).width > maxWidth && n > 0) {
-			ctx.fillText(line, x, y);
+			ctx.strokeText(line, x, y);
 			line = words[n] + " ";
 			y += this.lineHeight;
 	  }
@@ -582,7 +596,7 @@ G.menu.wrapText = function(text, x, y, maxWidth) {
 			line = testLine;
 	  }
 	}
-	ctx.fillText(line, x, y);
+	ctx.strokeText(line, x, y);
 };//FILE: restart.js
 G.startMain = function() {
 	G.restart(true);
@@ -616,10 +630,12 @@ G.restart = function(intro) {
 	
 	for (var s=0; s<13; s++) G.addStone(rnd(0,G.ui.width),s%3);
 	
+	G.entity.add({id:'mute', x:1, y:G.ui.height-1-10, follow:true, pts:G.ui.sprites.mute, col:G.music.enabled?0:2})
+	c = G.entity.add({id:'info', x:20, y:G.ui.height-1-10, follow:true, pts:G.ui.sprites.info}); c.col=2;
+	
 	G.entity.add({id:'char3', x:G.ui.width-4*(6+2), y:G.ui.height-2-10, follow:true, pts:G.ui.sprites.char0})
 	G.entity.add({id:'char2', x:G.ui.width-3*(6+2), y:G.ui.height-2-10, follow:true, pts:G.ui.sprites.char0})
 	G.entity.add({id:'char1', x:G.ui.width-2*(6+2), y:G.ui.height-2-10, follow:true, pts:G.ui.sprites.char0})
-	G.entity.add({id:'mute', x:1, y:G.ui.height-1-10, follow:true, pts:G.ui.sprites.mute, col:G.music.enabled?0:2})
 	
 	G.menu.next=null;
 	
@@ -708,7 +724,7 @@ G.update = function() {
 };
 G.loop = function() {
 	G.update();
-	if (G.state>1) return;
+	if (G.state>1 || G.paused) return;
 	G.clear();
 	G.draw();
 	if (G._intervalId) requestAnimationFrame(G.loop);
@@ -737,8 +753,9 @@ G.addCactus = function(x,t) {
 	return G.entity.add({tag:'cactus',obstacle:[9,h], x:G.ui.camera.x+G.ui.width+x, y:G.ui.floor, l:3, pts:G.ui.sprites['cactus'+t]})
 };
 G.start = function() {
+	G.paused=false;
 	if (G._intervalId) clearInterval(G._intervalId);
-	G._intervalId = requestAnimationFrame(G.loop);//setInterval(G.loop, 1000/G.ui.fps);
+	G._intervalId = requestAnimationFrame(G.loop);
 	G.music.restart();
 };
 G.gameOver = function() {
@@ -750,6 +767,7 @@ G.gameOver = function() {
 }
 G.pause = function() {
 	if (G._intervalId) {
+		G.paused=true;
 		clearInterval(G._intervalId);
 		delete G._intervalId;
 		G.music.stop();
