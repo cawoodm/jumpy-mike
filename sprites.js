@@ -47,6 +47,7 @@ G.ui.sprites = {none:null
 	,char8: spriteCombine([spriteQuad(0,0,2,10,10), spriteQuad(0,0,6,2,10), spriteQuad(4,2,2,2,10), spriteQuad(0,4,6,2,10), spriteQuad(4,6,2,2,10), spriteQuad(0,8,6,2,10)])
 	,char9: spriteCombine([spriteQuad(0,0,6,2,10), spriteQuad(0,2,2,4,10), spriteQuad(2,4,2,2,10), spriteQuad(4,2,2,8,10)])
 	,mute: spriteCombine([spriteQuad(0,4,2,2,10), spriteQuad(2,3,1,4,10), spriteQuad(3,2,1,6,10), spriteQuad(4,1,1,8,10)])
+	,info: spriteCombine([spriteQuad(4,0,2,2,10), spriteQuad(4,3,2,7,10)])
 };
 G.ui.sprites.animate=function(){
 	if (G.player.y==G.ui.floor) {

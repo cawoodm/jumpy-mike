@@ -22,18 +22,22 @@ G.click = function(e) {
 			G.menu.end();
 		} else if (G.menu.next) {
 			// Goto next menu
-			if(eX<G.menu.rectX || eX>G.menu.rectX+G.menu.rectWidth || eY<G.menu.rectY || eY>(G.menu.rectY+G.menu.rectHeight*0.75	)) {
+			if (G.paused) {
+				G.start();
+			} else if(eX<G.menu.rectX || eX>G.menu.rectX+G.menu.rectWidth || eY<G.menu.rectY || eY>(G.menu.rectY+G.menu.rectHeight*0.75	)) {
 				// Skip intro menus
 				G.menu.end();
 			}  else {
 				G.menu.doNext();
 			}
-		} else if (G.state==1 && eX>0 && eX/G.ui.scaleX<=11 && eY/G.ui.scaleY<=11) {
-			// Tap mute button
-			G.music.toggle(); 
-		} else if (G.state==1) {
-			// During game
-			if(G.player.y>G.player.minY+5 && G.player.dy>-4) {
+		} else if (G.state==1) { // During game
+			if (eX>0 && eX/G.ui.scaleX<10 && eY/G.ui.scaleY<10) {
+				// Tap mute button
+				G.music.toggle(); 
+			} else if (eX/G.ui.scaleX>20 && eX/G.ui.scaleX<30 && eY/G.ui.scaleY<10) {
+				G.pause();
+				G.menu.info();
+			} else if(G.player.y>G.player.minY+5 && G.player.dy>-4) {
 				// Sink player mid-jump
 				G.player.dy=-4;
 			} else if(G.player.y=G.player.minY) {
