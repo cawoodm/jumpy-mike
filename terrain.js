@@ -42,8 +42,8 @@ G.ui.terrain.init = function() {
 	this.grad[3].addColorStop(0,"#AA8");this.grad[3].addColorStop(1,"#663");
 	//this.grad[3]=this.ctx.createLinearGradient(0,0,G.ui.area.width/2,G.ui.area.height/3); this.grad[3].addColorStop(0,"#DDE");this.grad[2].addColorStop(1,"#FFF");
 	this.mnt=[
-		 {speed:.9,frame:0,offset:0,col:this.grad[0],pts:pts[0]}
-		,{speed:.6,frame:0,offset:0,col:this.grad[1],pts:pts[1]}
+		 {speed:0.9,frame:0,offset:0,col:this.grad[0],pts:pts[0]}
+		,{speed:0.6,frame:0,offset:0,col:this.grad[1],pts:pts[1]}
 		,{speed:1.5,frame:0,offset:0,col:this.grad[2],pts:pts[2]}
 	];
 	this.frameLast=this.mnt[0].pts.length;

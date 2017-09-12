@@ -64,29 +64,25 @@ G.music.init = function() {
 	G.music.seq3.treble.frequency.value = 1400;
 	
 	this.sfxJump = new TinyMusic.Sequence( G.music.ac, G.music.tempo, G.music.jump);
-	this.sfxGameOver = new TinyMusic.Sequence( G.music.ac, G.music.tempo, G.music.gameover);
-	with (this.sfxJump) {
-		staccato = 0.45;
-		smoothing = 0.2;
-		gain.gain.value = 0.65 / 10;
-		bass.gain.value = -6;
-		bass.frequency.value = 1400;
-		mid.gain.value = -6;
-		mid.frequency.value = 1400;
-		treble.gain.value = -2;
-		treble.frequency.value = 1400;
-	}
-	with (this.sfxGameOver) {
-		staccato = 0.45;
-		smoothing = 0.2;
-		gain.gain.value = 0.65 / 10;
-		bass.gain.value = -6;
-		bass.frequency.value = 1400;
-		mid.gain.value = -6;
-		mid.frequency.value = 1400;
-		treble.gain.value = -2;
-		treble.frequency.value = 1400;
-	}
+	this.sfxJumpstaccato = 0.45;
+	this.sfxJumpsmoothing = 0.2;
+	this.sfxJumpgain.gain.value = 0.65 / 10;
+	this.sfxJumpbass.gain.value = -6;
+	this.sfxJumpbass.frequency.value = 1400;
+	this.sfxJumpmid.gain.value = -6;
+	this.sfxJumpmid.frequency.value = 1400;
+	this.sfxJumptreble.gain.value = -2;
+	this.sfxJumptreble.frequency.value = 1400;
+
+	this.sfxGameOverstaccato = 0.45;
+	this.sfxGameOversmoothing = 0.2;
+	this.sfxGameOvergain.gain.value = 0.65 / 10;
+	this.sfxGameOverbass.gain.value = -6;
+	this.sfxGameOverbass.frequency.value = 1400;
+	this.sfxGameOvermid.gain.value = -6;
+	this.sfxGameOvermid.frequency.value = 1400;
+	this.sfxGameOvertreble.gain.value = -2;
+	this.sfxGameOvertreble.frequency.value = 1400;
 
 }
 G.music.playJump = function() {

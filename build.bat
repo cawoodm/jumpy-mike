@@ -28,7 +28,7 @@ COPY /Y sprites.png release\
 COPY /Y favicon.png release\
 COPY /Y favicon.ico release\
 ECHO "Ready to test in release\ folder"
-::PAUSE
+PAUSE
 
 :: Commit local changes
 git add .

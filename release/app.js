@@ -182,8 +182,8 @@ G.ui.terrain.init = function() {
 	this.grad[3].addColorStop(0,"#AA8");this.grad[3].addColorStop(1,"#663");
 	//this.grad[3]=this.ctx.createLinearGradient(0,0,G.ui.area.width/2,G.ui.area.height/3); this.grad[3].addColorStop(0,"#DDE");this.grad[2].addColorStop(1,"#FFF");
 	this.mnt=[
-		 {speed:.9,frame:0,offset:0,col:this.grad[0],pts:pts[0]}
-		,{speed:.6,frame:0,offset:0,col:this.grad[1],pts:pts[1]}
+		 {speed:0.9,frame:0,offset:0,col:this.grad[0],pts:pts[0]}
+		,{speed:0.6,frame:0,offset:0,col:this.grad[1],pts:pts[1]}
 		,{speed:1.5,frame:0,offset:0,col:this.grad[2],pts:pts[2]}
 	];
 	this.frameLast=this.mnt[0].pts.length;
@@ -355,29 +355,25 @@ G.music.init = function() {
 	G.music.seq3.treble.frequency.value = 1400;
 	
 	this.sfxJump = new TinyMusic.Sequence( G.music.ac, G.music.tempo, G.music.jump);
-	this.sfxGameOver = new TinyMusic.Sequence( G.music.ac, G.music.tempo, G.music.gameover);
-	with (this.sfxJump) {
-		staccato = 0.45;
-		smoothing = 0.2;
-		gain.gain.value = 0.65 / 10;
-		bass.gain.value = -6;
-		bass.frequency.value = 1400;
-		mid.gain.value = -6;
-		mid.frequency.value = 1400;
-		treble.gain.value = -2;
-		treble.frequency.value = 1400;
-	}
-	with (this.sfxGameOver) {
-		staccato = 0.45;
-		smoothing = 0.2;
-		gain.gain.value = 0.65 / 10;
-		bass.gain.value = -6;
-		bass.frequency.value = 1400;
-		mid.gain.value = -6;
-		mid.frequency.value = 1400;
-		treble.gain.value = -2;
-		treble.frequency.value = 1400;
-	}
+	this.sfxJumpstaccato = 0.45;
+	this.sfxJumpsmoothing = 0.2;
+	this.sfxJumpgain.gain.value = 0.65 / 10;
+	this.sfxJumpbass.gain.value = -6;
+	this.sfxJumpbass.frequency.value = 1400;
+	this.sfxJumpmid.gain.value = -6;
+	this.sfxJumpmid.frequency.value = 1400;
+	this.sfxJumptreble.gain.value = -2;
+	this.sfxJumptreble.frequency.value = 1400;
+
+	this.sfxGameOverstaccato = 0.45;
+	this.sfxGameOversmoothing = 0.2;
+	this.sfxGameOvergain.gain.value = 0.65 / 10;
+	this.sfxGameOverbass.gain.value = -6;
+	this.sfxGameOverbass.frequency.value = 1400;
+	this.sfxGameOvermid.gain.value = -6;
+	this.sfxGameOvermid.frequency.value = 1400;
+	this.sfxGameOvertreble.gain.value = -2;
+	this.sfxGameOvertreble.frequency.value = 1400;
 
 }
 G.music.playJump = function() {
@@ -647,7 +643,7 @@ G.update = function() {
 	if (prob(75) && G.ticks%rnd(10,30)==0 && G.entity.count('stone1')<7) G.addStone(0, 1);
 	if (prob(75) && G.ticks%rnd(10,30)==0 && G.entity.count('stone2')<7) G.addStone(0, 2);
 
-	if (G.ticks%10==0) {G.speed+=0.005;G.spacing-=.1;}
+	if (G.ticks%10==0) {G.speed+=0.005;G.spacing-=0.1;}
 	
 	// Generate cactii 
 	if (G.ticks%rnd(10,30)==0) {
@@ -734,7 +730,7 @@ G.addStone = function(x,t) {
 G.addCloud = function(x,t) {
 	var X = x||G.ui.camera.x+G.ui.width
 	var Y = rnd(t*G.ui.height/60+G.ui.height/2, G.ui.height-15);
-	G.entity.add({tag:t==0?'smallCloud':'cloud',x:X,y:Y,pts:t==0?G.ui.sprites.smallCloud:G.ui.sprites.cloud,col:2, dx:2*G.speed/(2+t), dy:.01, l: '0'})
+	G.entity.add({tag:t==0?'smallCloud':'cloud',x:X,y:Y,pts:t==0?G.ui.sprites.smallCloud:G.ui.sprites.cloud,col:2, dx:2*G.speed/(2+t), dy:0.01, l: '0'})
 };
 G.addCactus = function(x,t) {
 	var h=9+t*9;

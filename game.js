@@ -14,7 +14,7 @@ G.update = function() {
 	if (prob(75) && G.ticks%rnd(10,30)==0 && G.entity.count('stone1')<7) G.addStone(0, 1);
 	if (prob(75) && G.ticks%rnd(10,30)==0 && G.entity.count('stone2')<7) G.addStone(0, 2);
 
-	if (G.ticks%10==0) {G.speed+=0.005;G.spacing-=.1;}
+	if (G.ticks%10==0) {G.speed+=0.005;G.spacing-=0.1;}
 	
 	// Generate cactii 
 	if (G.ticks%rnd(10,30)==0) {
@@ -101,7 +101,7 @@ G.addStone = function(x,t) {
 G.addCloud = function(x,t) {
 	var X = x||G.ui.camera.x+G.ui.width
 	var Y = rnd(t*G.ui.height/60+G.ui.height/2, G.ui.height-15);
-	G.entity.add({tag:t==0?'smallCloud':'cloud',x:X,y:Y,pts:t==0?G.ui.sprites.smallCloud:G.ui.sprites.cloud,col:2, dx:2*G.speed/(2+t), dy:.01, l: '0'})
+	G.entity.add({tag:t==0?'smallCloud':'cloud',x:X,y:Y,pts:t==0?G.ui.sprites.smallCloud:G.ui.sprites.cloud,col:2, dx:2*G.speed/(2+t), dy:0.01, l: '0'})
 };
 G.addCactus = function(x,t) {
 	var h=9+t*9;
