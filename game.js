@@ -79,7 +79,7 @@ G.update = function() {
 };
 G.loop = function() {
 	G.update();
-	if (G.state>1) return;
+	if (G.state>1 || G.paused) return;
 	G.clear();
 	G.draw();
 	if (G._intervalId) requestAnimationFrame(G.loop);
@@ -108,8 +108,9 @@ G.addCactus = function(x,t) {
 	return G.entity.add({tag:'cactus',obstacle:[9,h], x:G.ui.camera.x+G.ui.width+x, y:G.ui.floor, l:3, pts:G.ui.sprites['cactus'+t]})
 };
 G.start = function() {
+	G.paused=false;
 	if (G._intervalId) clearInterval(G._intervalId);
-	G._intervalId = requestAnimationFrame(G.loop);//setInterval(G.loop, 1000/G.ui.fps);
+	G._intervalId = requestAnimationFrame(G.loop);
 	G.music.restart();
 };
 G.gameOver = function() {
@@ -121,6 +122,7 @@ G.gameOver = function() {
 }
 G.pause = function() {
 	if (G._intervalId) {
+		G.paused=true;
 		clearInterval(G._intervalId);
 		delete G._intervalId;
 		G.music.stop();
